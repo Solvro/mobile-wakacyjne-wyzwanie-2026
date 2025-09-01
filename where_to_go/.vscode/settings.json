@@ -1,3 +1,19 @@
 {
-  "dart.flutterSdkPath": ".fvm/versions/stable"
+  "dart.flutterSdkPath": ".fvm/versions/3.32.7",
+  "[dart]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "always"
+    },
+    "editor.formatOnSave": true,
+    "editor.bracketPairColorization.enabled": true
+  },
+  "dart.previewFlutterUiGuides": true,
+  "editor.stickyScroll.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "*.dart": "${capture}.g.dart, ${capture}.freezed.dart, ${capture}.gr.dart, ${capture}.tailor.dart, ${capture}.gform.dart",
+    "*.graphql": "${capture}.graphql.dart"
+  },
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.expand": false,
+  "dart.previewHotReloadOnSave": true
 }
