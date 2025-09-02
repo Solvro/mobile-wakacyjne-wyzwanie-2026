@@ -4,20 +4,19 @@ W pierwszej liście ożywiliśmy naszą aplikację za pomocą `StatefulWidget`. 
 
 Następnie zajmiemy się problemem globalnego stanu, czyli tego, który chcemy udostępnić w wielu miejscach aplikacji. Poznamy **Riverpod** do zarządzania globalnym stanem oraz **GoRouter** do deklaratywnego routing’u.
 
-
 ### Teoria — Hooki we Flutterze
 
 **Dlaczego hooki?**
 
-* Pozwalają zarządzać stanem w `HookWidget` bez tworzenia osobnej klasy stanu (`StatefulWidget`).
-* Kod jest krótszy i bardziej czytelny.
-* Dostępne są gotowe hooki, np. `useEffect`, `useAnimationController`, `useTextEditingController`.
+- Pozwalają zarządzać stanem w `HookWidget` bez tworzenia osobnej klasy stanu (`StatefulWidget`).
+- Kod jest krótszy i bardziej czytelny.
+- Dostępne są gotowe hooki, np. `useEffect`, `useAnimationController`, `useTextEditingController`.
 
 **Podstawy użycia:**
 
-* Importujemy pakiet `flutter_hooks`.
-* Zamiast `StatefulWidget` tworzymy `HookWidget`.
-* Stan przechowujemy np. w `useState()`.
+- Importujemy pakiet `flutter_hooks`.
+- Zamiast `StatefulWidget` tworzymy `HookWidget`.
+- Stan przechowujemy np. w `useState()`.
 
 ### 1. Zadanie do wykonania
 
@@ -27,39 +26,41 @@ Następnie zajmiemy się problemem globalnego stanu, czyli tego, który chcemy u
    dependencies:
      flutter_hooks: <najnowsza_wersja>
    ```
+
 2. W ekranie `DreamPlaceScreen`:
 
-   * Zmień go na `HookWidget`.
-   * Utwórz stan `isFavorited` za pomocą `useState(false)`.
-   * Dodaj ikonę serca w `AppBar`, która po kliknięciu:
+   - Zmień go na `HookWidget`.
+   - Utwórz stan `isFavorited` za pomocą `useState(false)`.
+   - Dodaj ikonę serca w `AppBar`, która po kliknięciu:
 
-     * przełącza `isFavorited` między `true` a `false`
-     * zmienia ikonę między `Icons.favorite` a `Icons.favorite_border`
-     * ustawia kolor na czerwony, gdy jest ulubione.
+     - przełącza `isFavorited` między `true` a `false`
+     - zmienia ikonę między `Icons.favorite` a `Icons.favorite_border`
+     - ustawia kolor na czerwony, gdy jest ulubione.
+
 3. Resztę ekranu (`body`) pozostaw bez zmian.
 
 ### Problem: "Prop Drilling" (przekazywanie stanu przez wiele widgetów)
 
-* Gdy nasza aplikacja rośnie, często potrzebujemy udostępnić stan wielu widgetom.
-* Przekazywanie przez wiele warstw widgetów danych i funkcji staje się uciążliwe i utrudnia konserwację.
+- Gdy nasza aplikacja rośnie, często potrzebujemy udostępnić stan wielu widgetom.
+- Przekazywanie przez wiele warstw widgetów danych i funkcji staje się uciążliwe i utrudnia konserwację.
 
-###  Historyczne rozwiązanie: `InheritedWidget`
+### Historyczne rozwiązanie: `InheritedWidget`
 
-* Flutter oferuje `InheritedWidget` do udostępniania danych całemu poddrzewu widgetów.
-* Mechanizm ten stosowany jest np. w `Theme.of(context)` czy `MediaQuery.of(context)`.
-* Jest jednak dość skomplikowany w użyciu — wymaga napisania dodatkowego kodu (statyczna metoda `of`, `updateShouldNotify`).
-* Dla prostych przypadków jest to ok, ale przy bardziej skomplikowanych stanach i wielu providerach staje się trudny do utrzymania.
+- Flutter oferuje `InheritedWidget` do udostępniania danych całemu poddrzewu widgetów.
+- Mechanizm ten stosowany jest np. w `Theme.of(context)` czy `MediaQuery.of(context)`.
+- Jest jednak dość skomplikowany w użyciu — wymaga napisania dodatkowego kodu (statyczna metoda `of`, `updateShouldNotify`).
+- Dla prostych przypadków jest to ok, ale przy bardziej skomplikowanych stanach i wielu providerach staje się trudny do utrzymania.
 
 ### 2. Zadanie do wykonania
 
-* Dla chętnych - zaimplementować rozwiązanie zarządzania stanem za pomocą `InheritedWidget`
+- Dla chętnych - zaimplementować rozwiązanie zarządzania stanem za pomocą `InheritedWidget`
 
 ### Nowoczesne zarządzanie stanem: Riverpod
 
 #### Czym jest Riverpod?
 
-* Riverpod to nowoczesny, bezpieczny i elastyczny system zarządzania stanem.
-* Działa globalnie i pozwala na łatwy dostęp i modyfikację stanu z dowolnego miejsca aplikacji — bez przekazywania przez widgety.
+- Riverpod to nowoczesny, bezpieczny i elastyczny system zarządzania stanem.
+- Działa globalnie i pozwala na łatwy dostęp i modyfikację stanu z dowolnego miejsca aplikacji — bez przekazywania przez widgety.
 
 ### 3. Zadanie do wykoniania
 
@@ -67,7 +68,7 @@ Następnie zajmiemy się problemem globalnego stanu, czyli tego, który chcemy u
 
 Konfiguracja i działanie bibliteki szczegółowo opisana w dokumentacji [Riverpod](https://riverpod.dev/docs/introduction/getting_started)
 
-* Częsty błąd - pamiętaj aby owinąć aplikacje w `ProviderScope`:
+- Częsty błąd - pamiętaj aby owinąć aplikacje w `ProviderScope`:
 
 ```dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -80,11 +81,12 @@ void main() {
   );
 }
 ```
+
 Jeśli tego nie zrobisz wszystkie następne wykonane kroki nie będą działać poprawnie.
 
 #### Refaktoryzacja stanu ulubionych do Riverpoda
 
-* Stwórz plik `lib/features/favorite/favorite_provider.dart`:
+- Stwórz plik `lib/features/favorite/favorite_provider.dart`:
 
 ```dart
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -104,13 +106,13 @@ class Favorite extends _$Favorite {
 }
 ```
 
-* Uruchom generator kodu:
+- Uruchom generator kodu:
 
 ```bash
 flutter pub run build_runner build -d
 ```
 
-* W `dream_place_screen.dart` użyj `ConsumerWidget` i providera:
+- W `dream_place_screen.dart` użyj `ConsumerWidget` i providera:
 
 ```dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -146,14 +148,13 @@ class DreamPlaceScreen extends ConsumerWidget {
 
 ### 4. Globalny stan i nawigacja z GoRouter
 
-* Riverpod świetnie działa z routingiem, a do nawigacji użyjemy **go\_router** — narzędzia rekomendowanego przez zespół Fluttera.
-
+- Riverpod świetnie działa z routingiem, a do nawigacji użyjemy **go_router** — narzędzia rekomendowanego przez zespół Fluttera.
 
 #### 4.1. Model i źródło danych z Riverpod (code generation)
 
 Zamiast trzymać dane „na sztywno” w ekranie, stworzymy model i globalne źródło danych.
 
-* Stwórz model `Place`:
+- Stwórz model `Place`:
 
 ```dart
 class Place {
@@ -180,7 +181,7 @@ class Place {
 }
 ```
 
-* Stwórz plik `lib/features/places/places_provider.dart`:
+- Stwórz plik `lib/features/places/places_provider.dart`:
 
 ```dart
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -240,7 +241,7 @@ final goRouter = GoRouter(
 
 ### 4.3. Ekran główny i nawigacja
 
-Na ekranie głównym ustaw callback kliknięcia w kafelek na 
+Na ekranie głównym ustaw callback kliknięcia w kafelek na
 
 ```dart
 GoRouter.of(context).push("${DetailsScreen.route}/$id");
@@ -261,10 +262,9 @@ Na obu ekranach zaobserwuj wygenerowany placesProvider oraz użyj metody `toggle
 
 ### Podsumowanie
 
-* **Hooki** — prostszy lokalny stan.
-* **Prop drilling** — problem rozwiązany przez providery.
-* **InheritedWidget** — historyczne rozwiązanie, dziś raczej rzadziej stosowane.
-* **Riverpod** (z code generation) — nowoczesny globalny stan z automatycznie generowanymi providerami.
-* **GoRouter** — deklaratywna nawigacja, współpracuje z Riverpod.
-* **Model + provider** - aplikacja działa na prawdziwych danych i stan zsynchronizowany między ekranami.
-
+- **Hooki** — prostszy lokalny stan.
+- **Prop drilling** — problem rozwiązany przez providery.
+- **InheritedWidget** — historyczne rozwiązanie, dziś raczej rzadziej stosowane.
+- **Riverpod** (z code generation) — nowoczesny globalny stan z automatycznie generowanymi providerami.
+- **GoRouter** — deklaratywna nawigacja, współpracuje z Riverpod.
+- **Model + provider** - aplikacja działa na prawdziwych danych i stan zsynchronizowany między ekranami.
