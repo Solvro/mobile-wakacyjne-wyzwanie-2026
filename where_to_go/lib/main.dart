@@ -1,9 +1,11 @@
 import "package:flutter/material.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
 
 import "gen/assets.gen.dart";
 
 void main() {
-  runApp(const MaterialApp(home: MyApp()));
+  runApp(const ProviderScope(child: MaterialApp(home: MyApp())));
 }
 
 class Place {
@@ -81,7 +83,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class DreamPlaceScreen extends StatefulWidget {
+class DreamPlaceScreen extends HookWidget {
   final String title;
   final String description;
   final AssetGenImage photo;
@@ -89,26 +91,9 @@ class DreamPlaceScreen extends StatefulWidget {
   const DreamPlaceScreen(this.title, this.description, this.photo);
 
   @override
-  State<DreamPlaceScreen> createState() => _DreamPlaceScreenState(title, description, photo);
-}
-
-class _DreamPlaceScreenState extends State<DreamPlaceScreen> {
-  final String title;
-  final String description;
-  final AssetGenImage photo;
-
-  _DreamPlaceScreenState(this.title, this.description, this.photo);
-
-  bool isFavorited = false;
-
-  void setFavorite({required bool isFavorite}) {
-    setState(() {
-      isFavorited = isFavorite;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final isFavorited = useState(false);
+
     return Scaffold(
       body: Column(
         children: [
@@ -136,8 +121,9 @@ class _DreamPlaceScreenState extends State<DreamPlaceScreen> {
       backgroundColor: const Color.fromARGB(255, 162, 236, 200),
       appBar: AppBar(title: Text(title), actions: [
         IconButton(
-            onPressed: () => {setFavorite(isFavorite: !isFavorited)},
-            icon: Icon(isFavorited ? Icons.favorite : Icons.no_backpack))
+            onPressed: () => {isFavorited.value = !isFavorited.value},
+            icon: Icon(isFavorited.value ? Icons.favorite : Icons.favorite_border,
+                color: isFavorited.value ? Colors.red : null))
       ]),
     );
   }

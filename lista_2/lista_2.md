@@ -63,7 +63,7 @@ Następnie zajmiemy się problemem globalnego stanu, czyli tego, który chcemy u
 
 ### 3. Zadanie do wykoniania
 
-**Zamień dotychczasowy spsób zarządzania stanem na riverpod**
+**Zamień dotychczasowy sposób zarządzania stanem na riverpod**
 
 Konfiguracja i działanie bibliteki szczegółowo opisana w dokumentacji [Riverpod](https://riverpod.dev/docs/introduction/getting_started)
 
