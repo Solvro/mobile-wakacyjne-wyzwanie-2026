@@ -28,3 +28,10 @@ buildscript {
     }
 }
 
+android {
+    defaultConfig {
+        minSdkVersion 18
+    }
+
+}
+

@@ -1,6 +1,7 @@
 import "package:go_router/go_router.dart";
 import "dream_place_screen.dart";
 import "place_screen_list.dart";
+import "register_screen.dart";
 
 final goRouter = GoRouter(
   initialLocation: "/",
@@ -15,6 +16,10 @@ final goRouter = GoRouter(
         final id = state.pathParameters["id"]!;
         return DreamPlaceScreen(placeId: id);
       },
+    ),
+    GoRoute(
+      path: "/register",
+      builder: (context, state) => const _RegisterScreen(),
     ),
   ],
 );
