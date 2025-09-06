@@ -7,6 +7,7 @@ import "../../../app/remote/repository/dream_place_repository_impl.dart";
 import "../../../app/remote/repository/photo_repository_impl.dart";
 import "../../../data/models/create_place_dto.dart";
 import "../../../data/models/dream_place.dart";
+import "../providers/filter_providers.dart";
 
 part "dream_place_service.g.dart";
 
@@ -75,4 +76,16 @@ class DreamPlaceService extends _$DreamPlaceService {
 DreamPlace? placeById(Ref ref, int id) {
   final placesAsync = ref.watch(dreamPlaceServiceProvider);
   return placesAsync.whenData((places) => places.firstWhere((p) => p.id == id)).value;
+}
+
+@riverpod
+Future<List<DreamPlace>> filteredPlaces(Ref ref) async {
+  final query = ref.watch(searchQueryProvider);
+  final allPlacesAsync = await ref.watch(dreamPlaceServiceProvider.future);
+
+  if (query.trim().isEmpty) return allPlacesAsync;
+
+  final lowerQuery = query.toLowerCase();
+
+  return allPlacesAsync.where((place) => place.name.toLowerCase().contains(lowerQuery)).toList();
 }

@@ -9,6 +9,7 @@ import "../pages/create_place_page.dart";
 import "../service/dream_place_service.dart";
 import "../utils/show_actions_menu.dart";
 import "../widgets/dream_place_list_tile.dart";
+import "../widgets/filter_bar.dart";
 import "place_detail_view.dart";
 
 class PlacesListView extends ConsumerWidget {
@@ -16,7 +17,7 @@ class PlacesListView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final dreamPlacesList = ref.watch(dreamPlaceServiceProvider);
+    final dreamPlacesList = ref.watch(filteredPlacesProvider);
 
     return Scaffold(
         backgroundColor: context.colorScheme.surface,
@@ -27,11 +28,7 @@ class PlacesListView extends ConsumerWidget {
           actions: [ThemeSelectorButton()],
         ),
         body: Column(mainAxisSize: MainAxisSize.min, children: [
-          IconButton(
-              onPressed: ref.read(dreamPlaceServiceProvider.notifier).toggleFilter,
-              icon: Icon(ref.read(dreamPlaceServiceProvider.notifier).isShowingOnlyFavourites
-                  ? Icons.favorite
-                  : Icons.favorite_outline)),
+          FilterBar(),
           dreamPlacesList.when(
             loading: () => const Center(child: CircularProgressIndicator()),
             error: (error, stack) => Text("Sorry, an error occured: $error"),
