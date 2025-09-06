@@ -12,10 +12,27 @@ part "dream_place_service.g.dart";
 
 @riverpod
 class DreamPlaceService extends _$DreamPlaceService {
+  bool _showOnlyFavourites = false;
+
+  bool get isShowingOnlyFavourites => _showOnlyFavourites;
+
   @override
   Future<List<DreamPlace>> build() async {
     final repo = await ref.watch(dreamPlaceRepositoryProvider.future);
-    return repo.getAll();
+    final allPlaces = await repo.getAll();
+    if (_showOnlyFavourites) {
+      return allPlaces.where((p) => p.isFavourite).toList();
+    } else {
+      return allPlaces;
+    }
+  }
+
+  Future<void> toggleFilter() async {
+    _showOnlyFavourites = !_showOnlyFavourites;
+    final repo = await ref.read(dreamPlaceRepositoryProvider.future);
+    final allPlaces = await repo.getAll();
+    final filtered = _showOnlyFavourites ? allPlaces.where((p) => p.isFavourite).toList() : allPlaces;
+    state = AsyncValue.data(filtered);
   }
 
   Future<void> toggleFavorite(int id) async {
@@ -24,7 +41,8 @@ class DreamPlaceService extends _$DreamPlaceService {
     final repo = await ref.read(dreamPlaceRepositoryProvider.future);
     final updated = await repo.toggleFavorite(id, newValue: !place.isFavourite);
     final newList = currentState.map((place) => (place.id == updated.id) ? updated : place).toList();
-    state = AsyncValue.data(newList);
+    final filtered = _showOnlyFavourites ? newList.where((p) => p.isFavourite).toList() : newList;
+    state = AsyncValue.data(filtered);
   }
 
   Future<DreamPlace> createDreamPlaceWithPhoto(CreatePlaceDTO place, File file) async {
@@ -32,17 +50,24 @@ class DreamPlaceService extends _$DreamPlaceService {
     final photoRepo = await ref.read(photoRepositoryProvider.future);
     final path = await photoRepo.uploadImage(file);
     final newPlace = await placeRepo.save(
-        name: place.name!, description: place.description!, imageUrl: path, isFavourite: place.isFavourite!);
-    state = AsyncData(await placeRepo.getAll());
+      name: place.name!,
+      description: place.description!,
+      imageUrl: path,
+      isFavourite: place.isFavourite!,
+    );
+
+    final updatedList = await placeRepo.getAll();
+    final filtered = _showOnlyFavourites ? updatedList.where((p) => p.isFavourite).toList() : updatedList;
+    state = AsyncData(filtered);
     return newPlace;
   }
 
   Future<void> deleteDreamPlace(int id) async {
     final placeRepo = await ref.read(dreamPlaceRepositoryProvider.future);
     await placeRepo.delete(id);
-    final currentState = await future;
-    currentState.removeWhere((place) => place.id == id);
-    state = AsyncValue.data(currentState);
+    final updatedList = await placeRepo.getAll();
+    final filtered = _showOnlyFavourites ? updatedList.where((p) => p.isFavourite).toList() : updatedList;
+    state = AsyncData(filtered);
   }
 }
 

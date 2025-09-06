@@ -26,28 +26,34 @@ class PlacesListView extends ConsumerWidget {
           leading: const ProfileButton(),
           actions: [ThemeSelectorButton()],
         ),
-        body: dreamPlacesList.when(
-          loading: () => const Center(child: CircularProgressIndicator()),
-          error: (error, stack) {
-            Text("Sorry, an error occured: $error");
-            return null;
-          },
-          data: (places) => ListView.builder(
-            itemCount: places.length,
-            itemBuilder: (context, index) => GestureDetector(
-              onLongPressStart: (details) async {
-                await showDeleteMenu(
-                  context: context,
-                  position: details.globalPosition,
-                  ref: ref,
-                  placeId: places[index].id,
-                );
-              },
-              onTap: () => GoRouter.of(context).push("${PlaceDetailView.route}/${places[index].id}"),
-              child: DreamPlaceListTile(dreamPlace: places[index]),
+        body: Column(mainAxisSize: MainAxisSize.min, children: [
+          IconButton(
+              onPressed: ref.read(dreamPlaceServiceProvider.notifier).toggleFilter,
+              icon: Icon(ref.read(dreamPlaceServiceProvider.notifier).isShowingOnlyFavourites
+                  ? Icons.favorite
+                  : Icons.favorite_outline)),
+          dreamPlacesList.when(
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (error, stack) => Text("Sorry, an error occured: $error"),
+            data: (places) => Expanded(
+              child: ListView.builder(
+                itemCount: places.length,
+                itemBuilder: (context, index) => GestureDetector(
+                  onLongPressStart: (details) async {
+                    await showDeleteMenu(
+                      context: context,
+                      position: details.globalPosition,
+                      ref: ref,
+                      placeId: places[index].id,
+                    );
+                  },
+                  onTap: () => GoRouter.of(context).push("${PlaceDetailView.route}/${places[index].id}"),
+                  child: DreamPlaceListTile(dreamPlace: places[index]),
+                ),
+              ),
             ),
           ),
-        ),
+        ]),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
             await GoRouter.of(context).push(CreatePlacePage.route);
