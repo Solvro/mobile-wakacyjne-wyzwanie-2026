@@ -17,7 +17,21 @@ class DreamPlaceRepository {
 
   Future<List<PlaceModel>> getAllPlaces() async {
     final response = await apiClient.dio.get<Map<String, dynamic>>("/places");
-    return (response as List).map((e) => PlaceModel.fromJson(e as Map<String, dynamic>)).toList();
+    
+    if (response.data == null) {
+      return <PlaceModel>[];
+    }
+    
+    final placesData = response.data!["places"];
+    if (placesData == null) {
+      return <PlaceModel>[];
+    }
+    
+    final placesList = placesData as List<dynamic>? ?? <dynamic>[];
+    
+    return placesList
+        .map((e) => PlaceModel.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   Future<PlaceModel> getPlace(int id) async {

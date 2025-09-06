@@ -4,7 +4,7 @@ import "../../authentication/http_client.dart";
 import "dream_place_repository.dart";
 
 final apiClientProvider = Provider<ApiClient>((ref) {
-  return ApiClient(null); 
+  return ApiClient.instance; 
 });
 
 final dreamPlacesRepositoryProvider = Provider<DreamPlaceRepository>((ref) {

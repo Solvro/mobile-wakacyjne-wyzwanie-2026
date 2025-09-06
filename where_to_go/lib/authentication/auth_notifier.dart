@@ -1,8 +1,8 @@
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "authentication_repository.dart";
+import "http_client.dart";
 import "local_authentication_repository.dart";
 import "remote_authentication_repository.dart";
-
 enum AuthStatus { unknown, authenticated, unauthenticated }
 
 class AuthNotifier extends StateNotifier<AuthStatus> {
@@ -38,6 +38,7 @@ final authProvider =
   final repo = AuthenticationRepository(
     localAuthRepo: LocalAuthenticationRepository(),
     remoteAuthRepo: RemoteAuthenticationRepository(),
+    apiClient: ApiClient.instance,
   );
   return AuthNotifier(repo);
 });
