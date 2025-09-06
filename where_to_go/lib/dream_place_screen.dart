@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
-import "features/places/places_provider.dart";
+import "features/table/dream_place_providers.dart";
 
 class DreamPlaceScreen extends ConsumerWidget {
   static const route = "/details";
@@ -10,42 +10,38 @@ class DreamPlaceScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final places = ref.watch(placesProvider);
-    final place = places.firstWhere((p) => p.id == placeId);
-    final isFavorited = place.isFavorite;
+    final placeAsync = ref.watch(dreamPlaceProvider(placeId));
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(place.title),
-        actions: [
-          IconButton(
-            onPressed: () {
-              ref.read(placesProvider.notifier).toggleFavorite(place.id);
-            },
-            icon: Icon(
-              isFavorited ? Icons.favorite : Icons.favorite_border,
-              color: isFavorited ? Colors.red : null,
+    return placeAsync.when(
+      data: (place) => Scaffold(
+        appBar: AppBar(
+          title: Text(place.name),
+          actions: [
+            IconButton(
+              onPressed: () async {
+                final repo = ref.read(dreamPlacesRepositoryProvider);
+                await repo.updateIsFavorite(place.id, isFavorite: !place.isFavorite);
+                ref.refresh(dreamPlaceProvider(placeId));
+                ref.refresh(dreamPlacesProvider);
+              },
+              icon: Icon(
+                place.isFavorite ? Icons.favorite : Icons.favorite_border,
+                color: place.isFavorite ? Colors.red : null,
+              ),
             ),
+          ],
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: [
+              Text(place.description, style: const TextStyle(fontSize: 18)),
+            ],
           ),
-        ],
+        ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(children: [
-          Text(place.description, style: const TextStyle(fontSize: 18)),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: place.features
-                .map((f) => Column(
-                      children: [
-                        Icon(f.icon),
-                        Text(f.label),
-                      ],
-                    ))
-                .toList(),
-          )
-        ]),
-      ),
+      loading: () => const Scaffold(body: Center(child: CircularProgressIndicator())),
+      error: (err, stack) => Scaffold(body: Center(child: Text("Error: $err"))),
     );
   }
 }

@@ -1,71 +1,41 @@
-import "package:drift/drift.dart";
+import "/features/places/place_model.dart";
 
-import "dream_place_table.dart";
+import "../../authentication/http_client.dart";
 
 class DreamPlaceRepository {
-  final AppDatabase db;
+  final ApiClient apiClient;
 
-  DreamPlaceRepository(this.db);
+  DreamPlaceRepository(this.apiClient);
 
-  Future<int> addPlace(DreamPlaceTableCompanion place) {
-    return db.into(db.dreamPlaceTable).insert(place);
+  Future<PlaceModel> addPlace(PlaceModel place) async {
+    final response = await apiClient.dio.post<Map<String, dynamic>>(
+      "/places",
+      data: place.toJson(),
+    );
+    return PlaceModel.fromJson(response.data!);
   }
 
-  Future<List<DreamPlaceTableData>> getAllPlaces() {
-    return db.select(db.dreamPlaceTable).get();
+  Future<List<PlaceModel>> getAllPlaces() async {
+    final response = await apiClient.dio.get<Map<String, dynamic>>("/places");
+    return (response as List).map((e) => PlaceModel.fromJson(e as Map<String, dynamic>)).toList();
   }
 
-  Future<DreamPlaceTableData> getPlace(int id) {
-    return (db.select(db.dreamPlaceTable)..where((tbl) => tbl.id.equals(id))).getSingle();
+  Future<PlaceModel> getPlace(int id) async {
+    final response = await apiClient.dio.get<Map<String, dynamic>>("/places/$id");
+    return PlaceModel.fromJson(response.data!);
   }
 
-  Stream<List<DreamPlaceTableData>> watchAllPlaces() {
-    return db.select(db.dreamPlaceTable).watch();
+  Future<PlaceModel> updatePlace(PlaceModel place) async {
+    final response = await apiClient.dio.put<Map<String, dynamic>>("/places/${place.id}", data: place.toJson());
+    return PlaceModel.fromJson(response.data!);
   }
 
-  Future<bool> updatePlace(DreamPlaceTableCompanion place) {
-    return db.update(db.dreamPlaceTable).replace(place);
+  Future<PlaceModel> updateIsFavorite(int id, {required bool isFavorite}) async {
+    final response = await apiClient.dio.patch<Map<String, dynamic>>("/places/$id", data: {"isFavorite": isFavorite});
+    return PlaceModel.fromJson(response.data!);
   }
 
-  Future<int> updateIsFavorite(int id, {required bool isFavorite}) {
-    return (db.update(db.dreamPlaceTable)..where((tbl) => tbl.id.equals(id)))
-        .write(DreamPlaceTableCompanion(isFavorite: Value(isFavorite)));
-  }
-
-  Future<int> deletePlace(int id) {
-    return (db.delete(db.dreamPlaceTable)..where((tbl) => tbl.id.equals(id))).go();
-  }
-
-  Future<void> seedDatabase() async {
-    final existing = await getAllPlaces();
-    if (existing.isNotEmpty) return;
-
-    final samplePlaces = [
-      DreamPlaceTableCompanion.insert(
-        name: "Paryż",
-        description: "Miasto miłości",
-        imageUrl: "https://example.com/paris.jpg",
-        isFavorite: const Value(true),
-      ),
-      DreamPlaceTableCompanion.insert(
-        name: "Tokio",
-        description: "Nowoczesna metropolia",
-        imageUrl: "https://example.com/tokyo.jpg",
-      ),
-      DreamPlaceTableCompanion.insert(
-          name: "Nowy Jork",
-          isFavorite: const Value(true),
-          imageUrl: "https://example.com/nyc.jpg",
-          description: "Jork New"),
-      DreamPlaceTableCompanion.insert(
-          name: "Rzym",
-          isFavorite: const Value(false),
-          imageUrl: "https://example.com/rome.jpg",
-          description: "Papyrus got better pasta"),
-    ];
-
-    await db.batch((batch) {
-      batch.insertAll(db.dreamPlaceTable, samplePlaces);
-    });
+  Future<void> deletePlace(int id) async {
+    await apiClient.dio.delete<Map<String, dynamic>>("/places/$id");
   }
 }

@@ -2,7 +2,7 @@ import "dart:convert";
 import "package:http/http.dart" as http; 
 
 class RemoteAuthenticationRepository {
-  final baseUrl = "https://backend-api.w.solvro.pl/api";
+  final baseUrl = "https://backend-api.w.solvro.pl";
 
   Future<AuthResponse> login(String email, String password) async {
     final uri = Uri.parse("$baseUrl/auth/login");
@@ -16,7 +16,7 @@ class RemoteAuthenticationRepository {
       }),
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       final data = jsonDecode(response.body) as Map<String, dynamic>;
       return AuthResponse.fromJson(data);
     } else {
@@ -36,7 +36,7 @@ class RemoteAuthenticationRepository {
       }),
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       final data = jsonDecode(response.body) as Map<String, dynamic>;
       return RegisterResponse.fromJson(data);
     } else {
@@ -55,7 +55,7 @@ class RemoteAuthenticationRepository {
       }),
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       final data = jsonDecode(response.body) as Map<String, dynamic>;
       return RefreshResponse.fromJson(data);
     } else {

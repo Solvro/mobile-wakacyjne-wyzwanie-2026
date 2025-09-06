@@ -12,9 +12,9 @@ class ApiClient {
 
   ApiClient._internal(String? accessToken)
       : _dio = Dio(BaseOptions(
-          baseUrl: "https://backend-api.w.solvro.pl/api",
+          baseUrl: "https://backend-api.w.solvro.pl",
           headers: accessToken != null
-              ? {"Authorization": "Bearer $accessToken"}
+              ? {"Authorization": accessToken}
               : {},
         ));
 

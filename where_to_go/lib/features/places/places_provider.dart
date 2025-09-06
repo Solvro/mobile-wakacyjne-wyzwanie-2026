@@ -1,30 +1,22 @@
-import "package:flutter/material.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
-import "place_feature.dart";
 import "place_model.dart";
 
 part "places_provider.g.dart";
 
 const _initialPlaces = [
   PlaceModel(
-    id: "1",
-    title: "Snowdin",
+    id: 1,
+    name: "Snowdin",
     description: "Here lives THE GREAT PAPYRUS",
-    features: [
-      PlaceFeature(icon: Icons.wb_sunny, label: "No sun"),
-      PlaceFeature(icon: Icons.beach_access, label: "No beach"),
-      PlaceFeature(icon: Icons.restaurant, label: "Tasty pasta"),
-    ],
+    ownerEmail: "papyrus@snowdin.com",
+    imageUrl: "https://example.com/snowdin.jpg",
   ),
   PlaceModel(
-    id: "2",
-    title: "Zakopane",
+    id: 2,
+    name: "Zakopane",
     description: "Big snowy mountains",
-    features: [
-      PlaceFeature(icon: Icons.snowboarding, label: "Snow sports!"),
-      PlaceFeature(icon: Icons.hiking, label: "Hiking!"),
-      PlaceFeature(icon: Icons.water, label: "Oko morskie!"),
-    ],
+    ownerEmail: "owner@example.com",
+    imageUrl: "https://example.com/zakopane.jpg",
   ),
 ];
 

@@ -26,6 +26,11 @@ class AuthNotifier extends StateNotifier<AuthStatus> {
     await authRepo.logout();
     state = AuthStatus.unauthenticated;
   }
+
+  Future<void> register(String email, String password) async {
+    await authRepo.register(email, password);
+    state = AuthStatus.authenticated;
+  }
 }
 
 final authProvider =

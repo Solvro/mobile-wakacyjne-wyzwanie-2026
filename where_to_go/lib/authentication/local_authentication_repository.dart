@@ -4,7 +4,7 @@ class LocalAuthenticationRepository {
   final _storage = const FlutterSecureStorage();
 
   Future<void> writeAccessToken(String token) async {
-  await _storage.write(key: "access_token", value: token);
+    await _storage.write(key: "access_token", value: token);
   }
 
   Future<String?> readAccessToken() {
