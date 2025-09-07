@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:font_awesome_flutter/font_awesome_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
 import "../providers/filter_providers.dart";
@@ -22,6 +23,11 @@ class FilterBar extends ConsumerWidget {
           icon: Icon(ref.read(dreamPlaceServiceProvider.notifier).isShowingOnlyFavourites
               ? Icons.favorite
               : Icons.favorite_outline)),
+      IconButton(
+          onPressed: ref.read(dreamPlaceServiceProvider.notifier).toggleSortOrder,
+          icon: Icon(ref.read(dreamPlaceServiceProvider.notifier).isSortAsc
+              ? FontAwesomeIcons.arrowDownAZ
+              : FontAwesomeIcons.arrowUpAZ)),
     ]);
   }
 }

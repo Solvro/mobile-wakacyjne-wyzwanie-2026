@@ -15,8 +15,8 @@ class DreamPlaceRepositoryImpl implements DreamPlaceRepository {
   DreamPlaceRepositoryImpl(this._client);
 
   @override
-  Future<List<DreamPlace>> getAll() async {
-    final places = await _client.getPlaces("asc", "name");
+  Future<List<DreamPlace>> getAll({SortOrder ordering = SortOrder.asc}) async {
+    final places = await _client.getPlaces(ordering.name, "name");
     return places.results;
   }
 

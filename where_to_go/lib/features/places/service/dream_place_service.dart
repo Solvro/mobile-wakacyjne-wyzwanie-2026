@@ -8,19 +8,22 @@ import "../../../app/remote/repository/photo_repository_impl.dart";
 import "../../../data/models/create_place_dto.dart";
 import "../../../data/models/dream_place.dart";
 import "../providers/filter_providers.dart";
+import "../repository/dream_place_repository.dart";
 
 part "dream_place_service.g.dart";
 
 @riverpod
 class DreamPlaceService extends _$DreamPlaceService {
   bool _showOnlyFavourites = false;
+  SortOrder _sortOrder = SortOrder.asc;
 
   bool get isShowingOnlyFavourites => _showOnlyFavourites;
+  bool get isSortAsc => _sortOrder == SortOrder.asc;
 
   @override
   Future<List<DreamPlace>> build() async {
     final repo = await ref.watch(dreamPlaceRepositoryProvider.future);
-    final allPlaces = await repo.getAll();
+    final allPlaces = await repo.getAll(ordering: _sortOrder);
     if (_showOnlyFavourites) {
       return allPlaces.where((p) => p.isFavourite).toList();
     } else {
@@ -31,7 +34,15 @@ class DreamPlaceService extends _$DreamPlaceService {
   Future<void> toggleFilter() async {
     _showOnlyFavourites = !_showOnlyFavourites;
     final repo = await ref.read(dreamPlaceRepositoryProvider.future);
-    final allPlaces = await repo.getAll();
+    final allPlaces = await repo.getAll(ordering: _sortOrder);
+    final filtered = _showOnlyFavourites ? allPlaces.where((p) => p.isFavourite).toList() : allPlaces;
+    state = AsyncValue.data(filtered);
+  }
+
+  Future<void> toggleSortOrder() async {
+    _sortOrder = _sortOrder == SortOrder.asc ? SortOrder.desc : SortOrder.asc;
+    final repo = await ref.read(dreamPlaceRepositoryProvider.future);
+    final allPlaces = await repo.getAll(ordering: _sortOrder);
     final filtered = _showOnlyFavourites ? allPlaces.where((p) => p.isFavourite).toList() : allPlaces;
     state = AsyncValue.data(filtered);
   }
@@ -57,7 +68,7 @@ class DreamPlaceService extends _$DreamPlaceService {
       isFavourite: place.isFavourite!,
     );
 
-    final updatedList = await placeRepo.getAll();
+    final updatedList = await placeRepo.getAll(ordering: _sortOrder);
     final filtered = _showOnlyFavourites ? updatedList.where((p) => p.isFavourite).toList() : updatedList;
     state = AsyncData(filtered);
     return newPlace;
@@ -66,7 +77,7 @@ class DreamPlaceService extends _$DreamPlaceService {
   Future<void> deleteDreamPlace(int id) async {
     final placeRepo = await ref.read(dreamPlaceRepositoryProvider.future);
     await placeRepo.delete(id);
-    final updatedList = await placeRepo.getAll();
+    final updatedList = await placeRepo.getAll(ordering: _sortOrder);
     final filtered = _showOnlyFavourites ? updatedList.where((p) => p.isFavourite).toList() : updatedList;
     state = AsyncData(filtered);
   }

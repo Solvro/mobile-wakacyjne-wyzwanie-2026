@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   reactive_forms: ^18.1.1
   image_picker: ^1.2.0
+  font_awesome_flutter: ^10.9.1
 
   # State management
   hooks_riverpod: ^2.6.1

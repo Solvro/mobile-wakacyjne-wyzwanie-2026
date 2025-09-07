@@ -1,9 +1,11 @@
 import "../../../data/models/dream_place.dart";
 
+enum SortOrder { asc, desc }
+
 abstract class DreamPlaceRepository {
   const DreamPlaceRepository();
 
-  Future<List<DreamPlace>> getAll();
+  Future<List<DreamPlace>> getAll({SortOrder ordering});
 
   Future<DreamPlace> get(int id);
 
