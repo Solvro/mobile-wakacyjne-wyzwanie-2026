@@ -46,7 +46,6 @@ final goRouterProvider = Provider<GoRouter>((ref) {
     redirect: (context, state) async {
       try {
         final authRepo = ref.read(authRepositoryProvider);
-        await authRepo.initialize();
         final isAuthenticated = await authRepo.isLoggedIn;
 
         final isAuthPath = state.matchedLocation == RouteNames.auth ||
