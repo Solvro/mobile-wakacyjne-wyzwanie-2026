@@ -40,26 +40,38 @@ class AuthScreen extends ConsumerWidget {
                 constraints: const BoxConstraints(maxWidth: 250),
                 child: Column(
                   children: [
-                    ElevatedButton(
-                      onPressed: () => context.push("/login"),
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () => context.push("/login"),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: theme.colorScheme.primary,
+                          foregroundColor: theme.colorScheme.onPrimary,
+                          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          elevation: 4,
                         ),
+                        child: const Text("Zaloguj się", style: TextStyle(fontSize: 16)),
                       ),
-                      child: const Text("Zaloguj się"),
                     ),
                     const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () => context.push("/register"),
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () => context.push("/register"),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: theme.colorScheme.secondary,
+                          foregroundColor: theme.colorScheme.onSecondary,
+                          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          elevation: 4,
                         ),
+                        child: const Text("Zarejestruj się", style: TextStyle(fontSize: 16)),
                       ),
-                      child: const Text("Zarejestruj się"),
                     ),
                   ],
                 ),

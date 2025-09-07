@@ -2,6 +2,7 @@
 import "dart:developer" as developer;
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:go_router/go_router.dart";
 
 import "../providers/auth_providers.dart";
 
@@ -41,9 +42,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       final authRepo = ref.read(authRepositoryProvider);
       await authRepo.login(_emailController.text, _passwdController.text);
 
-      // Po udanym logowaniu przejdź do ekranu głównego
       if (mounted) {
-        await Navigator.of(context).pushReplacementNamed("/");
+        GoRouter.of(context).go("/");
       }
     } on Exception catch (e) {
       developer.log("Login error: $e", name: "Auth");

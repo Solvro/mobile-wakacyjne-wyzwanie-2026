@@ -25,7 +25,7 @@ class GoRouterRefreshStream extends ChangeNotifier {
 
   @override
   void dispose() {
-    _subscription.cancel();
+    unawaited(_subscription.cancel());
     super.dispose();
   }
 }
@@ -39,7 +39,7 @@ class RouteNames {
 }
 
 final goRouterProvider = Provider<GoRouter>((ref) {
-  // final authRepo = ref.read(authRepositoryProvider);
+  final authRepo = ref.read(authRepositoryProvider);
 
   return GoRouter(
     initialLocation: RouteNames.auth,
@@ -69,7 +69,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         return RouteNames.auth;
       }
     },
-    // refreshListenable: GoRouterRefreshStream(authRepo.authStateChanges),
+    refreshListenable: GoRouterRefreshStream(authRepo.authStateChanges),
     routes: [
       // Auth flow
       GoRoute(
