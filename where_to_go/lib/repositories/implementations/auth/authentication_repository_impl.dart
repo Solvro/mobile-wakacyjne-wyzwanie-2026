@@ -1,6 +1,6 @@
-import "../authentication_repository.dart";
-import "../local_authentication_repository.dart";
-import "../remote_authentication_repository.dart";
+import "../../auth/authentication_repository.dart";
+import "../../auth/local_authentication_repository.dart";
+import "../../auth/remote_authentication_repository.dart";
 
 class AuthenticationRepositoryImpl implements AuthenticationRepository {
   final LocalAuthenticationRepository _localAuthenticationRepository;

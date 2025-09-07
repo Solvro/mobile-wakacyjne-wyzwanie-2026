@@ -1,9 +1,9 @@
 import "package:dio/dio.dart";
 
-import "../../models/paginated_dto.dart";
-import "../../models/place_create_without_owner_input_dto.dart";
-import "../../models/place_response_dto.dart";
-import "../dream_places_repository.dart";
+import "../../../models/place/paginated_dto.dart";
+import "../../../models/place/place_create_without_owner_input_dto.dart";
+import "../../../models/place/place_response_dto.dart";
+import "../../app/dream_places_repository.dart";
 
 class DreamPlacesRepositoryImpl implements DreamPlacesRepository {
   final Dio _dio;

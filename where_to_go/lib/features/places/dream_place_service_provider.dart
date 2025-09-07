@@ -3,8 +3,8 @@ import "dart:io";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 
-import "../../models/place_create_without_owner_input_dto.dart";
-import "../../models/place_response_dto.dart";
+import "../../models/place/place_create_without_owner_input_dto.dart";
+import "../../models/place/place_response_dto.dart";
 import "../auth/auth_provider.dart";
 import "../photos/photos_repository_provider.dart";
 import "place_repository_provider.dart";

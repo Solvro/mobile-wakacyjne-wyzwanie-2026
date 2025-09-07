@@ -2,8 +2,8 @@ import "dart:io";
 
 import "package:dio/dio.dart";
 
-import "../../models/photo_response_dto.dart";
-import "../photos_repository.dart";
+import "../../../models/place/photo_response_dto.dart";
+import "../../app/photos_repository.dart";
 
 class PhotosRepositoryImpl implements PhotosRepository {
   final Dio _dio;

@@ -6,7 +6,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:reactive_forms/reactive_forms.dart";
 
 import "../features/places/dream_place_service_provider.dart";
-import "../models/place_create_without_owner_input_dto.dart";
+import "../models/place/place_create_without_owner_input_dto.dart";
 import "../themes/utils.dart";
 import "../utils/error_handler.dart";
 import "../widgets/one_image_picker.dart";

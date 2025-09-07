@@ -1,12 +1,12 @@
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 
-import "../../repositories/authentication_repository.dart";
-import "../../repositories/implementations/authentication_repository_impl.dart";
-import "../../repositories/implementations/local_authentication_repository_impl.dart";
-import "../../repositories/implementations/remote_authentication_repository_impl.dart";
-import "../../repositories/local_authentication_repository.dart";
-import "../../repositories/remote_authentication_repository.dart";
+import "../../repositories/auth/authentication_repository.dart";
+import "../../repositories/auth/local_authentication_repository.dart";
+import "../../repositories/auth/remote_authentication_repository.dart";
+import "../../repositories/implementations/auth/authentication_repository_impl.dart";
+import "../../repositories/implementations/auth/local_authentication_repository_impl.dart";
+import "../../repositories/implementations/auth/remote_authentication_repository_impl.dart";
 import "http_provider.dart";
 
 part "repository_providers.g.dart";

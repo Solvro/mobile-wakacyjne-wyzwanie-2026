@@ -1,5 +1,5 @@
-import "../models/auth_response.dart";
-import "../models/me_dto.dart";
+import "../../models/auth/auth_response.dart";
+import "../../models/auth/me_dto.dart";
 
 abstract class RemoteAuthenticationRepository {
   Future<AuthResponse> login(String email, String password);

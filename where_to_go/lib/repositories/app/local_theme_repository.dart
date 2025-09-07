@@ -1,4 +1,4 @@
-import "../themes/enums/mode_theme.dart";
+import "../../themes/enums/mode_theme.dart";
 
 abstract class LocalThemeRepository {
   Future<ModeTheme> getTheme();

@@ -1,9 +1,9 @@
 import "package:dio/dio.dart";
 
-import "../../models/auth_response.dart";
-import "../../models/me_dto.dart";
-import "../../models/user.dart";
-import "../remote_authentication_repository.dart";
+import "../../../models/auth/auth_response.dart";
+import "../../../models/auth/me_dto.dart";
+import "../../../models/auth/user.dart";
+import "../../auth/remote_authentication_repository.dart";
 
 class RemoteAuthenticationRepositoryImpl implements RemoteAuthenticationRepository {
   final Dio _dio;

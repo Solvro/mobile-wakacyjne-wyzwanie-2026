@@ -1,5 +1,5 @@
-import "../models/place_create_without_owner_input_dto.dart";
-import "../models/place_response_dto.dart";
+import "../../models/place/place_create_without_owner_input_dto.dart";
+import "../../models/place/place_response_dto.dart";
 
 abstract class DreamPlacesRepository {
   Future<PlaceResponseDto> read(String id);

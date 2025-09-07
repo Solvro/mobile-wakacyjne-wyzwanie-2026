@@ -3,7 +3,7 @@ import "package:go_router/go_router.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
 import "../features/places/dream_place_service_provider.dart";
-import "../models/place_response_dto.dart";
+import "../models/place/place_response_dto.dart";
 import "../utils/paths.dart";
 import "../views/dream_place_screen_consumer_router.dart";
 
