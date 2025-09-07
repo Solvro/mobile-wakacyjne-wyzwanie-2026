@@ -65,8 +65,14 @@ RestClient client(
   Future<void> Function(DioException error, ErrorInterceptorHandler handler)? onError,
 }) {
   final dio = Dio();
-  dio.options.headers["Authorization"] = (token != null) ? "Bearer $token" : null;
-  onError ?? dio.interceptors.add(InterceptorsWrapper(onError: onError));
+  if (token != null) dio.options.headers["Authorization"] = "Bearer $token";
+  if (onError != null) dio.interceptors.add(InterceptorsWrapper(onError: onError));
+  // dio.interceptors.add(LogInterceptor(
+  //   requestBody: true,
+  //   responseBody: true,
+  //   responseHeader: false,
+  //   logPrint: print,
+  // ));
 
   return RestClient(dio);
 }

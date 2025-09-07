@@ -108,6 +108,15 @@ DreamPlace? placeById(Ref ref, int id) {
 }
 
 @riverpod
+Future<File> photoById(Ref ref, int id) async {
+  final places = await ref.watch(dreamPlaceServiceProvider.future);
+  final photoRepo = await ref.watch(photoRepositoryProvider.future);
+
+  final place = places.firstWhere((p) => p.id == id);
+  return photoRepo.downloadImage(place.imageUrl);
+}
+
+@riverpod
 Future<List<DreamPlace>> filteredPlaces(Ref ref) async {
   final query = ref.watch(searchQueryProvider);
   final allPlacesAsync = await ref.watch(dreamPlaceServiceProvider.future);

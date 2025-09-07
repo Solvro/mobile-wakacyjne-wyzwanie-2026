@@ -1,6 +1,7 @@
 import "dart:io";
 
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:path_provider/path_provider.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 
 import "../../../features/photos/repository/photo_repository.dart";
@@ -22,8 +23,11 @@ class PhotoRepositoryImpl implements PhotoRepository {
 
   @override
   Future<File> downloadImage(String name) async {
-    final res = await _client.downloadPhoto(name);
-    throw UnimplementedError();
+    final bytes = await _client.downloadPhoto(name);
+    final tempDir = await getTemporaryDirectory();
+    final tempFile = File("${tempDir.path}/$name");
+    await tempFile.writeAsBytes(bytes);
+    return tempFile;
   }
 }
 

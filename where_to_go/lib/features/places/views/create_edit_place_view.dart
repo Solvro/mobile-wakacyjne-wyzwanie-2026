@@ -9,23 +9,22 @@ import "../../../data/models/dream_place.dart";
 import "../../common/widgets/error_snack_bar.dart";
 import "../../common/widgets/reactive_image_picker.dart";
 
-class CreatePlaceView extends StatefulWidget {
+class CreateEditPlaceView extends StatefulWidget {
   final void Function(Map<String, Object?> values) onSubmit;
   final DreamPlace? place;
-  const CreatePlaceView({super.key, required this.onSubmit, this.place});
+  final File? photo;
+  const CreateEditPlaceView({super.key, required this.onSubmit, this.place, this.photo});
 
   @override
-  State<CreatePlaceView> createState() => _CreatePlaceViewState();
+  State<CreateEditPlaceView> createState() => _CreateEditPlaceViewState();
 }
 
-class _CreatePlaceViewState extends State<CreatePlaceView> {
+class _CreateEditPlaceViewState extends State<CreateEditPlaceView> {
   late FormGroup form = FormGroup({
     "name": FormControl<String>(validators: [Validators.required], value: widget.place?.name),
     "description": FormControl<String>(validators: [Validators.required], value: widget.place?.description),
     "isFavourite": FormControl<bool>(value: widget.place?.isFavourite ?? false),
-    "image": FormControl<File>(
-      validators: [Validators.required],
-    ),
+    "image": FormControl<File>(validators: [Validators.required], value: widget.photo),
   });
 
   void _submit() {

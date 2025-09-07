@@ -7,7 +7,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 
 import "../../../data/models/create_place_dto.dart";
 import "../service/dream_place_service.dart";
-import "../views/create_place_view.dart";
+import "../views/create_edit_place_view.dart";
 import "home_page.dart";
 
 class CreatePlacePage extends ConsumerWidget {
@@ -17,7 +17,7 @@ class CreatePlacePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return CreatePlaceView(
+    return CreateEditPlaceView(
       onSubmit: (Map<String, Object?> values) async {
         final name = values["name"]! as String;
         final description = values["description"]! as String;
