@@ -5,23 +5,27 @@ import "package:reactive_forms/reactive_forms.dart";
 
 import "../../../app/theme/app_theme.dart";
 import "../../../app/ui_config.dart";
+import "../../../data/models/dream_place.dart";
 import "../../common/widgets/error_snack_bar.dart";
 import "../../common/widgets/reactive_image_picker.dart";
 
 class CreatePlaceView extends StatefulWidget {
   final void Function(Map<String, Object?> values) onSubmit;
-  const CreatePlaceView({super.key, required this.onSubmit});
+  final DreamPlace? place;
+  const CreatePlaceView({super.key, required this.onSubmit, this.place});
 
   @override
   State<CreatePlaceView> createState() => _CreatePlaceViewState();
 }
 
 class _CreatePlaceViewState extends State<CreatePlaceView> {
-  final FormGroup form = FormGroup({
-    "name": FormControl<String>(validators: [Validators.required]),
-    "description": FormControl<String>(validators: [Validators.required]),
-    "isFavourite": FormControl<bool>(value: false),
-    "image": FormControl<File>(validators: [Validators.required]),
+  late FormGroup form = FormGroup({
+    "name": FormControl<String>(validators: [Validators.required], value: widget.place?.name),
+    "description": FormControl<String>(validators: [Validators.required], value: widget.place?.description),
+    "isFavourite": FormControl<bool>(value: widget.place?.isFavourite ?? false),
+    "image": FormControl<File>(
+      validators: [Validators.required],
+    ),
   });
 
   void _submit() {
@@ -93,7 +97,7 @@ class _CreatePlaceViewState extends State<CreatePlaceView> {
               ),
               ElevatedButton(
                 onPressed: _submit,
-                child: const Text("Create Place"),
+                child: Text(widget.place != null ? "Update Place" : "Create Place"),
               ),
             ],
           ),

@@ -6,6 +6,7 @@ import "../features/auth/auth_notifier.dart";
 import "../features/auth/pages/login_page.dart";
 import "../features/auth/pages/register_page.dart";
 import "../features/places/pages/create_place_page.dart";
+import "../features/places/pages/edit_place_page.dart";
 import "../features/places/pages/home_page.dart";
 import "../features/places/views/place_detail_view.dart";
 
@@ -37,6 +38,12 @@ GoRouter goRouter(Ref ref) {
         path: CreatePlacePage.route,
         builder: (context, state) => const CreatePlacePage(),
       ),
+      GoRoute(
+          path: "${EditPlacePage.route}/:id",
+          builder: (context, state) {
+            final id = state.pathParameters["id"]!;
+            return EditPlacePage(id: int.parse(id));
+          }),
       GoRoute(
         path: "${PlaceDetailView.route}/:id",
         builder: (context, state) {

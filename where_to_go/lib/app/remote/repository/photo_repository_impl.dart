@@ -19,6 +19,12 @@ class PhotoRepositoryImpl implements PhotoRepository {
     final uploadedImage = await _client.postImage(image);
     return uploadedImage.filename;
   }
+
+  @override
+  Future<File> downloadImage(String name) async {
+    final res = await _client.downloadPhoto(name);
+    throw UnimplementedError();
+  }
 }
 
 @riverpod

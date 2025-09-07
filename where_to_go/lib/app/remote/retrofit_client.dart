@@ -52,6 +52,10 @@ abstract class RestClient {
   @POST("/photos/upload")
   @MultiPart()
   Future<ImageDTO> postImage(@Part(name: "file") File file);
+
+  @GET("/photos/{filename}")
+  @DioResponseType(ResponseType.bytes)
+  Future<List<int>> downloadPhoto(@Path() String filename);
 }
 
 @riverpod

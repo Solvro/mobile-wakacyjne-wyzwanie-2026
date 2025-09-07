@@ -74,6 +74,24 @@ class DreamPlaceService extends _$DreamPlaceService {
     return newPlace;
   }
 
+  Future<DreamPlace> updateDreamPlaceWithPhoto(int id, CreatePlaceDTO place, File file) async {
+    final placeRepo = await ref.read(dreamPlaceRepositoryProvider.future);
+    final photoRepo = await ref.read(photoRepositoryProvider.future);
+    final path = await photoRepo.uploadImage(file);
+    final updatedPlace = await placeRepo.updatePlace(
+      id,
+      name: place.name,
+      description: place.description,
+      imageUrl: path,
+      isFavourite: place.isFavourite,
+    );
+
+    final updatedList = await placeRepo.getAll(ordering: _sortOrder);
+    final filtered = _showOnlyFavourites ? updatedList.where((p) => p.isFavourite).toList() : updatedList;
+    state = AsyncData(filtered);
+    return updatedPlace;
+  }
+
   Future<void> deleteDreamPlace(int id) async {
     final placeRepo = await ref.read(dreamPlaceRepositoryProvider.future);
     await placeRepo.delete(id);

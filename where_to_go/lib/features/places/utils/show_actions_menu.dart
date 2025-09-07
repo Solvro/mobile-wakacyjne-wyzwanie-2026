@@ -1,10 +1,13 @@
 import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
+import "../pages/edit_place_page.dart";
 import "../service/dream_place_service.dart";
 
 enum Actions {
   delete,
+  edit,
 }
 
 Future<void> showDeleteMenu({
@@ -26,10 +29,17 @@ Future<void> showDeleteMenu({
         value: Actions.delete,
         child: Text("Delete"),
       ),
+      PopupMenuItem<Actions>(
+        value: Actions.edit,
+        child: Text("Edit"),
+      ),
     ],
   );
 
   if (selected == Actions.delete) {
     await ref.read(dreamPlaceServiceProvider.notifier).deleteDreamPlace(placeId);
+  }
+  if (selected == Actions.edit) {
+    if (context.mounted) await GoRouter.of(context).push("${EditPlacePage.route}/$placeId");
   }
 }
