@@ -114,6 +114,7 @@ class _AddPlaceDialogState extends ConsumerState<AddPlaceDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      // Tytuł i formularz
       title: const Text("Dodaj miejsce marzeń"),
       content: Form(
         key: _formKey,
@@ -131,6 +132,7 @@ class _AddPlaceDialogState extends ConsumerState<AddPlaceDialog> {
                 validator: (value) => value == null || value.isEmpty ? "Podaj nazwę" : null,
               ),
               const SizedBox(height: 12),
+              // Opis miejsca
               TextFormField(
                 controller: _descController,
                 decoration: const InputDecoration(
@@ -150,6 +152,7 @@ class _AddPlaceDialogState extends ConsumerState<AddPlaceDialog> {
               ),
               const SizedBox(height: 8),
 
+              // Podgląd wybranego zdjęcia
               if (_selectedImage != null)
                 Column(
                   children: [
@@ -188,6 +191,7 @@ class _AddPlaceDialogState extends ConsumerState<AddPlaceDialog> {
 
               const SizedBox(height: 12),
 
+              // Przycisk do wyboru zdjęcia
               ElevatedButton.icon(
                 icon: const Icon(Icons.add_a_photo, size: 18),
                 label: const Text("Dodaj zdjęcie"),
@@ -198,6 +202,7 @@ class _AddPlaceDialogState extends ConsumerState<AddPlaceDialog> {
               ),
 
               const SizedBox(height: 16),
+              // Przełącznik ulubionych
               Row(
                 children: [
                   const Text("Ulubione", style: TextStyle(fontWeight: FontWeight.bold)),
@@ -215,6 +220,7 @@ class _AddPlaceDialogState extends ConsumerState<AddPlaceDialog> {
         ),
       ),
       actions: [
+        // Anuluj i Dodaj
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
           child: const Text("Anuluj"),
