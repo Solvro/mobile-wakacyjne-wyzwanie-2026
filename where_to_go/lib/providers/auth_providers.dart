@@ -13,8 +13,17 @@ final secureStorageProvider = Provider<FlutterSecureStorage>((ref) {
   return const FlutterSecureStorage();
 });
 
-final dioProvider = Provider<Dio>((ref) {
-  return Dio();
+// Provider tylko dla podstawowego Dio (bez interceptorów)
+final baseDioProvider = Provider<Dio>((ref) {
+  return Dio(BaseOptions(
+    baseUrl: "https://backend-api.w.solvro.pl",
+    connectTimeout: const Duration(seconds: 10),
+    receiveTimeout: const Duration(seconds: 20),
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+    },
+  ));
 });
 
 // 2. Provider dla repozytoriów
@@ -24,7 +33,7 @@ final localAuthRepoProvider = Provider<LocalAuthenticationRepository>((ref) {
 });
 
 final remoteAuthRepoProvider = Provider<RemoteAuthenticationRepository>((ref) {
-  final dio = ref.read(dioProvider);
+  final dio = ref.read(baseDioProvider);
   final localAuthRepo = ref.read(localAuthRepoProvider);
   return RemoteAuthenticationRepository(dio: dio, localAuthRepo: localAuthRepo);
 });
@@ -39,10 +48,49 @@ final authRepositoryProvider = Provider<AuthenticationRepository>((ref) {
     remoteAuthenticationRepository: remoteAuthRepo,
   );
 
-  // POPRAWIONE: funkcja strzałkowa
   ref.onDispose(authRepo.dispose);
 
   return authRepo;
+});
+
+// Provider Dio z interceptorami (PO authRepositoryProvider)
+final dioProvider = Provider<Dio>((ref) {
+  final authRepo = ref.read(authRepositoryProvider);
+  final baseDio = ref.read(baseDioProvider);
+
+  baseDio.interceptors.add(InterceptorsWrapper(
+    onRequest: (options, handler) {
+      final token = authRepo.tokens?.accessToken;
+      if (token != null && token.isNotEmpty) {
+        options.headers["Authorization"] = "Bearer $token";
+      }
+      return handler.next(options);
+    },
+    onError: (error, handler) async {
+      if (error.response?.statusCode == 401) {
+        try {
+          await authRepo.refreshToken();
+
+          // Poprawne ponowienie requestu
+          final newToken = authRepo.tokens?.accessToken;
+          if (newToken != null) {
+            error.requestOptions.headers["Authorization"] = "Bearer $newToken";
+          }
+
+          final response = await baseDio.fetch<dynamic>(error.requestOptions);
+          return handler.resolve(response);
+        } on DioException catch (e) {
+          await authRepo.logout();
+          return handler.reject(e);
+        } on Exception {
+          return handler.next(error);
+        }
+      }
+      return handler.next(error);
+    },
+  ));
+
+  return baseDio;
 });
 
 // 4. Provider stanu autentykacji

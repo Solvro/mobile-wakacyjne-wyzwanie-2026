@@ -1,38 +1,102 @@
 // lib/repositories/photos_repository.dart
 import "dart:io";
 import "package:dio/dio.dart";
-import "package:flutter_riverpod/flutter_riverpod.dart";
-import "../providers/http_client_provider.dart";
 
-class PhotosRepository {
+class PhotoUploadResponse {
+  final String id;
+  final String filename;
+  final String originalName;
+  final String mimeType;
+  final int size;
+  final String path;
+  final DateTime createdAt;
+
+  PhotoUploadResponse({
+    required this.id,
+    required this.filename,
+    required this.originalName,
+    required this.mimeType,
+    required this.size,
+    required this.path,
+    required this.createdAt,
+  });
+
+  factory PhotoUploadResponse.fromJson(Map<String, dynamic> json) {
+    return PhotoUploadResponse(
+      id: json["id"] as String,
+      filename: json["filename"] as String,
+      originalName: json["originalName"] as String,
+      mimeType: json["mimeType"] as String,
+      size: json["size"] as int,
+      path: json["path"] as String,
+      createdAt: DateTime.parse(json["createdAt"] as String),
+    );
+  }
+
+  @override
+  String toString() {
+    return "PhotoUploadResponse(id: $id, path: $path, size: $size bytes)";
+  }
+}
+
+abstract class IPhotosRepository {
+  Future<PhotoUploadResponse> uploadPhoto(File imageFile);
+}
+
+class PhotosRepository implements IPhotosRepository {
   final Dio _dio;
+  final String _baseUrl;
 
-  PhotosRepository({Dio? dio}) : _dio = dio ?? Dio();
+  PhotosRepository({
+    required Dio dio,
+    required String baseUrl,
+  })  : _dio = dio,
+        _baseUrl = baseUrl;
 
-  // Uploduje zdjęcie i zwraca id, filename, size, path (choć ja skorzystam tylko z path)
-  Future<String?> uploadPhoto(File imageFile) async {
+  @override
+  Future<PhotoUploadResponse> uploadPhoto(File imageFile) async {
     try {
-      final String filename = imageFile.path.split("/").last;
+      if (!imageFile.existsSync()) {
+        throw Exception("Plik nie istnieje: ${imageFile.path}");
+      }
+      final fileLength = imageFile.lengthSync();
 
-      final response = await _dio.post(
-        "$_baseUrl/photos/upload", // 👈 tu Twój endpoint
-        data: FormData.fromMap({
-          "photo": await MultipartFile.fromFile(
-            imageFile.path,
-            filename: filename,
-          ),
-        }),
-        options: Options(
-          headers: {"Content-Type": "multipart/form-data"},
-        ),
+      // Limit 15MB
+      if (fileLength > 15 * 1024 * 1024) {
+        throw Exception("Plik jest zbyt duży: ${fileLength ~/ 1024 ~/ 1024}MB");
+      }
+
+      final String originalName = imageFile.path.split("/").last;
+
+      final multipartFile = await MultipartFile.fromFile(
+        imageFile.path,
+        filename: originalName,
       );
-      if (response.statusCode == 200) {
-        final data = response.data as Map<String, dynamic>;
-        return data["path"] as String; // Zwraca ścieżkę do zdjęcia
+
+      final formData = FormData.fromMap({
+        "file": multipartFile,
+      });
+
+      final response = await _dio.post<Map<String, dynamic>>(
+        "$_baseUrl/photos/upload",
+        data: formData,
+      );
+
+      if (response.statusCode == 201) {
+        final data = response.data!;
+        return PhotoUploadResponse.fromJson(data);
+      } else {
+        throw Exception("Nieoczekiwany status: ${response.statusCode}");
       }
     } on DioException catch (e) {
-      throw Exception("Błąd podczas uploadu zdjęcia: ${e.response?.data}");
+      if (e.response != null) {
+        final errorData = e.response!.data;
+        throw Exception("Błąd uploadu (${e.response!.statusCode}): $errorData");
+      } else {
+        throw Exception("Błąd sieci: ${e.message}");
+      }
+    } catch (e) {
+      throw Exception("Nieoczekiwany błąd: $e");
     }
-    return null;
   }
 }

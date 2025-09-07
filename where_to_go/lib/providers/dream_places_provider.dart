@@ -1,11 +1,12 @@
 import "package:flutter_riverpod/flutter_riverpod.dart";
+
 import "../models/dream_place.dart";
+import "../providers/auth_providers.dart";
 import "../repositories/dream_place_repository.dart";
-import "http_client_provider.dart";
 
 /// Provider repozytorium DreamPlace
 final dreamPlaceRepositoryProvider = Provider<DreamPlaceRepository>((ref) {
-  final dio = ref.watch(authenticationRepositoryProvider);
+  final dio = ref.watch(baseDioProvider);
   return DreamPlaceRepository(apiUrl: dio.options.baseUrl);
 });
 

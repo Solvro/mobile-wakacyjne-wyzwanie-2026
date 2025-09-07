@@ -7,6 +7,7 @@ import "package:image_picker/image_picker.dart";
 
 import "../models/dream_place.dart";
 import "../providers/dream_places_provider.dart";
+import "../providers/photos_providers.dart";
 
 class AddPlaceDialog extends ConsumerStatefulWidget {
   const AddPlaceDialog({super.key});
@@ -23,6 +24,8 @@ class _AddPlaceDialogState extends ConsumerState<AddPlaceDialog> {
   var _isFavorite = false;
   File? _selectedImage;
   final _picker = ImagePicker();
+  var _isUploading = false;
+  var _uploadStatus = "";
 
   Future<void> _pickImageFromGallery() async {
     try {
@@ -36,12 +39,12 @@ class _AddPlaceDialogState extends ConsumerState<AddPlaceDialog> {
         setState(() {
           _selectedImage = File(pickedFile.path);
         });
+
+        _showSnackbar("Zdjęcie wybrane");
       }
     } on Exception catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Błąd wyboru zdjęcia: $e")),
-        );
+        _showSnackbar("Błąd wyboru zdjęcia: $e");
       }
     }
   }
@@ -58,14 +61,23 @@ class _AddPlaceDialogState extends ConsumerState<AddPlaceDialog> {
         setState(() {
           _selectedImage = File(pickedFile.path);
         });
+
+        _showSnackbar("Zdjęcie zrobione");
       }
     } on Exception catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Błąd aparatu: $e")),
-        );
+        _showSnackbar("Błąd aparatu: $e");
       }
     }
+  }
+
+  void _showSnackbar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: const Duration(seconds: 2),
+      ),
+    );
   }
 
   Future<void> _showImageSourceDialog() async {
@@ -102,6 +114,8 @@ class _AddPlaceDialogState extends ConsumerState<AddPlaceDialog> {
     setState(() {
       _selectedImage = null;
     });
+
+    _showSnackbar("Zdjęcie usunięte");
   }
 
   @override
@@ -114,7 +128,6 @@ class _AddPlaceDialogState extends ConsumerState<AddPlaceDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      // Tytuł i formularz
       title: const Text("Dodaj miejsce marzeń"),
       content: Form(
         key: _formKey,
@@ -132,7 +145,6 @@ class _AddPlaceDialogState extends ConsumerState<AddPlaceDialog> {
                 validator: (value) => value == null || value.isEmpty ? "Podaj nazwę" : null,
               ),
               const SizedBox(height: 12),
-              // Opis miejsca
               TextFormField(
                 controller: _descController,
                 decoration: const InputDecoration(
@@ -144,15 +156,11 @@ class _AddPlaceDialogState extends ConsumerState<AddPlaceDialog> {
                 validator: (value) => value == null || value.isEmpty ? "Podaj opis" : null,
               ),
               const SizedBox(height: 16),
-
-              // Sekcja wyboru zdjęcia
               const Text(
                 "Zdjęcie miejsca",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
               const SizedBox(height: 8),
-
-              // Podgląd wybranego zdjęcia
               if (_selectedImage != null)
                 Column(
                   children: [
@@ -162,7 +170,7 @@ class _AddPlaceDialogState extends ConsumerState<AddPlaceDialog> {
                           borderRadius: BorderRadius.circular(12),
                           child: Image.file(
                             _selectedImage!,
-                            height: 120,
+                            height: 150,
                             width: double.infinity,
                             fit: BoxFit.cover,
                           ),
@@ -188,71 +196,125 @@ class _AddPlaceDialogState extends ConsumerState<AddPlaceDialog> {
                     ),
                   ],
                 ),
-
               const SizedBox(height: 12),
-
-              // Przycisk do wyboru zdjęcia
               ElevatedButton.icon(
                 icon: const Icon(Icons.add_a_photo, size: 18),
                 label: const Text("Dodaj zdjęcie"),
-                onPressed: _showImageSourceDialog,
+                onPressed: _isUploading ? null : _showImageSourceDialog,
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 ),
               ),
-
               const SizedBox(height: 16),
-              // Przełącznik ulubionych
               Row(
                 children: [
                   const Text("Ulubione", style: TextStyle(fontWeight: FontWeight.bold)),
                   const Spacer(),
                   Switch(
                     value: _isFavorite,
-                    onChanged: (value) {
-                      setState(() => _isFavorite = value);
-                    },
+                    onChanged: _isUploading
+                        ? null
+                        : (value) {
+                            setState(() => _isFavorite = value);
+                          },
                   ),
                 ],
               ),
+              if (_isUploading)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: Column(
+                    children: [
+                      const CircularProgressIndicator(),
+                      const SizedBox(height: 8),
+                      Text(
+                        _uploadStatus.isNotEmpty ? _uploadStatus : "Uploadowanie zdjęcia...",
+                        style: const TextStyle(fontSize: 12),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
             ],
           ),
         ),
       ),
       actions: [
-        // Anuluj i Dodaj
         TextButton(
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: _isUploading ? null : () => Navigator.of(context).pop(),
           child: const Text("Anuluj"),
         ),
         ElevatedButton(
-          onPressed: () async {
-            if (!_formKey.currentState!.validate()) return;
-
-            final navigator = Navigator.of(context);
-
-            // Tymczasowo placeholder jeśli nie ma uploadu
-            final finalImageUrl = _selectedImage != null
-                ? "https://via.placeholder.com/400x300?text=Wybrales+zdjecie"
-                : "https://via.placeholder.com/400x300?text=Brak+zdjecia";
-
-            final newPlace = DreamPlace(
-              name: _nameController.text,
-              description: _descController.text,
-              imageUrl: finalImageUrl,
-              isFavorite: _isFavorite,
-            );
-
-            final repo = ref.read(dreamPlaceRepositoryProvider);
-            await repo.addDreamPlace(newPlace);
-
-            if (mounted) {
-              navigator.pop(newPlace);
-            }
-          },
-          child: const Text("Dodaj"),
+          onPressed: _isUploading ? null : _addDreamPlace,
+          child: _isUploading
+              ? const CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(Colors.white))
+              : const Text("Dodaj"),
         ),
       ],
     );
+  }
+
+  Future<void> _addDreamPlace() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    setState(() {
+      _isUploading = true;
+      _uploadStatus = "Przygotowywanie...";
+    });
+
+    try {
+      final navigator = Navigator.of(context);
+      var finalImageUrl = "https://via.placeholder.com/400x300?text=Brak+zdjecia";
+
+      if (_selectedImage != null) {
+        try {
+          setState(() => _uploadStatus = "Uploadowanie zdjęcia...");
+
+          final photosRepo = ref.read(photosRepositoryProvider);
+          final uploadResponse = await photosRepo.uploadPhoto(_selectedImage!);
+          finalImageUrl = uploadResponse.path;
+
+          setState(() => _uploadStatus = "Zdjęcie uploaded!");
+
+          if (mounted) {
+            _showSnackbar("Zdjęcie uploaded: ${uploadResponse.filename}");
+          }
+        } on Exception catch (e) {
+          if (mounted) {
+            _showSnackbar("Błąd uploadu zdjęcia: $e");
+          }
+          setState(() => _isUploading = false);
+          return;
+        }
+      }
+
+      setState(() => _uploadStatus = "Dodawanie miejsca...");
+
+      final newPlace = DreamPlace(
+        name: _nameController.text,
+        description: _descController.text,
+        imageUrl: finalImageUrl,
+        isFavorite: _isFavorite,
+      );
+
+      final repo = ref.read(dreamPlaceRepositoryProvider);
+      await repo.addDreamPlace(newPlace);
+
+      if (mounted) {
+        _showSnackbar("Dodano: ${newPlace.name}");
+        navigator.pop(newPlace);
+      }
+    } on Exception catch (e) {
+      if (mounted) {
+        _showSnackbar("Błąd dodawania miejsca: $e");
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isUploading = false;
+          _uploadStatus = "";
+        });
+      }
+    }
   }
 }

@@ -6,15 +6,12 @@ import "../repositories/local_authentication_repository.dart";
 class RemoteAuthenticationRepository {
   final Dio _dio;
   final LocalAuthenticationRepository _localAuthRepo;
-  final String _baseUrl;
 
   RemoteAuthenticationRepository({
     required Dio dio,
     required LocalAuthenticationRepository localAuthRepo,
-    required String baseUrl,
   })  : _dio = dio,
-        _localAuthRepo = localAuthRepo,
-        _baseUrl = baseUrl;
+        _localAuthRepo = localAuthRepo;
 
   Future<AuthenticationTokens?> login({
     required String email,
@@ -22,7 +19,7 @@ class RemoteAuthenticationRepository {
   }) async {
     try {
       final response = await _dio.post<Map<String, dynamic>>(
-        "$_baseUrl/auth/login",
+        "/auth/login",
         data: {
           "email": email,
           "password": password,
@@ -39,7 +36,16 @@ class RemoteAuthenticationRepository {
         return tokens;
       }
     } on DioException catch (e) {
-      throw Exception("Błąd logowania: ${e.response?.data}");
+      if (e.response != null) {
+        final errorData = e.response!.data;
+        throw Exception("Błąd logowania (${e.response!.statusCode}): $errorData");
+      } else if (e.type == DioExceptionType.connectionError) {
+        throw Exception("Błąd połączenia: Sprawdź internet");
+      } else {
+        throw Exception("Błąd logowania: ${e.message}");
+      }
+    } catch (e) {
+      throw Exception("Nieoczekiwany błąd: $e");
     }
     return null;
   }
@@ -50,7 +56,7 @@ class RemoteAuthenticationRepository {
   }) async {
     try {
       final response = await _dio.post<Map<String, dynamic>>(
-        "$_baseUrl/auth/register",
+        "/auth/register",
         data: {
           "email": email,
           "password": password,
@@ -79,7 +85,7 @@ class RemoteAuthenticationRepository {
     }
     try {
       final response = await _dio.post<Map<String, dynamic>>(
-        "$_baseUrl/auth/refresh",
+        "/auth/refresh",
         data: {
           "refreshToken": currentTokens.refreshToken,
         },
