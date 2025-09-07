@@ -1,4 +1,4 @@
-//providers/auth_providers.dart
+// lib/providers/auth_providers.dart
 import "package:dio/dio.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:flutter_secure_storage/flutter_secure_storage.dart";
@@ -19,35 +19,40 @@ final dioProvider = Provider<Dio>((ref) {
 
 // 2. Provider dla repozytoriów
 final localAuthRepoProvider = Provider<LocalAuthenticationRepository>((ref) {
-  final secureStorage = ref.watch(secureStorageProvider);
+  final secureStorage = ref.read(secureStorageProvider);
   return LocalAuthenticationRepository(secureStorage: secureStorage);
 });
 
 final remoteAuthRepoProvider = Provider<RemoteAuthenticationRepository>((ref) {
-  final dio = ref.watch(dioProvider);
-  final localAuthRepo = ref.watch(localAuthRepoProvider);
+  final dio = ref.read(dioProvider);
+  final localAuthRepo = ref.read(localAuthRepoProvider);
   return RemoteAuthenticationRepository(dio: dio, localAuthRepo: localAuthRepo);
 });
 
 // 3. Główny provider AuthenticationRepository
 final authRepositoryProvider = Provider<AuthenticationRepository>((ref) {
-  final localAuthRepo = ref.watch(localAuthRepoProvider);
-  final remoteAuthRepo = ref.watch(remoteAuthRepoProvider);
-  return AuthenticationRepository(
+  final localAuthRepo = ref.read(localAuthRepoProvider);
+  final remoteAuthRepo = ref.read(remoteAuthRepoProvider);
+
+  final authRepo = AuthenticationRepository(
     localAuthenticationRepository: localAuthRepo,
     remoteAuthenticationRepository: remoteAuthRepo,
   );
+
+  // POPRAWIONE: funkcja strzałkowa
+  ref.onDispose(authRepo.dispose);
+
+  return authRepo;
 });
 
-// 4. Provider stanu autentykacji (uproszczony)
-final authStateProvider = FutureProvider<bool>((ref) async {
-  final authRepo = ref.watch(authRepositoryProvider);
-  await authRepo.initialize();
+// 4. Provider stanu autentykacji
+final authStateProvider = FutureProvider<bool>((ref) {
+  final authRepo = ref.read(authRepositoryProvider);
   return authRepo.isLoggedIn;
 });
 
 // 5. Provider dla tokenów (opcjonalnie)
 final tokensProvider = Provider<AuthenticationTokens?>((ref) {
-  final authRepo = ref.watch(authRepositoryProvider);
+  final authRepo = ref.read(authRepositoryProvider);
   return authRepo.tokens;
 });

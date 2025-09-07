@@ -1,4 +1,5 @@
 // lib/screens/login_screen.dart
+import "dart:developer" as developer;
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 
@@ -29,24 +30,35 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Future<void> _login() async {
     if (!_formKey.currentState!.validate()) return;
 
-    if (mounted) {
-      // Navigator.of(context).pop(); // Powrót do poprzedniego ekranu (AuthScreen)
-      await Navigator.of(context).pushReplacementNamed("/"); // Przejście do ekranu głównego
-    }
-
     setState(() {
       _isLoading = true;
       _errorMessage = null;
     });
 
     try {
+      developer.log("Login attempt with: ${_emailController.text}", name: "Auth");
+
       final authRepo = ref.read(authRepositoryProvider);
       await authRepo.login(_emailController.text, _passwdController.text);
+
+      // Po udanym logowaniu przejdź do ekranu głównego
+      if (mounted) {
+        await Navigator.of(context).pushReplacementNamed("/");
+      }
     } on Exception catch (e) {
-      setState(() {
-        _errorMessage = _getErrorMessage(e);
-        _isLoading = false;
-      });
+      developer.log("Login error: $e", name: "Auth");
+      if (mounted) {
+        setState(() {
+          _errorMessage = _getErrorMessage(e);
+          _isLoading = false;
+        });
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
@@ -55,9 +67,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       return "Nieprawidłowy email lub hasło.";
     } else if (error.toString().contains("Network error")) {
       return "Błąd sieci. Sprawdź połączenie internetowe.";
+    } else if (error.toString().contains("Błąd logowania")) {
+      return error.toString().replaceFirst("Exception: ", "");
     }
-    // return "Wystąpił błąd. Spróbuj ponownie.";
-    return "Unexpected error: $error";
+    return "Wystąpił błąd. Spróbuj ponownie.";
   }
 
   @override

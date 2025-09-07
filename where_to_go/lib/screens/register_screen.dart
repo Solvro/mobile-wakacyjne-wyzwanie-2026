@@ -39,17 +39,26 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     });
 
     try {
+      developer.log("Register attempt with: ${_emailController.text}", name: "Auth");
+
       final authRepo = ref.read(authRepositoryProvider);
       await authRepo.register(_emailController.text, _passwdController.text);
 
+      // Po udanej rejestracji przejdź do ekranu głównego
       if (mounted) {
-        // Navigator.of(context).pop(); // Powrót do poprzedniego ekranu (AuthScreen)
-        await Navigator.of(context).pushReplacementNamed("/"); // Przejście do ekranu głównego
+        await Navigator.of(context).pushReplacementNamed("/");
       }
     } on Exception catch (e) {
+      developer.log("Register error: $e", name: "Auth");
       if (mounted) {
         setState(() {
           _errorMessage = _getErrorMessage(e);
+          _isLoading = false;
+        });
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
           _isLoading = false;
         });
       }
@@ -61,10 +70,11 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       return "Ten email jest już w użyciu.";
     } else if (error.toString().contains("Network error")) {
       return "Błąd sieci. Sprawdź połączenie internetowe.";
+    } else if (error.toString().contains("Błąd rejestracji")) {
+      return error.toString().replaceFirst("Exception: ", "");
     }
     developer.log("Unexpected error: $error", name: "AuthError");
-    // return "Wystąpił błąd. Spróbuj ponownie.";
-    return "Unexpected error: $error";
+    return "Wystąpił błąd. Spróbuj ponownie.";
   }
 
   @override

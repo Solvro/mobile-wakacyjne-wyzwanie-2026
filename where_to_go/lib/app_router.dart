@@ -1,4 +1,6 @@
 // lib/app_router.dart
+import "dart:async";
+
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:go_router/go_router.dart";
@@ -10,6 +12,24 @@ import "screens/dream_place_screen.dart";
 import "screens/login_screen.dart";
 import "screens/register_screen.dart";
 
+// lib/app_router.dart
+class GoRouterRefreshStream extends ChangeNotifier {
+  GoRouterRefreshStream(Stream<dynamic> stream) {
+    notifyListeners();
+    _subscription = stream.asBroadcastStream().listen(
+          (dynamic _) => notifyListeners(),
+        );
+  }
+
+  late final StreamSubscription<dynamic> _subscription;
+
+  @override
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
+  }
+}
+
 class RouteNames {
   static const auth = "/auth";
   static const login = "/login";
@@ -19,30 +39,37 @@ class RouteNames {
 }
 
 final goRouterProvider = Provider<GoRouter>((ref) {
+  // final authRepo = ref.read(authRepositoryProvider);
+
   return GoRouter(
     initialLocation: RouteNames.auth,
     redirect: (context, state) async {
-      // Odczytaj authRepo bez watch (aby uniknąć cyklicznych zależności)
-      final authRepo = ref.read(authRepositoryProvider);
-      await authRepo.initialize();
-      final isAuthenticated = await authRepo.isLoggedIn;
+      try {
+        final authRepo = ref.read(authRepositoryProvider);
+        await authRepo.initialize();
+        final isAuthenticated = await authRepo.isLoggedIn;
 
-      final isAuthPath = state.matchedLocation == RouteNames.auth ||
-          state.matchedLocation == RouteNames.login ||
-          state.matchedLocation == RouteNames.register;
+        final isAuthPath = state.matchedLocation == RouteNames.auth ||
+            state.matchedLocation == RouteNames.login ||
+            state.matchedLocation == RouteNames.register;
 
-      // Jeśli użytkownik jest zalogowany i próbuje wejść na auth screen
-      if (isAuthenticated && isAuthPath) {
-        return RouteNames.home;
-      }
+        if (isAuthenticated && isAuthPath) {
+          return RouteNames.home;
+        }
 
-      // Jeśli użytkownik NIE jest zalogowany i próbuje wejść na chronione ścieżki
-      if (!isAuthenticated && !isAuthPath) {
+        if (!isAuthenticated && !isAuthPath) {
+          return RouteNames.auth;
+        }
+
+        return null;
+      } on Exception catch (e, stackTrace) {
+        // Dodaj logowanie błędu
+        debugPrint("Router redirect error: $e. StackTrace: $stackTrace");
+        // W przypadku błędu zawsze idź do auth
         return RouteNames.auth;
       }
-
-      return null;
     },
+    // refreshListenable: GoRouterRefreshStream(authRepo.authStateChanges),
     routes: [
       // Auth flow
       GoRoute(
