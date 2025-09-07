@@ -1,3 +1,5 @@
+//lib/models/dream_place.dart
+
 import "package:freezed_annotation/freezed_annotation.dart";
 
 part "dream_place.freezed.dart";

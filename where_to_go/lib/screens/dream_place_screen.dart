@@ -1,4 +1,3 @@
-// lib/screens/dream_place_screen.dart
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:go_router/go_router.dart";
@@ -38,7 +37,6 @@ class DreamPlacesScreen extends ConsumerWidget {
         final authRepo = ref.read(authRepositoryProvider);
         await authRepo.logout();
 
-        // Użyj goRouter do przekierowania zamiast context.go
         if (context.mounted) {
           GoRouter.of(context).go("/auth");
         }
@@ -162,8 +160,6 @@ class DreamPlacesScreen extends ConsumerWidget {
               builder: (_) => const AddPlaceDialog(),
             );
             if (newPlace != null) {
-              final repo = ref.read(dreamPlaceRepositoryProvider);
-              await repo.addDreamPlace(newPlace);
               ref.invalidate(dreamPlacesProvider);
             }
           },

@@ -1,4 +1,3 @@
-// lib/providers/auth_providers.dart
 import "package:dio/dio.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:flutter_secure_storage/flutter_secure_storage.dart";
@@ -17,8 +16,8 @@ final secureStorageProvider = Provider<FlutterSecureStorage>((ref) {
 final baseDioProvider = Provider<Dio>((ref) {
   return Dio(BaseOptions(
     baseUrl: "https://backend-api.w.solvro.pl",
-    connectTimeout: const Duration(seconds: 10),
-    receiveTimeout: const Duration(seconds: 20),
+    connectTimeout: const Duration(seconds: 30), // Zwiększone z 10
+    receiveTimeout: const Duration(seconds: 30), // Zwiększone z 20
     headers: {
       "Content-Type": "application/json",
       "Accept": "application/json",
