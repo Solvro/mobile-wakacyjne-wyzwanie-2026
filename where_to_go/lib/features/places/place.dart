@@ -1,10 +1,8 @@
-import "../../gen/assets.gen.dart";
-
 class Place {
   final int id;
   final String title;
   final String description;
-  final AssetGenImage photo;
+  final String photo;
   final bool isFavorite;
 
   Place(

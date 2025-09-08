@@ -1,6 +1,8 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
-import "../features/places/place_provider.dart";
+import "../features/places/providers/places_provider.dart";
+
+import "../features/theme/utils/is_dark_mode.dart";
 
 class DreamPlaceScreen extends ConsumerWidget {
   final int id;
@@ -11,39 +13,45 @@ class DreamPlaceScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final place = ref.watch(placesProvider).firstWhere((e) => e.id == id);
+    final place = ref.watch(placesProvider).value?.firstWhere((e) => e.id == id);
 
-    return Scaffold(
-      body: Column(
-        children: [
-          place.photo.image(fit: BoxFit.cover),
-          Padding(
-            padding: const EdgeInsetsGeometry.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600), place.title),
-                const SizedBox(height: 8),
-                Text(place.description)
-              ],
+    if (place == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    return Consumer(builder: (context, ref, child) {
+      return Scaffold(
+        body: Column(
+          children: [
+            Image(fit: BoxFit.cover, image: AssetImage(place.photo)),
+            Padding(
+              padding: const EdgeInsetsGeometry.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600), place.title),
+                  const SizedBox(height: 8),
+                  Text(place.description)
+                ],
+              ),
             ),
-          ),
-          Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [Icons.beach_access, Icons.satellite, Icons.wifi, Icons.ballot]
-                  .map((icon) => Column(
-                        children: [Icon(icon)],
-                      ))
-                  .toList())
-        ],
-      ),
-      backgroundColor: const Color.fromARGB(255, 162, 236, 200),
-      appBar: AppBar(title: Text(place.title), actions: [
-        IconButton(
-            onPressed: () => {ref.read(placesProvider.notifier).toggleFavorite(id)},
-            icon: Icon(place.isFavorite ? Icons.favorite : Icons.favorite_border,
-                color: place.isFavorite ? Colors.red : null))
-      ]),
-    );
+            Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [Icons.beach_access, Icons.satellite, Icons.wifi, Icons.ballot]
+                    .map((icon) => Column(
+                          children: [Icon(icon)],
+                        ))
+                    .toList())
+          ],
+        ),
+        backgroundColor: isDarkMode(context, ref) ? Colors.grey[850] : const Color.fromARGB(255, 162, 236, 200),
+        appBar: AppBar(title: Text(place.title), actions: [
+          IconButton(
+              onPressed: () => {ref.read(placesProvider.notifier).toggleFavorite(id)},
+              icon: Icon(place.isFavorite ? Icons.favorite : Icons.favorite_border,
+                  color: place.isFavorite ? Colors.red : null))
+        ]),
+      );
+    });
   }
 }

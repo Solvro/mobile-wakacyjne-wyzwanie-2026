@@ -1,16 +1,16 @@
 import "package:flutter/material.dart";
 import "package:shared_preferences/shared_preferences.dart";
 
-enum LocalTheme {
+enum LocalThemeEnum {
   light,
   dark,
   defaultTheme;
 
   ThemeData? get themeData {
     return switch (this) {
-      LocalTheme.dark => ThemeData.dark(),
-      LocalTheme.light => ThemeData.light(),
-      LocalTheme.defaultTheme => null
+      LocalThemeEnum.dark => ThemeData.dark(),
+      LocalThemeEnum.light => ThemeData.light(),
+      LocalThemeEnum.defaultTheme => null
     };
   }
 }
@@ -28,16 +28,16 @@ class LocalThemeRepository {
     return LocalThemeRepository(preferencesWithCache: prefs);
   }
 
-  LocalTheme getTheme() {
+  LocalThemeEnum get() {
     final themeString = preferencesWithCache.getString(themeKey);
 
-    return LocalTheme.values.firstWhere(
+    return LocalThemeEnum.values.firstWhere(
       (v) => v.name == themeString,
-      orElse: () => LocalTheme.defaultTheme,
+      orElse: () => LocalThemeEnum.defaultTheme,
     );
   }
 
-  Future<void> setTheme(LocalTheme val) async {
+  Future<void> set(LocalThemeEnum val) async {
     await preferencesWithCache.setString(themeKey, val.name);
   }
 }
