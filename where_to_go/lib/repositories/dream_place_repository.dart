@@ -1,35 +1,28 @@
 //lib/repositories/dream_place_repository.dart
-import "dart:io";
 import "package:dio/dio.dart";
 
 import "../models/dream_place.dart";
-import "photos_repository.dart";
 
 class DreamPlaceRepository {
   final Dio _dio;
-  final PhotosRepository _photosRepo;
 
   DreamPlaceRepository({
     required Dio dio,
-    required PhotosRepository photosRepo,
-  })  : _dio = dio,
-        _photosRepo = photosRepo;
+  }) : _dio = dio;
 
-  /// 🔹 Dodaj nowe miejsce ze zdjęciem
-  Future<DreamPlace> createDreamPlaceWithPhoto({
-    required File file,
+  /// 🔹 Dodaj nowe miejsce (ze zdjęciem, jeśli masz już url)
+  Future<DreamPlace> createDreamPlace({
     required String name,
     required String description,
+    required String imageUrl,
     required bool isFavorite,
   }) async {
-    final photo = await _photosRepo.uploadPhoto(file);
-
     final response = await _dio.post<Map<String, dynamic>>(
       "/places",
       data: {
         "name": name,
         "description": description,
-        "imageUrl": photo.url,
+        "imageUrl": imageUrl,
         "isFavorite": isFavorite,
       },
     );

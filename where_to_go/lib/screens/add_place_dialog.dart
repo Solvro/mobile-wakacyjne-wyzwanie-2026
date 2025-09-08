@@ -65,9 +65,9 @@ class _AddPlaceDialogState extends ConsumerState<AddPlaceDialog> {
     setState(() => _isUploading = true);
 
     try {
-      final repo = ref.read(dreamPlaceRepositoryProvider);
+      final service = ref.read(dreamPlaceServiceProvider);
 
-      final newPlace = await repo.createDreamPlaceWithPhoto(
+      final newPlace = await service.createDreamPlaceWithPhoto(
         file: _selectedImage!,
         name: _nameController.text,
         description: _descController.text,
@@ -77,10 +77,11 @@ class _AddPlaceDialogState extends ConsumerState<AddPlaceDialog> {
       if (mounted) {
         Navigator.of(context).pop(newPlace);
       }
-      // ignore: avoid_catches_without_on_clauses
-    } catch (e) {
+    } on Exception catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Błąd: $e")));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Błąd: $e")),
+        );
       }
     } finally {
       if (mounted) setState(() => _isUploading = false);

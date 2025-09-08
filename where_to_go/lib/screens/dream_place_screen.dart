@@ -119,7 +119,9 @@ class DreamPlacesScreen extends ConsumerWidget {
                                         place.imageUrl,
                                         fit: BoxFit.cover,
                                         width: double.infinity,
-                                        errorBuilder: (c, e, s) => const Center(child: Icon(Icons.broken_image)),
+                                        errorBuilder: (c, e, s) => const Center(
+                                          child: Icon(Icons.broken_image),
+                                        ),
                                       )
                                     : const Center(child: Icon(Icons.image)),
                               ),

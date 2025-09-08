@@ -1,16 +1,22 @@
-// lib/providers/dream_places_provider.dart
 import "package:flutter_riverpod/flutter_riverpod.dart";
 
 import "../models/dream_place.dart";
 import "../repositories/dream_place_repository.dart";
+import "../service/dream_place_service.dart";
 import "auth_providers.dart";
 import "photos_providers.dart";
 
-/// Provider repozytorium DreamPlace
+/// Provider repozytorium DreamPlace (CRUD miejsc)
 final dreamPlaceRepositoryProvider = Provider<DreamPlaceRepository>((ref) {
   final dio = ref.watch(dioProvider);
+  return DreamPlaceRepository(dio: dio);
+});
+
+/// Provider serwisu DreamPlace (upload + tworzenie miejsca)
+final dreamPlaceServiceProvider = Provider<DreamPlaceService>((ref) {
+  final placesRepo = ref.watch(dreamPlaceRepositoryProvider);
   final photosRepo = ref.watch(photosRepositoryProvider);
-  return DreamPlaceRepository(dio: dio, photosRepo: photosRepo);
+  return DreamPlaceService(placesRepo: placesRepo, photosRepo: photosRepo);
 });
 
 /// Provider do listy miejsc

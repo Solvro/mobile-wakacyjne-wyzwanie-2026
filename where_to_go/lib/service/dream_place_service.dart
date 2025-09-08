@@ -24,13 +24,11 @@ class DreamPlaceService {
     final photo = await photosRepo.uploadPhoto(file);
 
     // 2. Utwórz miejsce, korzystając z linku do zdjęcia
-    final response = await placesRepo.createDreamPlaceWithPhoto(
-      file: file,
+    return placesRepo.createDreamPlace(
       name: name,
       description: description,
+      imageUrl: photo.url,
       isFavorite: isFavorite,
     );
-
-    return response.copyWith(imageUrl: photo.url);
   }
 }
