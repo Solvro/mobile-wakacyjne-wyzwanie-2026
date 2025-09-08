@@ -8,10 +8,11 @@ import "package:mime/mime.dart";
 import "../models/photo.dart";
 
 class PhotosRepository {
-  final String apiUrl;
+  final String apiUrl; // https://backend-api.w.solvro.pl
 
   PhotosRepository({required this.apiUrl});
 
+  /// 🔹 Upload zdjęcia i zwróć Photo (z path i url)
   Future<Photo> uploadPhoto(File file) async {
     final mimeType = lookupMimeType(file.path) ?? "image/jpeg";
     final mediaType = MediaType.parse(mimeType);
@@ -36,6 +37,21 @@ class PhotosRepository {
     } else {
       throw Exception(
         "Upload zdjęcia nie powiódł się (${response.statusCode}): $responseBody",
+      );
+    }
+  }
+
+  /// 🔹 Pobierz listę wszystkich zdjęć jako pełne URL-e
+  Future<List<String>> fetchPhotos() async {
+    final response = await http.get(Uri.parse("$apiUrl/photos"));
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body) as List<dynamic>;
+      // API zwraca same nazwy plików, np. ["xxx.jpg", "yyy.png"]
+      return data.map((f) => "$apiUrl/photos/$f").toList();
+    } else {
+      throw Exception(
+        "Nie udało się pobrać zdjęć (${response.statusCode}): ${response.body}",
       );
     }
   }
