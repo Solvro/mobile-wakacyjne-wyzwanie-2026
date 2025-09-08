@@ -1,4 +1,4 @@
-//authentication_tokens.dart
+//lib/models/authentication_tokens.dart
 class AuthenticationTokens {
   final String accessToken;
   final String refreshToken;

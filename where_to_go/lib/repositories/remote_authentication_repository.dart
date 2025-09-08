@@ -1,4 +1,4 @@
-//remote_authentication_repository.dart
+//lib/repositories/remote_authentication_repository.dart
 import "package:dio/dio.dart";
 import "../models/authentication_tokens.dart";
 import "../repositories/local_authentication_repository.dart";

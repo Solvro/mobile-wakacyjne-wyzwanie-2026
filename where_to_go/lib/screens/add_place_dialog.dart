@@ -31,13 +31,34 @@ class _AddPlaceDialogState extends ConsumerState<AddPlaceDialog> {
     super.dispose();
   }
 
+  /// 🔹 Wybór zdjęcia z aparatu lub galerii
   Future<void> _pickImage() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery, imageQuality: 85);
-    if (pickedFile != null) {
-      setState(() => _selectedImage = File(pickedFile.path));
+    final source = await showDialog<ImageSource>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text("Wybierz źródło zdjęcia"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, ImageSource.gallery),
+            child: const Text("Galeria"),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, ImageSource.camera),
+            child: const Text("Aparat"),
+          ),
+        ],
+      ),
+    );
+
+    if (source != null) {
+      final pickedFile = await _picker.pickImage(source: source, imageQuality: 85);
+      if (pickedFile != null) {
+        setState(() => _selectedImage = File(pickedFile.path));
+      }
     }
   }
 
+  /// 🔹 Dodanie miejsca
   Future<void> _addDreamPlace() async {
     if (!_formKey.currentState!.validate() || _selectedImage == null) return;
 
