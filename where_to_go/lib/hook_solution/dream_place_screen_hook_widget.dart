@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
-import "../features/models/dream_place.dart";
+import "../features/models/dream_place_old.dart";
 
 class DreamPlaceScreenHookWidget extends HookWidget {
   final DreamPlace place;

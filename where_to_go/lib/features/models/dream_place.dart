@@ -1,17 +1,17 @@
-import "attraction.dart";
+import "package:freezed_annotation/freezed_annotation.dart";
 
-class DreamPlace {
-  final String title;
-  final String imagePath;
-  final String placeName;
-  final String description;
-  final List<Attraction> attractions;
+part "dream_place.freezed.dart";
+part "dream_place.g.dart";
 
-  const DreamPlace({
-    required this.title,
-    required this.imagePath,
-    required this.placeName,
-    required this.description,
-    required this.attractions,
-  });
+@freezed
+abstract class DreamPlace with _$DreamPlace {
+  const factory DreamPlace({
+    required String id,
+    required String name,
+    required String description,
+    required String imageUrl,
+    @Default(false) bool isFavorite,
+  }) = _DreamPlace;
+
+  factory DreamPlace.fromJson(Map<String, dynamic> json) => _$DreamPlaceFromJson(json);
 }

@@ -47,6 +47,12 @@ dependencies:
   sqlite3_flutter_libs: ^0.5.39
   path: ^1.9.1
   drift_dev: ^2.28.0
+  flutter_secure_storage: ^4.2.1
+  dio: ^5.9.0
+  logger: ^2.6.1
+  freezed: ^3.1.0
+  freezed_annotation: ^3.1.0
+  json_annotation: ^4.9.0
 
 dev_dependencies:
   flutter_test:
@@ -64,6 +70,7 @@ dev_dependencies:
   riverpod_lint: ^2.6.5
   riverpod_generator: ^2.6.5
   solvro_config: ^1.0.1
+  json_serializable: ^6.9.5
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

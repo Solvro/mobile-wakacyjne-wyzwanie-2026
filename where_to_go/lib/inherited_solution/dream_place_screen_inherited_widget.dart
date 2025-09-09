@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "../features/models/dream_place.dart";
+import "../features/models/dream_place_old.dart";
 import "favorites_provider.dart";
 
 class DreamPlaceScreenInheritedWidget extends StatelessWidget {

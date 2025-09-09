@@ -3,7 +3,7 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 import "features/database/dream_place_provider.dart";
 import "features/favorite/favorite_provider.dart"; // ignore: unused_import
 import "features/models/attraction.dart"; // ignore: unused_import
-import "features/models/dream_place.dart"; // ignore: unused_import
+import "features/models/dream_place_old.dart"; // ignore: unused_import
 import "features/places/places_provider.dart"; // ignore: unused_import
 
 class DetailsScreen extends ConsumerWidget {

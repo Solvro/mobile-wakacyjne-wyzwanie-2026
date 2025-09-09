@@ -13,6 +13,7 @@ class MyApp extends ConsumerWidget {
     final themeAsync = ref.watch(themeNotifierProvider);
     final platformBrightness = MediaQuery.platformBrightnessOf(context);
     final appTheme = AppThemeImplementation();
+    final router = ref.watch(goRouterProvider);
 
     return themeAsync.when(
       data: (theme) {
@@ -23,7 +24,7 @@ class MyApp extends ConsumerWidget {
         };
 
         return MaterialApp.router(
-          routerConfig: goRouter,
+          routerConfig: router,
           debugShowCheckedModeBanner: false,
           themeMode: themeMode,
           theme: appTheme.light,
