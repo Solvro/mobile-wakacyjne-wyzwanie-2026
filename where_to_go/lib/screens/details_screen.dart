@@ -2,11 +2,9 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:go_router/go_router.dart";
-
-import "../models/dream_place.dart";
 import "../providers/dream_places_provider.dart";
 
-class DetailsScreen extends ConsumerWidget {
+class DetailsScreen extends ConsumerStatefulWidget {
   static const route = "/details";
 
   final int placeId;
@@ -14,102 +12,101 @@ class DetailsScreen extends ConsumerWidget {
   const DetailsScreen({super.key, required this.placeId});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final repo = ref.watch(dreamPlaceRepositoryProvider);
+  ConsumerState<DetailsScreen> createState() => _DetailsScreenState();
+}
 
-    return FutureBuilder<DreamPlace>(
-      future: repo.fetchDreamPlace(placeId),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
-          );
-        }
+class _DetailsScreenState extends ConsumerState<DetailsScreen> {
+  @override
+  Widget build(BuildContext context) {
+    final placeAsync = ref.watch(dreamPlaceProvider(widget.placeId));
 
-        if (snapshot.hasError) {
-          return Scaffold(
-            appBar: AppBar(
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () => context.go("/"),
-              ),
-              title: const Text("Szczegóły"),
-            ),
-            body: Center(child: Text("Błąd: ${snapshot.error}")),
-          );
-        }
+    return placeAsync.when(
+      loading: () => const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      ),
+      error: (err, stack) => Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => context.go("/"),
+          ),
+          title: const Text("Szczegóły"),
+        ),
+        body: Center(child: Text("Błąd: $err")),
+      ),
+      data: (place) => Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => context.go("/"),
+          ),
+          title: Text(place.name),
+          actions: [
+            IconButton(
+              icon: Icon(place.isFavourite ?? false ? Icons.favorite : Icons.favorite_border),
+              color: (place.isFavourite ?? false) ? Colors.red : null,
+              onPressed: () async {
+                final updated = place.copyWith(
+                  isFavourite: !(place.isFavourite ?? false),
+                );
+                final repo = ref.read(dreamPlaceRepositoryProvider);
 
-        final place = snapshot.data;
-
-        if (place == null) {
-          return Scaffold(
-            appBar: AppBar(
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () => context.go("/"),
-              ),
-              title: const Text("Szczegóły"),
-            ),
-            body: const Center(child: Text("Nie znaleziono miejsca")),
-          );
-        }
-
-        return Scaffold(
-          appBar: AppBar(
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () => context.go("/"),
-            ),
-            title: Text(place.name),
-            actions: [
-              IconButton(
-                icon: Icon(place.isFavourite ?? false ? Icons.favorite : Icons.favorite_border),
-                color: (place.isFavourite ?? false) ? Colors.red : null,
-                onPressed: () async {
-                  final updated = place.copyWith(
-                    isFavourite: !(place.isFavourite ?? false),
-                  );
+                try {
                   await repo.updateDreamPlace(updated);
-                  (context as Element).markNeedsBuild();
-                },
-              )
+
+                  // odświeżenie po update
+                  ref.invalidate(dreamPlaceProvider(widget.placeId));
+
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Zaktualizowano ulubione!")),
+                    );
+                  }
+                } on Exception catch (e) {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Błąd podczas aktualizacji: $e")),
+                    );
+                  }
+                }
+              },
+            ),
+          ],
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              if (place.filename.isNotEmpty)
+                Image.network(
+                  place.fullimageUrl,
+                  width: double.infinity,
+                  height: 300,
+                  fit: BoxFit.cover,
+                  errorBuilder: (c, e, s) => const SizedBox(
+                    height: 300,
+                    child: Center(child: Icon(Icons.broken_image)),
+                  ),
+                )
+              else
+                const SizedBox(
+                  height: 300,
+                  child: Center(child: Icon(Icons.image)),
+                ),
+              const SizedBox(height: 20),
+              Text(place.name, style: const TextStyle(fontSize: 32)),
+              if (place.description.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Text(
+                    place.description,
+                    style: const TextStyle(fontSize: 18),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
             ],
           ),
-          body: SingleChildScrollView(
-            child: Column(
-              children: [
-                if (place.filename.isNotEmpty)
-                  Image.network(
-                    place.fullimageUrl,
-                    width: double.infinity,
-                    height: 300,
-                    fit: BoxFit.cover,
-                    errorBuilder: (c, e, s) => const SizedBox(
-                      height: 300,
-                      child: Center(child: Icon(Icons.broken_image)),
-                    ),
-                  )
-                else
-                  const SizedBox(
-                    height: 300,
-                    child: Center(child: Icon(Icons.image)),
-                  ),
-                const SizedBox(height: 20),
-                Text(place.name, style: const TextStyle(fontSize: 32)),
-                if (place.description.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Text(
-                      place.description,
-                      style: const TextStyle(fontSize: 18),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-              ],
-            ),
-          ),
-        );
-      },
+        ),
+      ),
     );
   }
 }
