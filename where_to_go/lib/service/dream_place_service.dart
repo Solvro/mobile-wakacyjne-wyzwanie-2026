@@ -30,7 +30,7 @@ class DreamPlaceService {
       name: name,
       description: description,
       imageUrl: photo.filename,
-      isFavorite: isFavorite,
+      isFavuorite: isFavorite,
     );
   }
 }

@@ -140,8 +140,9 @@ class DreamPlacesScreen extends ConsumerWidget {
                                     ),
                                     const SizedBox(width: 6),
                                     Icon(
-                                      place.isFavorite ? Icons.favorite : Icons.favorite_border,
-                                      color: place.isFavorite ? Colors.red : Theme.of(context).iconTheme.color,
+                                      place.isFavuorite ?? false ? Icons.favorite : Icons.favorite_border,
+                                      color:
+                                          (place.isFavuorite ?? false) ? Colors.red : Theme.of(context).iconTheme.color,
                                       size: 18,
                                     ),
                                   ],

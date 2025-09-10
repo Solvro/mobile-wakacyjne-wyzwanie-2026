@@ -63,15 +63,13 @@ class DetailsScreen extends ConsumerWidget {
             title: Text(place.name),
             actions: [
               IconButton(
-                icon: Icon(place.isFavorite ? Icons.favorite : Icons.favorite_border),
-                color: place.isFavorite ? Colors.red : null,
+                icon: Icon(place.isFavuorite ?? false ? Icons.favorite : Icons.favorite_border),
+                color: (place.isFavuorite ?? false) ? Colors.red : null,
                 onPressed: () async {
                   final updated = place.copyWith(
-                    isFavorite: !place.isFavorite,
+                    isFavuorite: !(place.isFavuorite ?? false), // Odwróć wartość
                   );
                   await repo.updateDreamPlace(updated);
-
-                  // ⚡️ Po update można zrobić refresh ekranu:
                   (context as Element).markNeedsBuild();
                 },
               )

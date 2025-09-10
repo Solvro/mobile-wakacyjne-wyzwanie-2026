@@ -12,7 +12,7 @@ abstract class DreamPlace with _$DreamPlace {
     required String name,
     required String description,
     required String imageUrl,
-    required bool isFavorite,
+    bool? isFavuorite,
   }) = _DreamPlace;
   const DreamPlace._();
 

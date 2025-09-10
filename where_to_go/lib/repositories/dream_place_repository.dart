@@ -16,7 +16,7 @@ class DreamPlaceRepository {
     required String name,
     required String description,
     required String imageUrl,
-    required bool isFavorite,
+    required bool isFavuorite,
   }) async {
     final response = await _dio.post<Map<String, dynamic>>(
       "/places",
@@ -24,7 +24,7 @@ class DreamPlaceRepository {
         "name": name,
         "description": description,
         "imageUrl": url,
-        "isFavourite": isFavorite,
+        "isFavourite": isFavuorite,
       },
     );
 
@@ -41,7 +41,6 @@ class DreamPlaceRepository {
 
     if (response.statusCode == 200 && response.data != null) {
       final data = response.data!;
-      // ✅ POPRAWIONE: "results" zamiast "items" (zgodnie z logami)
       final items = data["results"] as List<dynamic>? ?? [];
       return items.map((e) => DreamPlace.fromJson(e as Map<String, dynamic>)).toList();
     } else {
@@ -72,7 +71,7 @@ class DreamPlaceRepository {
         "name": place.name,
         "description": place.description,
         "imageUrl": place.url,
-        "isFavourite": place.isFavorite,
+        "isFavourite": place.isFavuorite ?? false,
       },
     );
 
