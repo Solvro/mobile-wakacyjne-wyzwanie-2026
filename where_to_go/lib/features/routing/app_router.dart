@@ -2,6 +2,7 @@ import "package:flutter/foundation.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:go_router/go_router.dart";
 import "../../auth_screen.dart";
+import "../../create_dream_place_screen.dart";
 import "../../details_screen.dart";
 import "../../home_screen.dart";
 import "../auth/auth_provider.dart";
@@ -16,6 +17,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: "/auth",
         builder: (context, state) => const AuthScreen(),
+      ),
+      GoRoute(
+        path: "/create",
+        builder: (context, state) => const CreateDreamPlaceScreen(),
       ),
       GoRoute(
         path: "${DetailsScreen.route}/:id",

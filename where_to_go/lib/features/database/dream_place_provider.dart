@@ -31,7 +31,10 @@ class DreamPlaces extends _$DreamPlaces {
   Future<void> addPlace(DreamPlace place) async {
     final repo = ref.watch(dreamPlacesRepositoryProvider);
     final newPlace = await repo.addPlace(place);
-    state.whenData((places) => state = AsyncData([...places, newPlace]));
+    state = await AsyncValue.guard(() async {
+      final currentPlaces = state.value ?? [];
+      return [...currentPlaces, newPlace];
+    });
   }
 
   Future<void> updatePlace(DreamPlace place) async {

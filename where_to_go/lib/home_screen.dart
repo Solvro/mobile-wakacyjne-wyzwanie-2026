@@ -73,6 +73,12 @@ class HomeScreen extends ConsumerWidget {
         AsyncError() => Center(child: Text("Błąd: ${placesAsync.error}")),
         _ => const Center(child: CircularProgressIndicator()),
       },
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          await GoRouter.of(context).push("/create");
+        },
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }

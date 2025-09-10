@@ -18,8 +18,8 @@ class AuthenticationRepository {
     try {
       final data = await _remoteRepo.login(email: email, password: password);
       await _localRepo.saveTokens(
-        accessToken: data["accessToken"] as String,
-        refreshToken: data["refreshToken"] as String,
+        accessToken: data["accessToken"].toString(),
+        refreshToken: data["refreshToken"].toString(),
       );
       return true;
     } on AuthException catch (e) {
