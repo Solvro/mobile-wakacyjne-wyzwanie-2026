@@ -23,7 +23,7 @@ class DreamPlaceRepository {
         "name": name,
         "description": description,
         "imageUrl": imageUrl,
-        "isFavorite": isFavorite,
+        "isFavourite": isFavorite,
       },
     );
 
@@ -40,7 +40,8 @@ class DreamPlaceRepository {
 
     if (response.statusCode == 200 && response.data != null) {
       final data = response.data!;
-      final items = data["items"] as List<dynamic>? ?? [];
+      // ✅ POPRAWIONE: "results" zamiast "items" (zgodnie z logami)
+      final items = data["results"] as List<dynamic>? ?? [];
       return items.map((e) => DreamPlace.fromJson(e as Map<String, dynamic>)).toList();
     } else {
       throw Exception("Błąd podczas pobierania miejsc (${response.statusCode})");
@@ -70,7 +71,7 @@ class DreamPlaceRepository {
         "name": place.name,
         "description": place.description,
         "imageUrl": place.imageUrl,
-        "isFavorite": place.isFavorite,
+        "isFavourite": place.isFavorite,
       },
     );
 

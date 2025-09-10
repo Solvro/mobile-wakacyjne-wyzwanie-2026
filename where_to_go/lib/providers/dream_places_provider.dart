@@ -20,7 +20,7 @@ final dreamPlaceServiceProvider = Provider<DreamPlaceService>((ref) {
 });
 
 /// Provider do listy miejsc
-final dreamPlacesProvider = FutureProvider<List<DreamPlace>>((ref) {
+final dreamPlacesProvider = FutureProvider.autoDispose<List<DreamPlace>>((ref) {
   final repo = ref.watch(dreamPlaceRepositoryProvider);
   return repo.fetchDreamPlaces();
 });

@@ -162,7 +162,7 @@ class DreamPlacesScreen extends ConsumerWidget {
               context: context,
               builder: (_) => const AddPlaceDialog(),
             );
-            if (newPlace != null) {
+            if (newPlace != null && context.mounted) {
               ref.invalidate(dreamPlacesProvider);
             }
           },

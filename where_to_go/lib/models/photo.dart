@@ -20,5 +20,5 @@ abstract class Photo with _$Photo {
   factory Photo.fromJson(Map<String, dynamic> json) => _$PhotoFromJson(json);
 
   /// 🔹 Pełny URL (z path + backend URL)
-  String get url => "https://backend-api.w.solvro.pl$path";
+  String get url => "https://backend-api.w.solvro.pl/photos/$filename";
 }

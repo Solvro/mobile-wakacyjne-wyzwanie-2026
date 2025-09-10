@@ -8,11 +8,10 @@ import "package:mime/mime.dart";
 import "../models/photo.dart";
 
 class PhotosRepository {
-  final String apiUrl; // https://backend-api.w.solvro.pl
+  final String apiUrl;
 
   PhotosRepository({required this.apiUrl});
 
-  /// 🔹 Upload zdjęcia i zwróć Photo (z path i url)
   Future<Photo> uploadPhoto(File file) async {
     final mimeType = lookupMimeType(file.path) ?? "image/jpeg";
     final mediaType = MediaType.parse(mimeType);
@@ -41,18 +40,26 @@ class PhotosRepository {
     }
   }
 
-  /// 🔹 Pobierz listę wszystkich zdjęć jako pełne URL-e
+  /// 🔹 Pobiera listę plików z backendu (GET /photos)
   Future<List<String>> fetchPhotos() async {
     final response = await http.get(Uri.parse("$apiUrl/photos"));
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body) as List<dynamic>;
-      // API zwraca same nazwy plików, np. ["xxx.jpg", "yyy.png"]
-      return data.map((f) => "$apiUrl/photos/$f").toList();
+      return data.cast<String>();
     } else {
-      throw Exception(
-        "Nie udało się pobrać zdjęć (${response.statusCode}): ${response.body}",
-      );
+      throw Exception("Nie udało się pobrać listy zdjęć (${response.statusCode})");
+    }
+  }
+
+  /// 🔹 Sprawdza czy zdjęcie już istnieje w backendzie (musiałem to dodać, bo serwer chyba nie zdążył się odświeżyć przy natychmiastowym wysyłaniu POST /places)
+  Future<void> ensurePhotoExists(String filename) async {
+    for (var i = 0; i < 5; i++) {
+      final photos = await fetchPhotos();
+      if (photos.contains(filename)) {
+        return;
+      }
+      await Future<void>.delayed(const Duration(milliseconds: 300));
     }
   }
 }

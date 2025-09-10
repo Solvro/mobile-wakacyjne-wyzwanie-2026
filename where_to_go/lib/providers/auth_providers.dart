@@ -17,8 +17,8 @@ final secureStorageProvider = Provider<FlutterSecureStorage>((ref) {
 final baseDioProvider = Provider<Dio>((ref) {
   return Dio(BaseOptions(
     baseUrl: "https://backend-api.w.solvro.pl",
-    connectTimeout: const Duration(seconds: 30), // Zwiększone z 10
-    receiveTimeout: const Duration(seconds: 30), // Zwiększone z 20
+    connectTimeout: const Duration(seconds: 30),
+    receiveTimeout: const Duration(seconds: 30),
     headers: {
       "Content-Type": "application/json",
       "Accept": "application/json",
@@ -88,6 +88,13 @@ final dioProvider = Provider<Dio>((ref) {
       }
       return handler.next(error);
     },
+  ));
+
+  // Dodatkowe pokazywanie requestów po dodaniu nagłówków (mam dosyć szukania w kodzie, czy endpointy są dobre)
+  baseDio.interceptors.add(LogInterceptor(
+    requestBody: true,
+    responseBody: true,
+    responseHeader: false,
   ));
 
   return baseDio;
