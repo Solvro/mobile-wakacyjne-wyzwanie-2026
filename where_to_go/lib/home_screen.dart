@@ -49,8 +49,8 @@ class HomeScreen extends ConsumerWidget {
                   contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   leading: ClipRRect(
                     borderRadius: BorderRadius.circular(8),
-                    child: Image.asset(
-                      place.imagePath,
+                    child: Image.network(
+                      place.imageUrl,
                       width: 60,
                       fit: BoxFit.cover,
                     ),

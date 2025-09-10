@@ -18,7 +18,7 @@ mixin _$DreamPlace {
   String get name;
   String get description;
   String get imageUrl;
-  bool get isFavorite;
+  bool get isFavourite;
 
   /// Create a copy of DreamPlace
   /// with the given fields replaced by the non-null parameter values.
@@ -41,18 +41,18 @@ mixin _$DreamPlace {
                 other.description == description) &&
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
-            (identical(other.isFavorite, isFavorite) ||
-                other.isFavorite == isFavorite));
+            (identical(other.isFavourite, isFavourite) ||
+                other.isFavourite == isFavourite));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, id, name, description, imageUrl, isFavorite);
+      Object.hash(runtimeType, id, name, description, imageUrl, isFavourite);
 
   @override
   String toString() {
-    return 'DreamPlace(id: $id, name: $name, description: $description, imageUrl: $imageUrl, isFavorite: $isFavorite)';
+    return 'DreamPlace(id: $id, name: $name, description: $description, imageUrl: $imageUrl, isFavourite: $isFavourite)';
   }
 }
 
@@ -67,7 +67,7 @@ abstract mixin class $DreamPlaceCopyWith<$Res> {
       String name,
       String description,
       String imageUrl,
-      bool isFavorite});
+      bool isFavourite});
 }
 
 /// @nodoc
@@ -86,7 +86,7 @@ class _$DreamPlaceCopyWithImpl<$Res> implements $DreamPlaceCopyWith<$Res> {
     Object? name = null,
     Object? description = null,
     Object? imageUrl = null,
-    Object? isFavorite = null,
+    Object? isFavourite = null,
   }) {
     return _then(_self.copyWith(
       id: null == id
@@ -105,9 +105,9 @@ class _$DreamPlaceCopyWithImpl<$Res> implements $DreamPlaceCopyWith<$Res> {
           ? _self.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      isFavorite: null == isFavorite
-          ? _self.isFavorite
-          : isFavorite // ignore: cast_nullable_to_non_nullable
+      isFavourite: null == isFavourite
+          ? _self.isFavourite
+          : isFavourite // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
   }
@@ -207,7 +207,7 @@ extension DreamPlacePatterns on DreamPlace {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(String id, String name, String description,
-            String imageUrl, bool isFavorite)?
+            String imageUrl, bool isFavourite)?
         $default, {
     required TResult orElse(),
   }) {
@@ -215,7 +215,7 @@ extension DreamPlacePatterns on DreamPlace {
     switch (_that) {
       case _DreamPlace() when $default != null:
         return $default(_that.id, _that.name, _that.description, _that.imageUrl,
-            _that.isFavorite);
+            _that.isFavourite);
       case _:
         return orElse();
     }
@@ -237,14 +237,14 @@ extension DreamPlacePatterns on DreamPlace {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(String id, String name, String description,
-            String imageUrl, bool isFavorite)
+            String imageUrl, bool isFavourite)
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _DreamPlace():
         return $default(_that.id, _that.name, _that.description, _that.imageUrl,
-            _that.isFavorite);
+            _that.isFavourite);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -265,14 +265,14 @@ extension DreamPlacePatterns on DreamPlace {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult? Function(String id, String name, String description,
-            String imageUrl, bool isFavorite)?
+            String imageUrl, bool isFavourite)?
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _DreamPlace() when $default != null:
         return $default(_that.id, _that.name, _that.description, _that.imageUrl,
-            _that.isFavorite);
+            _that.isFavourite);
       case _:
         return null;
     }
@@ -287,7 +287,7 @@ class _DreamPlace implements DreamPlace {
       required this.name,
       required this.description,
       required this.imageUrl,
-      this.isFavorite = false});
+      this.isFavourite = false});
   factory _DreamPlace.fromJson(Map<String, dynamic> json) =>
       _$DreamPlaceFromJson(json);
 
@@ -301,7 +301,7 @@ class _DreamPlace implements DreamPlace {
   final String imageUrl;
   @override
   @JsonKey()
-  final bool isFavorite;
+  final bool isFavourite;
 
   /// Create a copy of DreamPlace
   /// with the given fields replaced by the non-null parameter values.
@@ -329,18 +329,18 @@ class _DreamPlace implements DreamPlace {
                 other.description == description) &&
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
-            (identical(other.isFavorite, isFavorite) ||
-                other.isFavorite == isFavorite));
+            (identical(other.isFavourite, isFavourite) ||
+                other.isFavourite == isFavourite));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, id, name, description, imageUrl, isFavorite);
+      Object.hash(runtimeType, id, name, description, imageUrl, isFavourite);
 
   @override
   String toString() {
-    return 'DreamPlace(id: $id, name: $name, description: $description, imageUrl: $imageUrl, isFavorite: $isFavorite)';
+    return 'DreamPlace(id: $id, name: $name, description: $description, imageUrl: $imageUrl, isFavourite: $isFavourite)';
   }
 }
 
@@ -357,7 +357,7 @@ abstract mixin class _$DreamPlaceCopyWith<$Res>
       String name,
       String description,
       String imageUrl,
-      bool isFavorite});
+      bool isFavourite});
 }
 
 /// @nodoc
@@ -376,7 +376,7 @@ class __$DreamPlaceCopyWithImpl<$Res> implements _$DreamPlaceCopyWith<$Res> {
     Object? name = null,
     Object? description = null,
     Object? imageUrl = null,
-    Object? isFavorite = null,
+    Object? isFavourite = null,
   }) {
     return _then(_DreamPlace(
       id: null == id
@@ -395,9 +395,9 @@ class __$DreamPlaceCopyWithImpl<$Res> implements _$DreamPlaceCopyWith<$Res> {
           ? _self.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      isFavorite: null == isFavorite
-          ? _self.isFavorite
-          : isFavorite // ignore: cast_nullable_to_non_nullable
+      isFavourite: null == isFavourite
+          ? _self.isFavourite
+          : isFavourite // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
   }

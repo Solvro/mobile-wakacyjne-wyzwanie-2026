@@ -1,9 +1,13 @@
 import "package:dio/dio.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 import "auth_exception.dart";
 import "auth_provider.dart";
 
-final dioProvider = Provider<Dio>((ref) {
+part "dio_provider.g.dart";
+
+@riverpod
+Dio dio(Ref ref) {
   final dio = Dio(BaseOptions(
     baseUrl: "https://backend-api.w.solvro.pl/api",
     connectTimeout: const Duration(seconds: 20),
@@ -46,4 +50,4 @@ final dioProvider = Provider<Dio>((ref) {
   ));
 
   return dio;
-});
+}

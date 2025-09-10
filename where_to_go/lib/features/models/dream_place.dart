@@ -10,7 +10,7 @@ abstract class DreamPlace with _$DreamPlace {
     required String name,
     required String description,
     required String imageUrl,
-    @Default(false) bool isFavorite,
+    @Default(false) bool isFavourite,
   }) = _DreamPlace;
 
   factory DreamPlace.fromJson(Map<String, dynamic> json) => _$DreamPlaceFromJson(json);
