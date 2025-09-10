@@ -71,7 +71,7 @@ class _AddPlaceDialogState extends ConsumerState<AddPlaceDialog> {
         file: _selectedImage!,
         name: _nameController.text,
         description: _descController.text,
-        isFavorite: _isFavorite,
+        isFavourite: _isFavorite,
       );
 
       if (mounted) {

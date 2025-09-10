@@ -63,11 +63,11 @@ class DetailsScreen extends ConsumerWidget {
             title: Text(place.name),
             actions: [
               IconButton(
-                icon: Icon(place.isFavuorite ?? false ? Icons.favorite : Icons.favorite_border),
-                color: (place.isFavuorite ?? false) ? Colors.red : null,
+                icon: Icon(place.isFavourite ?? false ? Icons.favorite : Icons.favorite_border),
+                color: (place.isFavourite ?? false) ? Colors.red : null,
                 onPressed: () async {
                   final updated = place.copyWith(
-                    isFavuorite: !(place.isFavuorite ?? false), // Odwróć wartość
+                    isFavourite: !(place.isFavourite ?? false), // Odwróć wartość
                   );
                   await repo.updateDreamPlace(updated);
                   (context as Element).markNeedsBuild();

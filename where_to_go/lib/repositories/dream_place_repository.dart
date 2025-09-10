@@ -16,7 +16,7 @@ class DreamPlaceRepository {
     required String name,
     required String description,
     required String imageUrl,
-    required bool isFavuorite,
+    required bool isFavourite,
   }) async {
     final response = await _dio.post<Map<String, dynamic>>(
       "/places",
@@ -24,7 +24,7 @@ class DreamPlaceRepository {
         "name": name,
         "description": description,
         "imageUrl": url,
-        "isFavourite": isFavuorite,
+        "isFavourite": isFavourite,
       },
     );
 
@@ -71,7 +71,7 @@ class DreamPlaceRepository {
         "name": place.name,
         "description": place.description,
         "imageUrl": place.url,
-        "isFavourite": place.isFavuorite ?? false,
+        "isFavourite": place.isFavourite ?? false,
       },
     );
 

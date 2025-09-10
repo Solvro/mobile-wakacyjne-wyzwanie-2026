@@ -18,7 +18,7 @@ class DreamPlaceService {
     required File file,
     required String name,
     required String description,
-    required bool isFavorite,
+    required bool isFavourite,
   }) async {
     // 1. Upload zdjęcia → dostajemy Photo (z path i url)
     final photo = await photosRepo.uploadPhoto(file);
@@ -30,7 +30,7 @@ class DreamPlaceService {
       name: name,
       description: description,
       imageUrl: photo.filename,
-      isFavuorite: isFavorite,
+      isFavourite: isFavourite,
     );
   }
 }
