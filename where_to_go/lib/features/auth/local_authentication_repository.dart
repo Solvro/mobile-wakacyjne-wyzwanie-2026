@@ -14,11 +14,11 @@ class LocalAuthenticationRepository {
     await _secureStorage.write(key: _refreshTokenKey, value: refreshToken);
   }
 
-  Future<String?> readAccessToken() async {
+  Future<String?> readAccessToken() {
     return _secureStorage.read(key: _accessTokenKey);
   }
 
-  Future<String?> readRefreshToken() async {
+  Future<String?> readRefreshToken() {
     return _secureStorage.read(key: _refreshTokenKey);
   }
 

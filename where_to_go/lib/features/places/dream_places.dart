@@ -3,7 +3,7 @@ import "../../gen/assets.gen.dart";
 import "../models/attraction.dart";
 import "../models/dream_place_old.dart";
 
-final List<DreamPlace> places = [
+final places = [
   DreamPlace(
     title: "Tokio, Japonia",
     imagePath: Assets.images.tokio.path,

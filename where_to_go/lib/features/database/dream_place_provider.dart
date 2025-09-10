@@ -15,14 +15,14 @@ DreamPlacesRepository dreamPlacesRepository(Ref ref) {
 @riverpod
 class DreamPlaces extends _$DreamPlaces {
   @override
-  Future<List<DreamPlace>> build() async {
+  Future<List<DreamPlace>> build() {
     final repo = ref.watch(dreamPlacesRepositoryProvider);
     return repo.getAllPlaces();
   }
 
   Future<void> refresh() async {
     state = const AsyncLoading();
-    state = await AsyncValue.guard(() async {
+    state = await AsyncValue.guard(() {
       final repo = ref.watch(dreamPlacesRepositoryProvider);
       return repo.getAllPlaces();
     });

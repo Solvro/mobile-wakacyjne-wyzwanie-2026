@@ -18,22 +18,9 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   final _passwordCtrl = TextEditingController();
   final _confirmCtrl = TextEditingController();
 
-  bool _isLogin = true;
-  bool _loading = false;
+  var _isLogin = true;
+  var _loading = false;
   String? _error;
-
-  @override
-  void initState() {
-    super.initState();
-
-    ref.listen<AsyncValue<bool>>(authNotifierProvider, (_, state) {
-      state.whenData((loggedIn) {
-        if (loggedIn && mounted) {
-          context.go("/");
-        }
-      });
-    });
-  }
 
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
@@ -74,6 +61,15 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // 👇 przeniesione z initState
+    ref.listen<AsyncValue<bool>>(authNotifierProvider, (_, state) {
+      state.whenData((loggedIn) {
+        if (loggedIn && mounted) {
+          context.go("/");
+        }
+      });
+    });
+
     return Scaffold(
       appBar: AppBar(title: Text(_isLogin ? "Logowanie" : "Rejestracja")),
       body: Center(
