@@ -67,7 +67,7 @@ class DetailsScreen extends ConsumerWidget {
                 color: (place.isFavourite ?? false) ? Colors.red : null,
                 onPressed: () async {
                   final updated = place.copyWith(
-                    isFavourite: !(place.isFavourite ?? false), // Odwróć wartość
+                    isFavourite: !(place.isFavourite ?? false),
                   );
                   await repo.updateDreamPlace(updated);
                   (context as Element).markNeedsBuild();
@@ -78,9 +78,9 @@ class DetailsScreen extends ConsumerWidget {
           body: SingleChildScrollView(
             child: Column(
               children: [
-                if (place.url.isNotEmpty)
+                if (place.filename.isNotEmpty)
                   Image.network(
-                    place.url,
+                    place.fullimageUrl,
                     width: double.infinity,
                     height: 300,
                     fit: BoxFit.cover,

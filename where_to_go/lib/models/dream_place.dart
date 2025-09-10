@@ -11,13 +11,12 @@ abstract class DreamPlace with _$DreamPlace {
     int? id,
     required String name,
     required String description,
-    required String imageUrl,
+    required String filename,
     bool? isFavourite,
   }) = _DreamPlace;
-  const DreamPlace._();
 
   factory DreamPlace.fromJson(Map<String, dynamic> json) => _$DreamPlaceFromJson(json);
 
-  // Pełny URL do obrazka – używamy tylko w UI
-  String get url => "https://backend-api.w.solvro.pl/photos/$imageUrl";
+  const DreamPlace._();
+  String get fullimageUrl => "https://backend-api.w.solvro.pl/photos/$filename";
 }

@@ -60,14 +60,17 @@ final dioProvider = Provider<Dio>((ref) {
 
   baseDio.interceptors.add(InterceptorsWrapper(
     onRequest: (options, handler) {
-      final token = authRepo.tokens?.accessToken;
-      if (token != null && token.isNotEmpty) {
-        options.headers["Authorization"] = "Bearer $token";
+      // Nie dodawaj Authorization przy refreshToken
+      if (!options.path.contains("/auth/refresh")) {
+        final token = authRepo.tokens?.accessToken;
+        if (token != null && token.isNotEmpty) {
+          options.headers["Authorization"] = "Bearer $token";
+        }
       }
       return handler.next(options);
     },
     onError: (error, handler) async {
-      if (error.response?.statusCode == 401) {
+      if (error.response?.statusCode == 401 && !error.requestOptions.path.contains("/auth/refresh")) {
         try {
           await authRepo.refreshToken();
 
