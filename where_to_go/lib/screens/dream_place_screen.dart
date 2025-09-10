@@ -114,9 +114,9 @@ class DreamPlacesScreen extends ConsumerWidget {
                           child: Column(
                             children: [
                               Expanded(
-                                child: place.imageUrl.isNotEmpty
+                                child: place.url.isNotEmpty
                                     ? Image.network(
-                                        place.imageUrl,
+                                        place.url,
                                         fit: BoxFit.cover,
                                         width: double.infinity,
                                         errorBuilder: (c, e, s) => const Center(

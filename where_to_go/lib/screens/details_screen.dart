@@ -80,9 +80,9 @@ class DetailsScreen extends ConsumerWidget {
           body: SingleChildScrollView(
             child: Column(
               children: [
-                if (place.imageUrl.isNotEmpty)
+                if (place.url.isNotEmpty)
                   Image.network(
-                    place.imageUrl,
+                    place.url,
                     width: double.infinity,
                     height: 300,
                     fit: BoxFit.cover,

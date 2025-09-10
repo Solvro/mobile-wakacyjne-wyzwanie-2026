@@ -1,5 +1,6 @@
 //lib/repositories/dream_place_repository.dart
 import "package:dio/dio.dart";
+import "package:path/path.dart";
 
 import "../models/dream_place.dart";
 
@@ -22,7 +23,7 @@ class DreamPlaceRepository {
       data: {
         "name": name,
         "description": description,
-        "imageUrl": imageUrl,
+        "imageUrl": url,
         "isFavourite": isFavorite,
       },
     );
@@ -70,7 +71,7 @@ class DreamPlaceRepository {
       data: {
         "name": place.name,
         "description": place.description,
-        "imageUrl": place.imageUrl,
+        "imageUrl": place.url,
         "isFavourite": place.isFavorite,
       },
     );

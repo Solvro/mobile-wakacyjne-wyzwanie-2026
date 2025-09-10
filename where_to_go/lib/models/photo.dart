@@ -15,10 +15,6 @@ abstract class Photo with _$Photo {
     required String path,
     required DateTime createdAt,
   }) = _Photo;
-  const Photo._();
 
   factory Photo.fromJson(Map<String, dynamic> json) => _$PhotoFromJson(json);
-
-  /// 🔹 Pełny URL (z path + backend URL)
-  String get url => "https://backend-api.w.solvro.pl/photos/$filename";
 }

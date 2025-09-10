@@ -1,4 +1,4 @@
-//lib/models/dream_place.dart
+// lib/models/dream_place.dart
 
 import "package:freezed_annotation/freezed_annotation.dart";
 
@@ -14,6 +14,10 @@ abstract class DreamPlace with _$DreamPlace {
     required String imageUrl,
     required bool isFavorite,
   }) = _DreamPlace;
+  const DreamPlace._();
 
   factory DreamPlace.fromJson(Map<String, dynamic> json) => _$DreamPlaceFromJson(json);
+
+  // Pełny URL do obrazka – używamy tylko w UI
+  String get url => "https://backend-api.w.solvro.pl/photos/$imageUrl";
 }
