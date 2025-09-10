@@ -8,7 +8,9 @@ part "photo.g.dart";
 abstract class Photo with _$Photo {
   const factory Photo({
     required String id,
-    required String filename,
+    @JsonKey(name: "imageUrl")
+    required String
+        filename, // robie tak, gdyż backend wymaga 'imageUrl' choć tak naprawdę wymaga samej nazwy pliku (błąd w nazewnictwie)
     required String originalName,
     required String mimeType,
     required int size,

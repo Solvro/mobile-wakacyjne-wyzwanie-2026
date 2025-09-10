@@ -11,7 +11,9 @@ abstract class DreamPlace with _$DreamPlace {
     int? id,
     required String name,
     required String description,
-    required String filename,
+    @JsonKey(name: "imageUrl")
+    required String
+        filename, // robie tak, gdyż backend wymaga 'imageUrl' choć tak naprawdę wymaga samej nazwy pliku (błąd w nazewnictwie)
     bool? isFavourite,
   }) = _DreamPlace;
 
