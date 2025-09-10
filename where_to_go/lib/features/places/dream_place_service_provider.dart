@@ -5,6 +5,7 @@ import "package:riverpod_annotation/riverpod_annotation.dart";
 
 import "../../models/place/place_create_without_owner_input_dto.dart";
 import "../../models/place/place_response_dto.dart";
+import "../../utils/sort_order.dart";
 import "../auth/auth_provider.dart";
 import "../photos/photos_repository_provider.dart";
 import "place_repository_provider.dart";
@@ -13,6 +14,8 @@ part "dream_place_service_provider.g.dart";
 
 @riverpod
 class DreamPlaceService extends _$DreamPlaceService {
+  SortOrder _currentOrder = SortOrder.ascending;
+
   @override
   Future<List<PlaceResponseDto>> build() async {
     final isLoggedIn = await ref.watch(authNotifierProvider.future);
@@ -20,7 +23,7 @@ class DreamPlaceService extends _$DreamPlaceService {
 
     final repository = await ref.watch(dreamPlacesRepositoryProvider.future);
 
-    return repository.readAll();
+    return repository.readAll(_currentOrder);
   }
 
   Future<void> toggleFavorite(String id) async {
@@ -54,12 +57,17 @@ class DreamPlaceService extends _$DreamPlaceService {
       final imageUrl = await photoRepository.uploadPhoto(image);
       await placeRepository.create(newPlace.copyWith(imageUrl: imageUrl));
 
-      state = AsyncData(await placeRepository.readAll());
-
-      ref.invalidateSelf();
+      state = AsyncData(await placeRepository.readAll(_currentOrder));
     } on Exception catch (error, stackTrace) {
       state = AsyncValue.error(error, stackTrace);
     }
+  }
+
+  Future<void> sortRefresh(SortOrder sortOrder) async {
+    _currentOrder = sortOrder;
+    final repository = await ref.read(dreamPlacesRepositoryProvider.future);
+    await repository.readAll(sortOrder);
+    ref.invalidateSelf();
   }
 }
 

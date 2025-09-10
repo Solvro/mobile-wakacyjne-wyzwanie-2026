@@ -25,7 +25,7 @@ class BuildList extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(10),
                 child: SizedBox(
                   height: 200,
                   width: double.infinity,

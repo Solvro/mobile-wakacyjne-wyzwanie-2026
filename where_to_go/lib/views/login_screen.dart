@@ -5,8 +5,8 @@ import "package:reactive_forms/reactive_forms.dart";
 
 import "../features/auth/auth_provider.dart";
 import "../utils/error_handler.dart";
-import "../widgets/email_form.dart";
-import "../widgets/password_form.dart";
+import "../widgets/auth/email_form.dart";
+import "../widgets/auth/password_form.dart";
 import "register_screen.dart";
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -39,35 +39,39 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         appBar: AppBar(
           title: const Text("Bucket List"),
         ),
-        body: Padding(
-            padding: const EdgeInsets.all(16),
-            child: ReactiveForm(
-                formGroup: form,
-                child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                  const Text("Logowanie", style: TextStyle(fontSize: 25)),
-                  const SizedBox(height: 20),
-                  const EmailForm(
-                      formControlName: "email",
-                      labelText: "Email",
-                      validationMessage: "Email wymagany",
-                      validationMessageEmail: "Podaj prawidłowy email"),
-                  const SizedBox(height: 16),
-                  const PasswordForm(
-                    formControlName: "password",
-                    labelText: "Hasło",
-                    validationMessage: "Hasło wymagane",
-                    mustMatch: "",
-                  ),
-                  const SizedBox(height: 24),
-                  ReactiveFormConsumer(builder: (context, formGroup, child) {
-                    return ElevatedButton(
-                      onPressed: formGroup.valid && !authState.isLoading ? _login : null,
-                      child: authState.isLoading ? const CircularProgressIndicator() : const Text("Zaloguj się"),
-                    );
-                  }),
-                  const SizedBox(height: 12),
-                  TextButton(onPressed: () => context.go(RegisterScreen.route), child: const Text("Zarejestruj się"))
-                ]))));
+        body: Center(
+            child: SingleChildScrollView(
+                child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: ReactiveForm(
+                        formGroup: form,
+                        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                          const Text("Logowanie", style: TextStyle(fontSize: 25)),
+                          const SizedBox(height: 20),
+                          const EmailForm(
+                              formControlName: "email",
+                              labelText: "Email",
+                              validationMessage: "Email wymagany",
+                              validationMessageEmail: "Podaj prawidłowy email"),
+                          const SizedBox(height: 16),
+                          const PasswordForm(
+                            formControlName: "password",
+                            labelText: "Hasło",
+                            validationMessage: "Hasło wymagane",
+                            mustMatch: "",
+                          ),
+                          const SizedBox(height: 24),
+                          ReactiveFormConsumer(builder: (context, formGroup, child) {
+                            return ElevatedButton(
+                              onPressed: formGroup.valid && !authState.isLoading ? _login : null,
+                              child:
+                                  authState.isLoading ? const CircularProgressIndicator() : const Text("Zaloguj się"),
+                            );
+                          }),
+                          const SizedBox(height: 12),
+                          TextButton(
+                              onPressed: () => context.go(RegisterScreen.route), child: const Text("Zarejestruj się"))
+                        ]))))));
   }
 
   Future<void> _login() async {
