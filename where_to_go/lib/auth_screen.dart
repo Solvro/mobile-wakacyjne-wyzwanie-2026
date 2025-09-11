@@ -61,7 +61,6 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // 👇 przeniesione z initState
     ref.listen<AsyncValue<bool>>(authNotifierProvider, (_, state) {
       state.whenData((loggedIn) {
         if (loggedIn && mounted) {
