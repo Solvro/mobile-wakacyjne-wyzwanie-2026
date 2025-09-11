@@ -3,7 +3,8 @@ import "dart:core";
 import "../models/place/place_response_dto.dart";
 
 class PlaceFilter {
-  static List<PlaceResponseDto> findPlaces(List<PlaceResponseDto> places, {required String searchQuery, required bool showFavourite}) {
+  static List<PlaceResponseDto> findPlaces(List<PlaceResponseDto> places,
+      {required String searchQuery, required bool showFavourite}) {
     List<PlaceResponseDto> filteredPlaces = places;
 
     if (searchQuery.isNotEmpty) {
