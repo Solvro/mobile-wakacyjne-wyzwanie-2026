@@ -24,8 +24,7 @@ mixin _$DreamPlace {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $DreamPlaceCopyWith<DreamPlace> get copyWith =>
-      _$DreamPlaceCopyWithImpl<DreamPlace>(this as DreamPlace, _$identity);
+  $DreamPlaceCopyWith<DreamPlace> get copyWith => _$DreamPlaceCopyWithImpl<DreamPlace>(this as DreamPlace, _$identity);
 
   /// Serializes this DreamPlace to a JSON map.
   Map<String, dynamic> toJson();
@@ -37,18 +36,14 @@ mixin _$DreamPlace {
             other is DreamPlace &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.description, description) ||
-                other.description == description) &&
-            (identical(other.imageUrl, imageUrl) ||
-                other.imageUrl == imageUrl) &&
-            (identical(other.isFavourite, isFavourite) ||
-                other.isFavourite == isFavourite));
+            (identical(other.description, description) || other.description == description) &&
+            (identical(other.imageUrl, imageUrl) || other.imageUrl == imageUrl) &&
+            (identical(other.isFavourite, isFavourite) || other.isFavourite == isFavourite));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, name, description, imageUrl, isFavourite);
+  int get hashCode => Object.hash(runtimeType, id, name, description, imageUrl, isFavourite);
 
   @override
   String toString() {
@@ -58,16 +53,9 @@ mixin _$DreamPlace {
 
 /// @nodoc
 abstract mixin class $DreamPlaceCopyWith<$Res> {
-  factory $DreamPlaceCopyWith(
-          DreamPlace value, $Res Function(DreamPlace) _then) =
-      _$DreamPlaceCopyWithImpl;
+  factory $DreamPlaceCopyWith(DreamPlace value, $Res Function(DreamPlace) _then) = _$DreamPlaceCopyWithImpl;
   @useResult
-  $Res call(
-      {String id,
-      String name,
-      String description,
-      String imageUrl,
-      bool isFavourite});
+  $Res call({String id, String name, String description, String imageUrl, bool isFavourite});
 }
 
 /// @nodoc
@@ -206,16 +194,13 @@ extension DreamPlacePatterns on DreamPlace {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(String id, String name, String description,
-            String imageUrl, bool isFavourite)?
-        $default, {
+    TResult Function(String id, String name, String description, String imageUrl, bool isFavourite)? $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case _DreamPlace() when $default != null:
-        return $default(_that.id, _that.name, _that.description, _that.imageUrl,
-            _that.isFavourite);
+        return $default(_that.id, _that.name, _that.description, _that.imageUrl, _that.isFavourite);
       case _:
         return orElse();
     }
@@ -236,15 +221,12 @@ extension DreamPlacePatterns on DreamPlace {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(String id, String name, String description,
-            String imageUrl, bool isFavourite)
-        $default,
+    TResult Function(String id, String name, String description, String imageUrl, bool isFavourite) $default,
   ) {
     final _that = this;
     switch (_that) {
       case _DreamPlace():
-        return $default(_that.id, _that.name, _that.description, _that.imageUrl,
-            _that.isFavourite);
+        return $default(_that.id, _that.name, _that.description, _that.imageUrl, _that.isFavourite);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -264,15 +246,12 @@ extension DreamPlacePatterns on DreamPlace {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(String id, String name, String description,
-            String imageUrl, bool isFavourite)?
-        $default,
+    TResult? Function(String id, String name, String description, String imageUrl, bool isFavourite)? $default,
   ) {
     final _that = this;
     switch (_that) {
       case _DreamPlace() when $default != null:
-        return $default(_that.id, _that.name, _that.description, _that.imageUrl,
-            _that.isFavourite);
+        return $default(_that.id, _that.name, _that.description, _that.imageUrl, _that.isFavourite);
       case _:
         return null;
     }
@@ -288,8 +267,7 @@ class _DreamPlace implements DreamPlace {
       required this.description,
       required this.imageUrl,
       this.isFavourite = false});
-  factory _DreamPlace.fromJson(Map<String, dynamic> json) =>
-      _$DreamPlaceFromJson(json);
+  factory _DreamPlace.fromJson(Map<String, dynamic> json) => _$DreamPlaceFromJson(json);
 
   @override
   final String id;
@@ -308,8 +286,7 @@ class _DreamPlace implements DreamPlace {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$DreamPlaceCopyWith<_DreamPlace> get copyWith =>
-      __$DreamPlaceCopyWithImpl<_DreamPlace>(this, _$identity);
+  _$DreamPlaceCopyWith<_DreamPlace> get copyWith => __$DreamPlaceCopyWithImpl<_DreamPlace>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -325,18 +302,14 @@ class _DreamPlace implements DreamPlace {
             other is _DreamPlace &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.description, description) ||
-                other.description == description) &&
-            (identical(other.imageUrl, imageUrl) ||
-                other.imageUrl == imageUrl) &&
-            (identical(other.isFavourite, isFavourite) ||
-                other.isFavourite == isFavourite));
+            (identical(other.description, description) || other.description == description) &&
+            (identical(other.imageUrl, imageUrl) || other.imageUrl == imageUrl) &&
+            (identical(other.isFavourite, isFavourite) || other.isFavourite == isFavourite));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, name, description, imageUrl, isFavourite);
+  int get hashCode => Object.hash(runtimeType, id, name, description, imageUrl, isFavourite);
 
   @override
   String toString() {
@@ -345,19 +318,11 @@ class _DreamPlace implements DreamPlace {
 }
 
 /// @nodoc
-abstract mixin class _$DreamPlaceCopyWith<$Res>
-    implements $DreamPlaceCopyWith<$Res> {
-  factory _$DreamPlaceCopyWith(
-          _DreamPlace value, $Res Function(_DreamPlace) _then) =
-      __$DreamPlaceCopyWithImpl;
+abstract mixin class _$DreamPlaceCopyWith<$Res> implements $DreamPlaceCopyWith<$Res> {
+  factory _$DreamPlaceCopyWith(_DreamPlace value, $Res Function(_DreamPlace) _then) = __$DreamPlaceCopyWithImpl;
   @override
   @useResult
-  $Res call(
-      {String id,
-      String name,
-      String description,
-      String imageUrl,
-      bool isFavourite});
+  $Res call({String id, String name, String description, String imageUrl, bool isFavourite});
 }
 
 /// @nodoc
