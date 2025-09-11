@@ -23,9 +23,14 @@ class RemoteAuthenticationRepository {
         "/auth/login",
         data: {"email": email, "password": password},
       );
-      return response.data!;
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return response.data ?? {};
+      } else {
+        throw AuthException("Logowanie nieudane: ${response.statusCode}");
+      }
     } on DioException catch (e) {
-      throw AuthException("Login failed: ${e.response?.data ?? e.message}");
+      throw AuthException("Logowanie nieudane: ${e.response?.data ?? e.message}");
     }
   }
 
@@ -43,9 +48,14 @@ class RemoteAuthenticationRepository {
           "username": username,
         },
       );
-      return response.data!;
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return response.data ?? {};
+      } else {
+        throw AuthException("Rejestracja nieudana: ${response.statusCode}");
+      }
     } on DioException catch (e) {
-      throw AuthException("Register failed: ${e.response?.data ?? e.message}");
+      throw AuthException("Rejestracja nieudana: ${e.response?.data ?? e.message}");
     }
   }
 
@@ -57,9 +67,14 @@ class RemoteAuthenticationRepository {
         "/auth/refresh",
         data: {"refreshToken": refreshToken},
       );
-      return response.data!;
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return response.data ?? {};
+      } else {
+        throw AuthException("Odświeżanie tokena nieudane: ${response.statusCode}");
+      }
     } on DioException catch (e) {
-      throw AuthException("Token refresh failed: ${e.response?.data ?? e.message}");
+      throw AuthException("Odświeżanie tokena nieudane: ${e.response?.data ?? e.message}");
     }
   }
 }

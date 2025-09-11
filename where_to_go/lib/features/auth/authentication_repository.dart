@@ -17,9 +17,20 @@ class AuthenticationRepository {
   Future<bool> login({required String email, required String password}) async {
     try {
       final data = await _remoteRepo.login(email: email, password: password);
+
+      // Dodaj debugowanie odpowiedzi
+      _logger.d("Login response: $data");
+
+      final accessToken = data["accessToken"]?.toString();
+      final refreshToken = data["refreshToken"]?.toString();
+
+      if (accessToken == null || refreshToken == null) {
+        throw AuthException("Brak tokenów w odpowiedzi serwera");
+      }
+
       await _localRepo.saveTokens(
-        accessToken: data["accessToken"].toString(),
-        refreshToken: data["refreshToken"].toString(),
+        accessToken: accessToken,
+        refreshToken: refreshToken,
       );
       return true;
     } on AuthException catch (e) {
@@ -35,9 +46,20 @@ class AuthenticationRepository {
         password: password,
         username: username,
       );
+
+      // Dodaj debugowanie odpowiedzi
+      _logger.d("Register response: $data");
+
+      final accessToken = data["accessToken"]?.toString();
+      final refreshToken = data["refreshToken"]?.toString();
+
+      if (accessToken == null || refreshToken == null) {
+        throw AuthException("Brak tokenów w odpowiedzi serwera");
+      }
+
       await _localRepo.saveTokens(
-        accessToken: data["accessToken"] as String,
-        refreshToken: data["refreshToken"] as String,
+        accessToken: accessToken,
+        refreshToken: refreshToken,
       );
       return true;
     } on AuthException catch (e) {
@@ -54,12 +76,23 @@ class AuthenticationRepository {
 
   Future<Map<String, dynamic>> refreshToken() async {
     final refresh = await _localRepo.readRefreshToken();
-    if (refresh == null) throw AuthException("No refresh token saved.");
+    if (refresh == null) throw AuthException("Brak refresh tokena");
+
     final data = await _remoteRepo.refreshToken(refreshToken: refresh);
 
+    // Dodaj debugowanie odpowiedzi
+    _logger.d("Refresh token response: $data");
+
+    final accessToken = data["accessToken"]?.toString();
+    final refreshToken = data["refreshToken"]?.toString();
+
+    if (accessToken == null || refreshToken == null) {
+      throw AuthException("Brak tokenów w odpowiedzi serwera");
+    }
+
     await _localRepo.saveTokens(
-      accessToken: data["accessToken"] as String,
-      refreshToken: data["refreshToken"] as String,
+      accessToken: accessToken,
+      refreshToken: refreshToken,
     );
     return data;
   }

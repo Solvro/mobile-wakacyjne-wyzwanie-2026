@@ -7,13 +7,20 @@ class DreamPlacesRepository {
   DreamPlacesRepository(this._dio);
 
   Future<List<DreamPlace>> getAllPlaces() async {
-    final response = await _dio.get<List<dynamic>>("/places");
-    return response.data!.map((json) => DreamPlace.fromJson(json as Map<String, dynamic>)).toList();
+    final response = await _dio.get<Map<String, dynamic>>("/places");
+    final data = response.data?["items"] as List<dynamic>? ?? [];
+    final places = data.map((e) => DreamPlace.fromJson(e as Map<String, dynamic>)).toList();
+    return places;
   }
 
   Future<DreamPlace> getPlace(String id) async {
     final response = await _dio.get<Map<String, dynamic>>("/places/$id");
-    return DreamPlace.fromJson(response.data!);
+    final data = response.data;
+    if (data == null) {
+      throw Exception("Brak danych z API");
+    }
+    final placeJson = data["item"] ?? data;
+    return DreamPlace.fromJson(placeJson as Map<String, dynamic>);
   }
 
   Future<DreamPlace> addPlace(DreamPlace place) async {
