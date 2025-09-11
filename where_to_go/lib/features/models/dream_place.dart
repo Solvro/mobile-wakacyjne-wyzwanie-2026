@@ -6,7 +6,7 @@ part "dream_place.g.dart";
 @freezed
 abstract class DreamPlace with _$DreamPlace {
   const factory DreamPlace({
-    required String id,
+    String? id,
     required String name,
     required String description,
     required String imageUrl,

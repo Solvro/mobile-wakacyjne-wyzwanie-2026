@@ -20,7 +20,6 @@ class DreamPlaceService {
     final imageUrl = await photosRepository.uploadPhoto(photo);
 
     final newPlace = DreamPlace(
-      id: "",
       name: name,
       description: description,
       imageUrl: imageUrl,
