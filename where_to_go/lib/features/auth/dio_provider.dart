@@ -9,7 +9,7 @@ part "dio_provider.g.dart";
 @riverpod
 Dio dio(Ref ref) {
   final dio = Dio(BaseOptions(
-    baseUrl: "https://backend-api.w.solvro.pl/api",
+    baseUrl: "https://backend-api.w.solvro.pl",
     connectTimeout: const Duration(seconds: 20),
     receiveTimeout: const Duration(seconds: 20),
   ));
