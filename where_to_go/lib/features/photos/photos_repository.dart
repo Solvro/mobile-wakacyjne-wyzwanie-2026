@@ -12,7 +12,7 @@ class PhotosRepository {
     });
 
     final response = await _dio.post<Map<String, dynamic>>(
-      "/photos",
+      "/photos/upload",
       data: formData,
       options: Options(contentType: "multipart/form-data"),
     );
