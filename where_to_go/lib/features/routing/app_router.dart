@@ -31,7 +31,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       ),
     ],
     redirect: (context, state) {
-      final isLoggedIn = ref.read(authNotifierProvider).value ?? false;
+      final authState = ref.read(authNotifierProvider);
+      final isLoggedIn = authState.value ?? false;
       final goingToAuth = state.uri.toString().startsWith("/auth");
 
       if (!isLoggedIn && !goingToAuth) return "/auth";

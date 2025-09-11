@@ -40,18 +40,18 @@ class DreamPlaces extends _$DreamPlaces {
   Future<void> updatePlace(DreamPlace place) async {
     final repo = ref.watch(dreamPlacesRepositoryProvider);
     final updated = await repo.updatePlace(place);
-    state.whenData((places) {
-      final updatedList = [for (final p in places) p.id == updated.id ? updated : p];
-      state = AsyncData(updatedList);
+    state = await AsyncValue.guard(() async {
+      final currentPlaces = state.value ?? [];
+      return currentPlaces.map((p) => p.id == updated.id ? updated : p).toList();
     });
   }
 
   Future<void> deletePlace(String id) async {
     final repo = ref.watch(dreamPlacesRepositoryProvider);
     await repo.deletePlace(id);
-    state.whenData((places) {
-      final updatedList = places.where((p) => p.id != id).toList();
-      state = AsyncData(updatedList);
+    state = await AsyncValue.guard(() async {
+      final currentPlaces = state.value ?? [];
+      return currentPlaces.where((p) => p.id != id).toList();
     });
   }
 
