@@ -18,7 +18,6 @@ class AuthenticationRepository {
     try {
       final data = await _remoteRepo.login(email: email, password: password);
 
-      // Dodaj debugowanie odpowiedzi
       _logger.d("Login response: $data");
 
       final accessToken = data["accessToken"]?.toString();
@@ -47,7 +46,6 @@ class AuthenticationRepository {
         username: username,
       );
 
-      // Dodaj debugowanie odpowiedzi
       _logger.d("Register response: $data");
 
       final accessToken = data["accessToken"]?.toString();
@@ -80,7 +78,6 @@ class AuthenticationRepository {
 
     final data = await _remoteRepo.refreshToken(refreshToken: refresh);
 
-    // Dodaj debugowanie odpowiedzi
     _logger.d("Refresh token response: $data");
 
     final accessToken = data["accessToken"]?.toString();
