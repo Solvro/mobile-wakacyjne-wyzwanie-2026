@@ -31,7 +31,7 @@ class _AddPlaceDialogState extends ConsumerState<AddPlaceDialog> {
     super.dispose();
   }
 
-  /// 🔹 Wybór zdjęcia z aparatu lub galerii
+  // Wybór zdjęcia z aparatu lub galerii
   Future<void> _pickImage() async {
     final source = await showDialog<ImageSource>(
       context: context,
@@ -58,7 +58,7 @@ class _AddPlaceDialogState extends ConsumerState<AddPlaceDialog> {
     }
   }
 
-  /// 🔹 Dodanie miejsca
+  // Dodanie miejsca poprzez przekazanie do dreamPlaceServiceProvider gdzie jest createDreamPlaceWithPhoto
   Future<void> _addDreamPlace() async {
     if (!_formKey.currentState!.validate() || _selectedImage == null) return;
 

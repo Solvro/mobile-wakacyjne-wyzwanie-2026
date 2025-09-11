@@ -20,12 +20,12 @@ class DreamPlaceService {
     required String description,
     required bool isFavourite,
   }) async {
-    // 1. Upload zdjęcia → dostajemy Photo (z path i url)
+    // 1. Upload zdjęcia → dostajemy Photo (z path)
     final photo = await photosRepo.uploadPhoto(file);
 
     await photosRepo.ensurePhotoExists(photo.filename);
 
-    // 2. Utwórz miejsce, podając pełny URL
+    // 2. Utwórz miejsce, podając imageUrl jako nazwę pliku
     return placesRepo.createDreamPlace(
       name: name,
       description: description,

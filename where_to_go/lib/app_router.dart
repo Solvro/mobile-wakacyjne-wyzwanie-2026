@@ -12,7 +12,6 @@ import "screens/dream_place_screen.dart";
 import "screens/login_screen.dart";
 import "screens/register_screen.dart";
 
-// lib/app_router.dart
 class GoRouterRefreshStream extends ChangeNotifier {
   GoRouterRefreshStream(Stream<dynamic> stream) {
     notifyListeners();
@@ -62,7 +61,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
 
         return null;
       } on Exception catch (e, stackTrace) {
-        // Dodaj logowanie błędu
+        // Błąd logowania
         debugPrint("Router redirect error: $e. StackTrace: $stackTrace");
         // W przypadku błędu zawsze idź do auth
         return RouteNames.auth;
@@ -70,7 +69,6 @@ final goRouterProvider = Provider<GoRouter>((ref) {
     },
     refreshListenable: GoRouterRefreshStream(authRepo.authStateChanges),
     routes: [
-      // Auth flow
       GoRoute(
         path: RouteNames.auth,
         name: "auth",
@@ -86,8 +84,6 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         name: "register",
         builder: (context, state) => const RegisterScreen(),
       ),
-
-      // Main app flow (chronione)
       GoRoute(
         path: RouteNames.home,
         name: "home",

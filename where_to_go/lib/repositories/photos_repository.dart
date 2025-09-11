@@ -40,7 +40,7 @@ class PhotosRepository {
     }
   }
 
-  /// 🔹 Pobiera listę plików z backendu (GET /photos)
+  // Pobiera listę plików z backendu (GET /photos)
   Future<List<String>> fetchPhotos() async {
     final response = await http.get(Uri.parse("$apiUrl/photos"));
 
@@ -52,7 +52,7 @@ class PhotosRepository {
     }
   }
 
-  /// 🔹 Sprawdza czy zdjęcie już istnieje w backendzie (musiałem to dodać, bo serwer chyba nie zdążył się odświeżyć przy natychmiastowym wysyłaniu POST /places)
+  // Sprawdza czy zdjęcie już istnieje w backendzie (musiałem to dodać, bo serwer chyba nie zdążył się odświeżyć przy natychmiastowym wysyłaniu POST /places)
   Future<void> ensurePhotoExists(String filename) async {
     for (var i = 0; i < 5; i++) {
       final photos = await fetchPhotos();

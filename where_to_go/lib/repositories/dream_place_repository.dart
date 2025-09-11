@@ -9,7 +9,7 @@ class DreamPlaceRepository {
     required Dio dio,
   }) : _dio = dio;
 
-  /// 🔹 Dodaj nowe miejsce (ze zdjęciem, jeśli masz już url)
+  // Dodawanie nowego miejsca
   Future<DreamPlace> createDreamPlace({
     required String name,
     required String description,
@@ -33,7 +33,7 @@ class DreamPlaceRepository {
     }
   }
 
-  /// 🔹 Pobierz wszystkie miejsca (z paginacją)
+  // Pobieranie wszystkich miejsc (z paginacją)
   Future<List<DreamPlace>> fetchDreamPlaces() async {
     final response = await _dio.get<Map<String, dynamic>>("/places");
 
@@ -46,7 +46,7 @@ class DreamPlaceRepository {
     }
   }
 
-  /// 🔹 Pobierz pojedyncze miejsce
+  // Pobieranie pojedynczego miejsca
   Future<DreamPlace> fetchDreamPlace(int id) async {
     final response = await _dio.get<Map<String, dynamic>>("/places/$id");
 
@@ -57,7 +57,7 @@ class DreamPlaceRepository {
     }
   }
 
-  /// 🔹 Aktualizuj istniejące miejsce
+  // Aktualizacja istniejących miejsc
   Future<DreamPlace> updateDreamPlace(DreamPlace place) async {
     if (place.id == null) {
       throw Exception("Nie można zaktualizować miejsca bez ID");
@@ -80,7 +80,7 @@ class DreamPlaceRepository {
     }
   }
 
-  /// 🔹 Usuń miejsce
+  // Usuwanie miejsca o danym id
   Future<void> deleteDreamPlace(int id) async {
     final response = await _dio.delete<void>("/places/$id");
 

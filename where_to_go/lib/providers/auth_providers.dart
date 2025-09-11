@@ -26,7 +26,7 @@ final baseDioProvider = Provider<Dio>((ref) {
   ));
 });
 
-// 2. Provider dla repozytoriów
+// 2. Provider dla lokalnego repozytorium
 final localAuthRepoProvider = Provider<LocalAuthenticationRepository>((ref) {
   final secureStorage = ref.read(secureStorageProvider);
   return LocalAuthenticationRepository(secureStorage: secureStorage);
@@ -60,7 +60,6 @@ final dioProvider = Provider<Dio>((ref) {
 
   baseDio.interceptors.add(InterceptorsWrapper(
     onRequest: (options, handler) {
-      // Nie dodawaj Authorization przy refreshToken
       if (!options.path.contains("/auth/refresh")) {
         final token = authRepo.tokens?.accessToken;
         if (token != null && token.isNotEmpty) {
