@@ -43,7 +43,40 @@ class _FilterDialogState extends State<FilterDialog> {
           children: [
             const Text("Wyświetl miejsca alfabetycznie"),
             const SizedBox(height: 8),
-            RadioGroup<SortOrder>(
+            Column(
+              children: [
+                ListTile(
+                  title: const Text("Rosnąco"),
+                  leading: Radio<SortOrder>(
+                    value: SortOrder.ascending,
+                    groupValue: _tempOrder,
+                    onChanged: (SortOrder? value) {
+                      setState(() {
+                        _tempOrder = value!;
+                      });
+                    },
+                    activeColor: context.colorScheme.onSurface,
+                  ),
+                  onTap: () => setState(() => _tempOrder = SortOrder.ascending),
+                ),
+                ListTile(
+                  title: const Text("Malejąco"),
+                  leading: Radio<SortOrder>(
+                    value: SortOrder.descending,
+                    groupValue: _tempOrder,
+                    onChanged: (SortOrder? value) {
+                      setState(() {
+                        _tempOrder = value!;
+                      });
+                    },
+                    activeColor: context.colorScheme.onSurface,
+                  ),
+                  onTap: () => setState(() => _tempOrder = SortOrder.descending),
+                ),
+              ],
+            ),
+
+            /*RadioGroup<SortOrder>(
               groupValue: _tempOrder,
               onChanged: (value) {
                 setState(() {
@@ -70,7 +103,7 @@ class _FilterDialogState extends State<FilterDialog> {
                   ),
                 ],
               ),
-            ),
+            ),*/
             const Divider(),
             CheckboxListTile(
               title: const Text("Wyświetlaj ulubione"),
