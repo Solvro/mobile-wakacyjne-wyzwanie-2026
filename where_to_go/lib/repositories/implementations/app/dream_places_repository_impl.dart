@@ -46,4 +46,11 @@ class DreamPlacesRepositoryImpl implements DreamPlacesRepository {
 
     return paginatedDto.results;
   }
+
+  @override
+  Future<PlaceResponseDto> updatePlace(String id, PlaceCreateWithoutOwnerInputDto updatedPlace) async {
+    final response = await _dio.put<Map<String, dynamic>>("/places/$id", data: updatedPlace.toJson());
+
+    return PlaceResponseDto.fromJson(response.data!);
+  }
 }

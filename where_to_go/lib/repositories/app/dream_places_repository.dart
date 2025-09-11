@@ -8,4 +8,5 @@ abstract class DreamPlacesRepository {
   Future<void> toggleFavorite(String id);
   Future<PlaceResponseDto> create(PlaceCreateWithoutOwnerInputDto newPlace);
   Future<void> delete(String id);
+  Future<PlaceResponseDto> updatePlace(String id, PlaceCreateWithoutOwnerInputDto updatedPlace);
 }

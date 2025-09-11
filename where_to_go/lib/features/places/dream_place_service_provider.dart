@@ -69,6 +69,24 @@ class DreamPlaceService extends _$DreamPlaceService {
     await repository.readAll(sortOrder);
     ref.invalidateSelf();
   }
+
+  Future<void> updatePlace(String id, PlaceCreateWithoutOwnerInputDto updatedPlace, File? updatedImage) async {
+    try {
+      final placeRepository = await ref.read(dreamPlacesRepositoryProvider.future);
+
+      var imageUrl = updatedPlace.imageUrl;
+      if (updatedImage != null) {
+        final photoRepository = await ref.read(photosRepositoryProvider.future);
+        imageUrl = await photoRepository.uploadPhoto(updatedImage);
+      }
+      await placeRepository.updatePlace(id, updatedPlace.copyWith(imageUrl: imageUrl));
+
+      state = AsyncData(await placeRepository.readAll(_currentOrder));
+      ref.invalidate(placeProvider(id));
+    } on Exception catch (error, stackTrace) {
+      state = AsyncValue.error(error, stackTrace);
+    }
+  }
 }
 
 @riverpod

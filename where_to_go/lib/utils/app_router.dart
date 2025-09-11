@@ -3,6 +3,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 
 import "../features/auth/auth_provider.dart";
+import "../models/place/place_response_dto.dart";
 import "../views/bucket_list_screen.dart";
 import "../views/create_dream_place_screen.dart";
 import "../views/dream_place_screen_consumer_router.dart";
@@ -38,9 +39,11 @@ GoRouter goRouter(Ref ref) {
         builder: (context, state) => const RegisterScreen(),
       ),
       GoRoute(
-        path: CreateDreamPlaceScreen.route,
-        builder: (context, state) => const CreateDreamPlaceScreen(),
-      ),
+          path: CreateDreamPlaceScreen.route,
+          builder: (context, state) {
+            final PlaceResponseDto? existingPlace = state.extra as PlaceResponseDto?;
+            return CreateDreamPlaceScreen(existingPlace: existingPlace);
+          }),
     ],
   );
 }

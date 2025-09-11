@@ -1,10 +1,12 @@
 import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
 import "../features/places/dream_place_service_provider.dart";
 import "../themes/utils.dart";
 import "../utils/error_handler.dart";
 import "../utils/paths.dart";
+import "create_dream_place_screen.dart";
 
 class DreamPlaceScreenConsumerRouter extends ConsumerWidget {
   final String id;
@@ -36,7 +38,10 @@ class DreamPlaceScreenConsumerRouter extends ConsumerWidget {
                   },
                   icon: place.isFavourite ? const Icon(Icons.favorite) : const Icon(Icons.favorite_border),
                   color: place.isFavourite ? Colors.red : null,
-                )
+                ),
+                IconButton(
+                    onPressed: () => context.push(CreateDreamPlaceScreen.route, extra: place),
+                    icon: const Icon(Icons.edit)),
               ],
             ),
             body: SingleChildScrollView(
