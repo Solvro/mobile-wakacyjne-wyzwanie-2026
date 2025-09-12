@@ -12,7 +12,7 @@ class DreamPlacesRepository {
   Future<List<DreamPlace>> getAllPlaces() async {
     final response = await _dio.get<Map<String, dynamic>>("/places?sort=asc&sortBy=name");
     final data = response.data?["results"] as List<dynamic>? ?? [];
-    logger.d("Odpowiedź serwera (addPlace): ${response.data}");
+    logger.d("Odpowiedź serwera (getAllPlaces): ${response.data}");
 
     final places = data.map((e) => DreamPlace.fromJson(e as Map<String, dynamic>)).toList();
     return places;
@@ -24,10 +24,9 @@ class DreamPlacesRepository {
     if (data == null) {
       throw Exception("Brak danych z API");
     }
-    final placeJson = data["item"] ?? data;
-    logger.d("Odpowiedź serwera (addPlace): ${response.data}");
+    logger.d("Odpowiedź serwera (getPlace): ${response.data}");
 
-    return DreamPlace.fromJson(placeJson as Map<String, dynamic>);
+    return DreamPlace.fromJson(data);
   }
 
   Future<DreamPlace> addPlace(DreamPlace place) async {
@@ -46,6 +45,8 @@ class DreamPlacesRepository {
       "/places/${place.id}",
       data: place.toJson(),
     );
+
+    logger.d("Odpowiedź serwera (updatePlace): ${response.data}");
     return DreamPlace.fromJson(response.data!);
   }
 

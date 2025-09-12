@@ -55,7 +55,7 @@ class DreamPlaces extends _$DreamPlaces {
     await repo.deletePlace(id);
     state = await AsyncValue.guard(() async {
       final currentPlaces = state.value ?? [];
-      return currentPlaces.where((p) => p.id != int.tryParse(id)).toList();
+      return currentPlaces.where((p) => p.id != int.parse(id)).toList();
     });
   }
 
