@@ -1,5 +1,8 @@
 import "package:dio/dio.dart";
+import "package:logger/logger.dart";
 import "../models/dream_place.dart";
+
+final logger = Logger();
 
 class DreamPlacesRepository {
   final Dio _dio;
@@ -28,6 +31,9 @@ class DreamPlacesRepository {
       "/places",
       data: place.toJson(),
     );
+
+    logger.d("Odpowiedź serwera (addPlace): ${response.data}");
+
     return DreamPlace.fromJson(response.data!);
   }
 

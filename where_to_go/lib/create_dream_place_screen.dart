@@ -2,8 +2,8 @@ import "dart:io";
 import "package:dio/dio.dart";
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:go_router/go_router.dart";
 import "package:image_picker/image_picker.dart";
-import "../features/database/dream_place_provider.dart";
 import "../features/photos/dream_place_service_provider.dart";
 
 class CreateDreamPlaceScreen extends ConsumerStatefulWidget {
@@ -40,18 +40,15 @@ class _CreateDreamPlaceScreenState extends ConsumerState<CreateDreamPlaceScreen>
     setState(() => _isLoading = true);
     try {
       final service = ref.read(dreamPlaceServiceProvider);
-      final notifier = ref.read(dreamPlacesProvider.notifier);
 
-      final newPlace = await service.createDreamPlaceWithPhoto(
+      await service.createDreamPlaceWithPhoto(
         name: _nameController.text,
         description: _descriptionController.text,
         photo: File(_selectedImage!.path),
       );
 
-      await notifier.addPlace(newPlace);
-
       if (mounted) {
-        Navigator.of(context).pop();
+        context.go("/");
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Miejsce dodane pomyślnie")),
         );

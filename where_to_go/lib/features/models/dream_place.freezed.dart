@@ -19,6 +19,7 @@ mixin _$DreamPlace {
   String get description;
   String get imageUrl;
   bool get isFavourite;
+  String? get ownerEmail;
 
   /// Create a copy of DreamPlace
   /// with the given fields replaced by the non-null parameter values.
@@ -42,17 +43,19 @@ mixin _$DreamPlace {
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
             (identical(other.isFavourite, isFavourite) ||
-                other.isFavourite == isFavourite));
+                other.isFavourite == isFavourite) &&
+            (identical(other.ownerEmail, ownerEmail) ||
+                other.ownerEmail == ownerEmail));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, name, description, imageUrl, isFavourite);
+  int get hashCode => Object.hash(
+      runtimeType, id, name, description, imageUrl, isFavourite, ownerEmail);
 
   @override
   String toString() {
-    return 'DreamPlace(id: $id, name: $name, description: $description, imageUrl: $imageUrl, isFavourite: $isFavourite)';
+    return 'DreamPlace(id: $id, name: $name, description: $description, imageUrl: $imageUrl, isFavourite: $isFavourite, ownerEmail: $ownerEmail)';
   }
 }
 
@@ -67,7 +70,8 @@ abstract mixin class $DreamPlaceCopyWith<$Res> {
       String name,
       String description,
       String imageUrl,
-      bool isFavourite});
+      bool isFavourite,
+      String? ownerEmail});
 }
 
 /// @nodoc
@@ -87,6 +91,7 @@ class _$DreamPlaceCopyWithImpl<$Res> implements $DreamPlaceCopyWith<$Res> {
     Object? description = null,
     Object? imageUrl = null,
     Object? isFavourite = null,
+    Object? ownerEmail = freezed,
   }) {
     return _then(_self.copyWith(
       id: freezed == id
@@ -109,6 +114,10 @@ class _$DreamPlaceCopyWithImpl<$Res> implements $DreamPlaceCopyWith<$Res> {
           ? _self.isFavourite
           : isFavourite // ignore: cast_nullable_to_non_nullable
               as bool,
+      ownerEmail: freezed == ownerEmail
+          ? _self.ownerEmail
+          : ownerEmail // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -207,7 +216,7 @@ extension DreamPlacePatterns on DreamPlace {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(int? id, String name, String description, String imageUrl,
-            bool isFavourite)?
+            bool isFavourite, String? ownerEmail)?
         $default, {
     required TResult orElse(),
   }) {
@@ -215,7 +224,7 @@ extension DreamPlacePatterns on DreamPlace {
     switch (_that) {
       case _DreamPlace() when $default != null:
         return $default(_that.id, _that.name, _that.description, _that.imageUrl,
-            _that.isFavourite);
+            _that.isFavourite, _that.ownerEmail);
       case _:
         return orElse();
     }
@@ -237,14 +246,14 @@ extension DreamPlacePatterns on DreamPlace {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(int? id, String name, String description, String imageUrl,
-            bool isFavourite)
+            bool isFavourite, String? ownerEmail)
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _DreamPlace():
         return $default(_that.id, _that.name, _that.description, _that.imageUrl,
-            _that.isFavourite);
+            _that.isFavourite, _that.ownerEmail);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -265,14 +274,14 @@ extension DreamPlacePatterns on DreamPlace {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult? Function(int? id, String name, String description, String imageUrl,
-            bool isFavourite)?
+            bool isFavourite, String? ownerEmail)?
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _DreamPlace() when $default != null:
         return $default(_that.id, _that.name, _that.description, _that.imageUrl,
-            _that.isFavourite);
+            _that.isFavourite, _that.ownerEmail);
       case _:
         return null;
     }
@@ -287,7 +296,8 @@ class _DreamPlace implements DreamPlace {
       required this.name,
       required this.description,
       required this.imageUrl,
-      this.isFavourite = false});
+      this.isFavourite = false,
+      this.ownerEmail});
   factory _DreamPlace.fromJson(Map<String, dynamic> json) =>
       _$DreamPlaceFromJson(json);
 
@@ -302,6 +312,8 @@ class _DreamPlace implements DreamPlace {
   @override
   @JsonKey()
   final bool isFavourite;
+  @override
+  final String? ownerEmail;
 
   /// Create a copy of DreamPlace
   /// with the given fields replaced by the non-null parameter values.
@@ -330,17 +342,19 @@ class _DreamPlace implements DreamPlace {
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
             (identical(other.isFavourite, isFavourite) ||
-                other.isFavourite == isFavourite));
+                other.isFavourite == isFavourite) &&
+            (identical(other.ownerEmail, ownerEmail) ||
+                other.ownerEmail == ownerEmail));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, name, description, imageUrl, isFavourite);
+  int get hashCode => Object.hash(
+      runtimeType, id, name, description, imageUrl, isFavourite, ownerEmail);
 
   @override
   String toString() {
-    return 'DreamPlace(id: $id, name: $name, description: $description, imageUrl: $imageUrl, isFavourite: $isFavourite)';
+    return 'DreamPlace(id: $id, name: $name, description: $description, imageUrl: $imageUrl, isFavourite: $isFavourite, ownerEmail: $ownerEmail)';
   }
 }
 
@@ -357,7 +371,8 @@ abstract mixin class _$DreamPlaceCopyWith<$Res>
       String name,
       String description,
       String imageUrl,
-      bool isFavourite});
+      bool isFavourite,
+      String? ownerEmail});
 }
 
 /// @nodoc
@@ -377,6 +392,7 @@ class __$DreamPlaceCopyWithImpl<$Res> implements _$DreamPlaceCopyWith<$Res> {
     Object? description = null,
     Object? imageUrl = null,
     Object? isFavourite = null,
+    Object? ownerEmail = freezed,
   }) {
     return _then(_DreamPlace(
       id: freezed == id
@@ -399,6 +415,10 @@ class __$DreamPlaceCopyWithImpl<$Res> implements _$DreamPlaceCopyWith<$Res> {
           ? _self.isFavourite
           : isFavourite // ignore: cast_nullable_to_non_nullable
               as bool,
+      ownerEmail: freezed == ownerEmail
+          ? _self.ownerEmail
+          : ownerEmail // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
