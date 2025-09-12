@@ -1,5 +1,6 @@
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
+import "../auth/auth_provider.dart";
 import "../auth/dio_provider.dart";
 import "../models/dream_place.dart";
 import "dream_place_repository.dart";
@@ -15,7 +16,10 @@ DreamPlacesRepository dreamPlacesRepository(Ref ref) {
 @riverpod
 class DreamPlaces extends _$DreamPlaces {
   @override
-  Future<List<DreamPlace>> build() {
+  Future<List<DreamPlace>> build() async {
+    // Poczekaj aż auth będzie gotowy
+    await ref.watch(authNotifierProvider.future);
+
     final repo = ref.watch(dreamPlacesRepositoryProvider);
     return repo.getAllPlaces();
   }

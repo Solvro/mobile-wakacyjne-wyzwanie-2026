@@ -3,6 +3,7 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:go_router/go_router.dart";
 import "features/auth/auth_exception.dart";
 import "features/auth/auth_provider.dart";
+import "features/database/dream_place_provider.dart";
 
 class AuthScreen extends ConsumerStatefulWidget {
   const AuthScreen({super.key});
@@ -64,6 +65,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     ref.listen<AsyncValue<bool>>(authNotifierProvider, (_, state) {
       state.whenData((loggedIn) {
         if (loggedIn && mounted) {
+          ref.invalidate(dreamPlacesProvider);
           context.go("/");
         }
       });

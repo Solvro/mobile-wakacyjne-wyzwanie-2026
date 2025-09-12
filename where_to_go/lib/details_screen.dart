@@ -65,7 +65,7 @@ class DetailsScreen extends ConsumerWidget {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(12),
                           child: Image.network(
-                            place.imageUrl,
+                            "https://backend-api.w.solvro.pl/photos/${place.imageUrl}",
                             fit: BoxFit.cover,
                           ),
                         ),

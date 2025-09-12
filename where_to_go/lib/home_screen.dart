@@ -50,7 +50,7 @@ class HomeScreen extends ConsumerWidget {
                   leading: ClipRRect(
                     borderRadius: BorderRadius.circular(8),
                     child: Image.network(
-                      place.imageUrl,
+                      "https://backend-api.w.solvro.pl/photos/${place.imageUrl}",
                       width: 60,
                       fit: BoxFit.cover,
                     ),
