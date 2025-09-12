@@ -29,18 +29,14 @@ class DetailsScreen extends ConsumerWidget {
             );
           }
 
-          // nie używamy firstWhere z throw — najpierw sprawdzamy czy istnieje
           final matching = value.where((p) => p.id == parsedId).toList();
           if (matching.isEmpty) {
-            // Element nie istnieje (był usunięty lub brak) — zamykamy ekran na następnej klatce
             WidgetsBinding.instance.addPostFrameCallback((_) {
               if (Navigator.canPop(context)) {
-                // bezpiecznie zamykamy ekran
                 Navigator.of(context).pop();
               }
             });
 
-            // Pokażemy prosty placeholder — ekran zostanie zamknięty wkrótce
             return const Scaffold(
               body: Center(child: CircularProgressIndicator()),
             );
@@ -62,7 +58,6 @@ class DetailsScreen extends ConsumerWidget {
                 IconButton(
                   icon: const Icon(Icons.delete),
                   onPressed: () async {
-                    // wywołujemy helper: onPressed krótki i czytelny
                     await deletePlaceWithConfirmation(context, ref, place.id!);
                   },
                 ),
@@ -73,14 +68,26 @@ class DetailsScreen extends ConsumerWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(12),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: Image.network(
-                        "https://backend-api.w.solvro.pl/photos/${place.imageUrl}",
-                        fit: BoxFit.cover,
-                        errorBuilder: (ctx, err, stack) => const SizedBox(
-                          height: 200,
-                          child: Center(child: Icon(Icons.broken_image)),
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 8,
+                            offset: Offset(0, 4),
+                          )
+                        ],
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.network(
+                          "https://backend-api.w.solvro.pl/photos/${place.imageUrl}",
+                          fit: BoxFit.cover,
+                          errorBuilder: (ctx, err, stack) => const SizedBox(
+                            height: 200,
+                            child: Center(child: Icon(Icons.broken_image)),
+                          ),
                         ),
                       ),
                     ),
@@ -88,10 +95,10 @@ class DetailsScreen extends ConsumerWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           place.name,
+                          textAlign: TextAlign.center,
                           style: const TextStyle(
                             fontSize: 26,
                             fontWeight: FontWeight.bold,
@@ -100,8 +107,10 @@ class DetailsScreen extends ConsumerWidget {
                         const SizedBox(height: 8),
                         Text(
                           place.description,
+                          textAlign: TextAlign.center,
                           style: const TextStyle(
                             fontSize: 18,
+                            fontWeight: FontWeight.w600,
                             height: 1.4,
                           ),
                         ),
@@ -117,14 +126,10 @@ class DetailsScreen extends ConsumerWidget {
     };
   }
 
-  /// Pokazuje dialog, zamyka ekran (pop) i potem usuwa element oraz pokazuje snackbar na liście.
-  /// WAŻNE: nie używamy `context` po await — przechwytujemy navigator/messenger PRZED.
   Future<void> deletePlaceWithConfirmation(BuildContext context, WidgetRef ref, int placeId) async {
-    // przechwytujemy obiekty potrzebne po await
     final navigator = Navigator.of(context);
     final messenger = ScaffoldMessenger.of(context);
 
-    // pokaż dialog (tu używamy context - to jest przed await)
     final confirm = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -147,13 +152,10 @@ class DetailsScreen extends ConsumerWidget {
 
     if (confirm != true) return;
 
-    // TERAZ: nie używamy już context — zamiast tego używamy 'navigator' oraz 'messenger' które mamy
-    // Najpierw zamykamy details screen (unikamy race condition)
     if (navigator.canPop()) {
       navigator.pop();
     }
 
-    // Następnie wykonujemy usunięcie (po powrocie na listę)
     try {
       await ref.read(dreamPlacesProvider.notifier).deletePlace(placeId.toString());
       messenger.showSnackBar(const SnackBar(content: Text("Miejsce zostało usunięte")));
