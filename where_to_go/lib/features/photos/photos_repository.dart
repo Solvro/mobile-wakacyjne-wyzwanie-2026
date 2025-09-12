@@ -32,7 +32,7 @@ class PhotosRepository {
 
       if (data != null && data.containsKey("filename")) {
         final filename = data["filename"] as String;
-        return "https://backend-api.w.solvro.pl/photos/$filename";
+        return filename;
       } else {
         throw Exception("Brak pola 'filename' w odpowiedzi serwera");
       }

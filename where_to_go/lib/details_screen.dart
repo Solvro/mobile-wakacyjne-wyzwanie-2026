@@ -26,8 +26,10 @@ class DetailsScreen extends ConsumerWidget {
           body: Center(child: Text("Błąd: $error")),
         ),
       AsyncData(:final value) => () {
-          final place =
-              value.firstWhere((p) => p.id == id, orElse: () => throw Exception("Nie znaleziono takiego miejsca."));
+          final place = value.firstWhere(
+            (p) => p.id == int.tryParse(id),
+            orElse: () => throw Exception("Nie znaleziono takiego miejsca."),
+          );
 
           return Scaffold(
             appBar: AppBar(

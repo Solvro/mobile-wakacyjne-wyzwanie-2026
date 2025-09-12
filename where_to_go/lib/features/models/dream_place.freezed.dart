@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$DreamPlace {
-  String? get id;
+  int? get id;
   String get name;
   String get description;
   String get imageUrl;
@@ -63,7 +63,7 @@ abstract mixin class $DreamPlaceCopyWith<$Res> {
       _$DreamPlaceCopyWithImpl;
   @useResult
   $Res call(
-      {String? id,
+      {int? id,
       String name,
       String description,
       String imageUrl,
@@ -92,7 +92,7 @@ class _$DreamPlaceCopyWithImpl<$Res> implements $DreamPlaceCopyWith<$Res> {
       id: freezed == id
           ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as int?,
       name: null == name
           ? _self.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -206,8 +206,8 @@ extension DreamPlacePatterns on DreamPlace {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(String? id, String name, String description,
-            String imageUrl, bool isFavourite)?
+    TResult Function(int? id, String name, String description, String imageUrl,
+            bool isFavourite)?
         $default, {
     required TResult orElse(),
   }) {
@@ -236,8 +236,8 @@ extension DreamPlacePatterns on DreamPlace {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(String? id, String name, String description,
-            String imageUrl, bool isFavourite)
+    TResult Function(int? id, String name, String description, String imageUrl,
+            bool isFavourite)
         $default,
   ) {
     final _that = this;
@@ -264,8 +264,8 @@ extension DreamPlacePatterns on DreamPlace {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(String? id, String name, String description,
-            String imageUrl, bool isFavourite)?
+    TResult? Function(int? id, String name, String description, String imageUrl,
+            bool isFavourite)?
         $default,
   ) {
     final _that = this;
@@ -292,7 +292,7 @@ class _DreamPlace implements DreamPlace {
       _$DreamPlaceFromJson(json);
 
   @override
-  final String? id;
+  final int? id;
   @override
   final String name;
   @override
@@ -353,7 +353,7 @@ abstract mixin class _$DreamPlaceCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String? id,
+      {int? id,
       String name,
       String description,
       String imageUrl,
@@ -382,7 +382,7 @@ class __$DreamPlaceCopyWithImpl<$Res> implements _$DreamPlaceCopyWith<$Res> {
       id: freezed == id
           ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as int?,
       name: null == name
           ? _self.name
           : name // ignore: cast_nullable_to_non_nullable

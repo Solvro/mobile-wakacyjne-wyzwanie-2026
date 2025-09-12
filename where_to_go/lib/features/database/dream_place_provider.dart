@@ -51,7 +51,7 @@ class DreamPlaces extends _$DreamPlaces {
     await repo.deletePlace(id);
     state = await AsyncValue.guard(() async {
       final currentPlaces = state.value ?? [];
-      return currentPlaces.where((p) => p.id != id).toList();
+      return currentPlaces.where((p) => p.id != int.tryParse(id)).toList();
     });
   }
 
@@ -59,7 +59,10 @@ class DreamPlaces extends _$DreamPlaces {
     final places = state.value;
     if (places == null) return;
 
-    final index = places.indexWhere((p) => p.id == id);
+    final intId = int.tryParse(id);
+    if (intId == null) return;
+
+    final index = places.indexWhere((p) => p.id == intId);
     if (index == -1) return;
 
     final place = places[index];
