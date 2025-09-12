@@ -5,6 +5,7 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:go_router/go_router.dart";
 import "package:image_picker/image_picker.dart";
 import "../features/photos/dream_place_service_provider.dart";
+import "features/database/dream_place_provider.dart";
 
 class CreateDreamPlaceScreen extends ConsumerStatefulWidget {
   const CreateDreamPlaceScreen({super.key});
@@ -46,6 +47,7 @@ class _CreateDreamPlaceScreenState extends ConsumerState<CreateDreamPlaceScreen>
         description: _descriptionController.text,
         photo: File(_selectedImage!.path),
       );
+      ref.invalidate(dreamPlacesProvider);
 
       if (!mounted) return;
 
