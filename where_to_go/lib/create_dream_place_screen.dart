@@ -47,20 +47,25 @@ class _CreateDreamPlaceScreenState extends ConsumerState<CreateDreamPlaceScreen>
         photo: File(_selectedImage!.path),
       );
 
-      if (mounted) {
-        context.go("/");
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Miejsce dodane pomyślnie")),
-        );
-      }
+      if (!mounted) return;
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          context.go("/");
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Miejsce dodane pomyślnie")),
+          );
+        }
+      });
     } on DioException catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Błąd: ${e.message}")),
-        );
-      }
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Błąd: ${e.message}")),
+      );
     } finally {
-      if (mounted) setState(() => _isLoading = false);
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
     }
   }
 
