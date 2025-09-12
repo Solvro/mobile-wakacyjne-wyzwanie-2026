@@ -1,10 +1,7 @@
+import "package:dio/dio.dart";
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "features/database/dream_place_provider.dart";
-import "features/favorite/favorite_provider.dart"; // ignore: unused_import
-import "features/models/attraction.dart"; // ignore: unused_import
-import "features/models/dream_place_old.dart"; // ignore: unused_import
-import "features/places/places_provider.dart"; // ignore: unused_import
 
 class DetailsScreen extends ConsumerWidget {
   static const route = "/place";
@@ -17,19 +14,39 @@ class DetailsScreen extends ConsumerWidget {
     final placesAsync = ref.watch(dreamPlacesProvider);
 
     return switch (placesAsync) {
-      AsyncLoading() => Scaffold(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          body: const Center(child: CircularProgressIndicator()),
+      AsyncLoading() => const Scaffold(
+          body: Center(child: CircularProgressIndicator()),
         ),
       AsyncError(:final error) => Scaffold(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           body: Center(child: Text("Błąd: $error")),
         ),
       AsyncData(:final value) => () {
-          final place = value.firstWhere(
-            (p) => p.id == int.tryParse(id),
-            orElse: () => throw Exception("Nie znaleziono takiego miejsca."),
-          );
+          final parsedId = int.tryParse(id);
+
+          if (parsedId == null) {
+            return const Scaffold(
+              body: Center(child: Text("Błędne ID miejsca.")),
+            );
+          }
+
+          // nie używamy firstWhere z throw — najpierw sprawdzamy czy istnieje
+          final matching = value.where((p) => p.id == parsedId).toList();
+          if (matching.isEmpty) {
+            // Element nie istnieje (był usunięty lub brak) — zamykamy ekran na następnej klatce
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (Navigator.canPop(context)) {
+                // bezpiecznie zamykamy ekran
+                Navigator.of(context).pop();
+              }
+            });
+
+            // Pokażemy prosty placeholder — ekran zostanie zamknięty wkrótce
+            return const Scaffold(
+              body: Center(child: CircularProgressIndicator()),
+            );
+          }
+
+          final place = matching.first;
 
           return Scaffold(
             appBar: AppBar(
@@ -42,6 +59,13 @@ class DetailsScreen extends ConsumerWidget {
                   ),
                   onPressed: () => ref.read(dreamPlacesProvider.notifier).toggleFavourite(id),
                 ),
+                IconButton(
+                  icon: const Icon(Icons.delete),
+                  onPressed: () async {
+                    // wywołujemy helper: onPressed krótki i czytelny
+                    await deletePlaceWithConfirmation(context, ref, place.id!);
+                  },
+                ),
               ],
             ),
             body: SingleChildScrollView(
@@ -49,25 +73,14 @@ class DetailsScreen extends ConsumerWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(12),
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black26,
-                            blurRadius: 8,
-                            offset: Offset(0, 4),
-                          )
-                        ],
-                      ),
-                      child: Hero(
-                        tag: place.name,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: Image.network(
-                            "https://backend-api.w.solvro.pl/photos/${place.imageUrl}",
-                            fit: BoxFit.cover,
-                          ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.network(
+                        "https://backend-api.w.solvro.pl/photos/${place.imageUrl}",
+                        fit: BoxFit.cover,
+                        errorBuilder: (ctx, err, stack) => const SizedBox(
+                          height: 200,
+                          child: Center(child: Icon(Icons.broken_image)),
                         ),
                       ),
                     ),
@@ -89,18 +102,12 @@ class DetailsScreen extends ConsumerWidget {
                           place.description,
                           style: const TextStyle(
                             fontSize: 18,
-                            fontWeight: FontWeight.w600,
                             height: 1.4,
                           ),
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  ),
-                  const SizedBox(height: 16),
                 ],
               ),
             ),
@@ -108,5 +115,52 @@ class DetailsScreen extends ConsumerWidget {
         }(),
       _ => const SizedBox.shrink(),
     };
+  }
+
+  /// Pokazuje dialog, zamyka ekran (pop) i potem usuwa element oraz pokazuje snackbar na liście.
+  /// WAŻNE: nie używamy `context` po await — przechwytujemy navigator/messenger PRZED.
+  Future<void> deletePlaceWithConfirmation(BuildContext context, WidgetRef ref, int placeId) async {
+    // przechwytujemy obiekty potrzebne po await
+    final navigator = Navigator.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+
+    // pokaż dialog (tu używamy context - to jest przed await)
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text("Usuń miejsce"),
+        content: const Text(
+          "Czy na pewno chcesz usunąć to miejsce? Tej operacji nie można cofnąć.",
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text("Anuluj"),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text("Usuń", style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm != true) return;
+
+    // TERAZ: nie używamy już context — zamiast tego używamy 'navigator' oraz 'messenger' które mamy
+    // Najpierw zamykamy details screen (unikamy race condition)
+    if (navigator.canPop()) {
+      navigator.pop();
+    }
+
+    // Następnie wykonujemy usunięcie (po powrocie na listę)
+    try {
+      await ref.read(dreamPlacesProvider.notifier).deletePlace(placeId.toString());
+      messenger.showSnackBar(const SnackBar(content: Text("Miejsce zostało usunięte")));
+    } on DioException catch (e) {
+      messenger.showSnackBar(SnackBar(content: Text("Błąd podczas usuwania: ${e.message}")));
+    } on Exception catch (e) {
+      messenger.showSnackBar(SnackBar(content: Text("Błąd podczas usuwania: $e")));
+    }
   }
 }
