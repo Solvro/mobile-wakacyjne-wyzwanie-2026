@@ -3,10 +3,8 @@ class PlaceModel {
   final String name;
   final String description;
   final bool isFavorite;
-  //final List<PlaceFeature> features;
   final String imageUrl;
   final String ownerEmail;
-
 
   const PlaceModel({
     required this.id,
@@ -17,14 +15,21 @@ class PlaceModel {
     required this.imageUrl,
   });
 
-  PlaceModel copyWith({bool? isFavorite}) {
+  PlaceModel copyWith({
+    int? id,
+    String? name,
+    String? description,
+    bool? isFavorite,
+    String? ownerEmail,
+    String? imageUrl,
+  }) {
     return PlaceModel(
-      id: id,
-      name: name,
-      description: description,
+      id: id ?? this.id,
+      name: name ?? this.name,
+      description: description ?? this.description,
       isFavorite: isFavorite ?? this.isFavorite,
-      ownerEmail: ownerEmail,
-      imageUrl: imageUrl,
+      ownerEmail: ownerEmail ?? this.ownerEmail,
+      imageUrl: imageUrl ?? this.imageUrl,
     );
   }
 
@@ -34,7 +39,7 @@ class PlaceModel {
       name: json["name"] as String,
       description: json["description"] as String,
       imageUrl: json["imageUrl"] as String? ?? "",
-      isFavorite: json["isFavorite"] as bool? ?? false,
+      isFavorite: (json["isFavorite"] ?? json["isFavourite"]) as bool? ?? false,
       ownerEmail: json["ownerEmail"] as String,
     );
   }
@@ -44,7 +49,7 @@ class PlaceModel {
       "name": name,
       "description": description,
       "imageUrl": imageUrl,
-      "isFavorite": isFavorite,
+      "isFavourite": isFavorite,
     };
   }
 }

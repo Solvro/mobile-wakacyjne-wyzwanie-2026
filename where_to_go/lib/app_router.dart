@@ -1,9 +1,9 @@
 import "package:go_router/go_router.dart";
+import "create_dream_place_screen.dart";
 import "dream_place_screen.dart";
 import "login_screen.dart";
 import "place_screen_list.dart";
 import "register_screen.dart";
-
 final goRouter = GoRouter(
   initialLocation: "/login",
   routes: [
@@ -25,6 +25,10 @@ final goRouter = GoRouter(
     GoRoute(
       path: "/login",
       builder: (context, state) => const LoginScreen(),
+    ),
+    GoRoute(
+      path: "/create-place",
+      builder: (context, state) => const CreateDreamPlaceScreen(),
     ),
   ],
 );
