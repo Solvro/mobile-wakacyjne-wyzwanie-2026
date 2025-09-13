@@ -3,6 +3,8 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:go_router/go_router.dart";
 import "details_screen.dart";
 import "features/database/dream_place_provider.dart";
+import "features/filters/filtered_dream_places_provider.dart";
+import "features/filters/show_favorites_only_provider.dart";
 import "features/themes/local_theme_repository.dart";
 import "features/themes/theme_notifier.dart";
 
@@ -13,12 +15,26 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final placesAsync = ref.watch(dreamPlacesProvider);
     final themeAsync = ref.watch(themeNotifierProvider);
+    final filteredPlaces = ref.watch(filteredDreamPlacesProvider);
+    final showFavorites = ref.watch(showFavoritesOnlyProvider);
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.tertiary,
       appBar: AppBar(
         title: const Text("Moje wymarzone miejsca"),
         actions: [
+          Row(
+            children: [
+              const Text("Ulubione"),
+              Switch(
+                value: showFavorites,
+                activeTrackColor: Colors.grey[500],
+                onChanged: (val) {
+                  ref.read(showFavoritesOnlyProvider.notifier).setValue(value: val);
+                },
+              ),
+            ],
+          ),
           switch (themeAsync) {
             AsyncData(value: final currentTheme) => IconButton(
                 icon: Icon(currentTheme == AppTheme.light
@@ -38,11 +54,11 @@ class HomeScreen extends ConsumerWidget {
         ],
       ),
       body: switch (placesAsync) {
-        AsyncData(value: final places) => ListView.separated(
-            itemCount: places.length,
+        AsyncData() => ListView.separated(
+            itemCount: filteredPlaces.length,
             separatorBuilder: (_, __) => const Divider(height: 4),
             itemBuilder: (context, index) {
-              final place = places[index];
+              final place = filteredPlaces[index];
               return Card(
                 child: ListTile(
                   horizontalTitleGap: 12,
