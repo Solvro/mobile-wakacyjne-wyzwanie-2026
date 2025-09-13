@@ -1,15 +1,18 @@
+import "dart:async";
+
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "authentication_repository.dart";
 import "http_client.dart";
 import "local_authentication_repository.dart";
 import "remote_authentication_repository.dart";
+
 enum AuthStatus { unknown, authenticated, unauthenticated }
 
 class AuthNotifier extends StateNotifier<AuthStatus> {
   final AuthenticationRepository authRepo;
 
   AuthNotifier(this.authRepo) : super(AuthStatus.unknown) {
-    _checkLogin();
+    unawaited(_checkLogin());
   }
 
   Future<void> _checkLogin() async {
@@ -33,8 +36,7 @@ class AuthNotifier extends StateNotifier<AuthStatus> {
   }
 }
 
-final authProvider =
-    StateNotifierProvider<AuthNotifier, AuthStatus>((ref) {
+final authProvider = StateNotifierProvider<AuthNotifier, AuthStatus>((ref) {
   final repo = AuthenticationRepository(
     localAuthRepo: LocalAuthenticationRepository(),
     remoteAuthRepo: RemoteAuthenticationRepository(),

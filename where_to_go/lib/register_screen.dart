@@ -31,7 +31,7 @@ class RegisterScreenState extends ConsumerState<RegisterScreen> {
       }
     } on Exception catch (e) {
       if (!mounted) return;
-      
+
       var errorMessage = "Registration failed: $e";
       if (e.toString().contains("already exists")) {
         errorMessage = "User with this email already exists. Try logging in instead.";
@@ -66,7 +66,6 @@ class RegisterScreenState extends ConsumerState<RegisterScreen> {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 32),
-
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: "Email",
@@ -86,7 +85,6 @@ class RegisterScreenState extends ConsumerState<RegisterScreen> {
                 onSaved: (value) => _email = value!,
               ),
               const SizedBox(height: 16),
-
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: "Password",
@@ -94,24 +92,19 @@ class RegisterScreenState extends ConsumerState<RegisterScreen> {
                   prefixIcon: Icon(Icons.lock),
                 ),
                 obscureText: true,
-                validator: (value) =>
-                    value!.length < 6 ? "Password must be at least 6 characters" : null,
+                validator: (value) => value!.length < 6 ? "Password must be at least 6 characters" : null,
                 onSaved: (value) => _password = value!,
               ),
               const SizedBox(height: 24),
-
               SizedBox(
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
                   onPressed: _loading ? null : _register,
-                  child: _loading
-                      ? const CircularProgressIndicator()
-                      : const Text("Register"),
+                  child: _loading ? const CircularProgressIndicator() : const Text("Register"),
                 ),
               ),
               const SizedBox(height: 16),
-
               const Row(
                 children: [
                   Expanded(child: Divider()),
@@ -123,7 +116,6 @@ class RegisterScreenState extends ConsumerState<RegisterScreen> {
                 ],
               ),
               const SizedBox(height: 16),
-
               SizedBox(
                 width: double.infinity,
                 height: 50,

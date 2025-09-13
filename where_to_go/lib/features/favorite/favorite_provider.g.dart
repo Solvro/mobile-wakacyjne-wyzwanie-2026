@@ -13,8 +13,7 @@ String _$favoriteHash() => r'e2214b520333b5a50ad7b8fe1bfd0e13c323d567';
 final favoriteProvider = AutoDisposeNotifierProvider<Favorite, bool>.internal(
   Favorite.new,
   name: r'favoriteProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$favoriteHash,
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product') ? null : _$favoriteHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );

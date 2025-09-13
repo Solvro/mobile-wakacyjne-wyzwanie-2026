@@ -68,7 +68,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 32),
-
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: "Email",
@@ -85,7 +84,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 onSaved: (value) => _email = value!,
               ),
               const SizedBox(height: 16),
-
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: "Password",
@@ -93,24 +91,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   prefixIcon: Icon(Icons.lock),
                 ),
                 obscureText: true,
-                validator: (value) =>
-                    value!.isEmpty ? "Enter a password" : null,
+                validator: (value) => value!.isEmpty ? "Enter a password" : null,
                 onSaved: (value) => _password = value!,
               ),
               const SizedBox(height: 24),
-
               SizedBox(
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
                   onPressed: _loading ? null : _login,
-                  child: _loading
-                      ? const CircularProgressIndicator()
-                      : const Text("Login"),
+                  child: _loading ? const CircularProgressIndicator() : const Text("Login"),
                 ),
               ),
               const SizedBox(height: 16),
-
               const Row(
                 children: [
                   Expanded(child: Divider()),
@@ -122,7 +115,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ],
               ),
               const SizedBox(height: 16),
-
               SizedBox(
                 width: double.infinity,
                 height: 50,

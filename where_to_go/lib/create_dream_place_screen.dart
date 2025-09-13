@@ -10,12 +10,10 @@ class CreateDreamPlaceScreen extends ConsumerStatefulWidget {
   const CreateDreamPlaceScreen({super.key});
 
   @override
-  ConsumerState<CreateDreamPlaceScreen> createState() =>
-      _CreateDreamPlaceScreenState();
+  ConsumerState<CreateDreamPlaceScreen> createState() => _CreateDreamPlaceScreenState();
 }
 
-class _CreateDreamPlaceScreenState
-    extends ConsumerState<CreateDreamPlaceScreen> {
+class _CreateDreamPlaceScreenState extends ConsumerState<CreateDreamPlaceScreen> {
   final _formKey = GlobalKey<FormState>();
   var _name = "";
   var _description = "";
@@ -55,7 +53,7 @@ class _CreateDreamPlaceScreenState
         );
         Navigator.pop(context, true);
       }
-    } catch (e) {
+    } on Exception catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Error creating place: $e")),
@@ -80,15 +78,13 @@ class _CreateDreamPlaceScreenState
               children: [
                 TextFormField(
                   decoration: const InputDecoration(labelText: "Name"),
-                  validator: (v) =>
-                      v == null || v.isEmpty ? "Enter a name" : null,
+                  validator: (v) => v == null || v.isEmpty ? "Enter a name" : null,
                   onSaved: (v) => _name = v!,
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
                   decoration: const InputDecoration(labelText: "Description"),
-                  validator: (v) =>
-                      v == null || v.isEmpty ? "Enter a description" : null,
+                  validator: (v) => v == null || v.isEmpty ? "Enter a description" : null,
                   onSaved: (v) => _description = v!,
                   maxLines: 3,
                 ),
@@ -101,11 +97,9 @@ class _CreateDreamPlaceScreenState
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
-                  decoration: const InputDecoration(
-                      labelText: "Image URL",
-                      hintText: "Enter a direct link to the image"),
-                  validator: (v) =>
-                      v == null || v.isEmpty ? "Enter image URL" : null,
+                  decoration:
+                      const InputDecoration(labelText: "Image URL", hintText: "Enter a direct link to the image"),
+                  validator: (v) => v == null || v.isEmpty ? "Enter image URL" : null,
                   onSaved: (v) => _imageUrl = v!,
                 ),
                 const SizedBox(height: 24),
@@ -114,9 +108,7 @@ class _CreateDreamPlaceScreenState
                   height: 50,
                   child: ElevatedButton(
                     onPressed: _loading ? null : _savePlace,
-                    child: _loading
-                        ? const CircularProgressIndicator(color: Colors.white)
-                        : const Text("Create"),
+                    child: _loading ? const CircularProgressIndicator(color: Colors.white) : const Text("Create"),
                   ),
                 ),
               ],

@@ -22,7 +22,7 @@ class PhotosRepository {
         ),
       });
 
-      final response = await _apiClient.dio.post(
+      final response = await _apiClient.dio.post<Map<String, dynamic>>(
         "/photos/upload",
         data: formData,
         options: Options(
@@ -33,12 +33,11 @@ class PhotosRepository {
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        return PhotoModel.fromJson(response.data as Map<String, dynamic>);
+        return PhotoModel.fromJson(response.data!);
       } else {
         throw Exception("Failed to upload photo: ${response.statusCode}");
       }
     } catch (e) {
-      print("PhotosRepository uploadPhoto error: $e");
       rethrow;
     }
   }
@@ -57,7 +56,6 @@ class PhotosRepository {
         throw Exception("Failed to download image: ${response.statusCode}");
       }
     } catch (e) {
-      print("uploadPhotoFromUrl error: $e");
       rethrow;
     }
   }

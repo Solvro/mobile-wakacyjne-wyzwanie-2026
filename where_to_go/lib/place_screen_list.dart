@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:go_router/go_router.dart";
-import "create_dream_place_screen.dart"; 
+import "create_dream_place_screen.dart";
 import "dream_place_screen.dart";
 import "features/table/dream_place_providers.dart";
 import "features/theme/local_theme_repository.dart";
@@ -59,7 +59,7 @@ class PlaceScreenList extends ConsumerWidget {
         onPressed: () async {
           final created = await context.push(CreateDreamPlaceScreen.route);
           if (created == true) {
-            ref.refresh(dreamPlacesProvider);
+            final _ = ref.refresh(dreamPlacesProvider);
           }
         },
         child: const Icon(Icons.add),

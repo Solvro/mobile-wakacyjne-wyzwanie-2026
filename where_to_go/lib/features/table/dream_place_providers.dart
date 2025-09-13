@@ -1,5 +1,3 @@
-// Добавьте эти провайдеры в ваш существующий файл dream_place_providers.dart
-
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "/features/places/place_model.dart";
 import "../../authentication/http_client.dart";
@@ -8,7 +6,7 @@ import "../../photos_repository.dart";
 import "dream_place_repository.dart";
 
 final apiClientProvider = Provider<ApiClient>((ref) {
-  return ApiClient.instance; 
+  return ApiClient.instance;
 });
 
 final dreamPlacesRepositoryProvider = Provider<DreamPlaceRepository>((ref) {

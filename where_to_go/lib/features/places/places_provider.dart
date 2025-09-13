@@ -26,9 +26,10 @@ class Places extends _$Places {
   List<PlaceModel> build() => _initialPlaces;
 
   void toggleFavorite(String id) {
+    final int intId = int.parse(id);
     state = [
       for (final p in state)
-        if (p.id == id) p.copyWith(isFavorite: !p.isFavorite) else p
+        if (p.id == intId) p.copyWith(isFavorite: !p.isFavorite) else p
     ];
   }
 }

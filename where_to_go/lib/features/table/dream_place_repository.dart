@@ -1,5 +1,4 @@
 import "/features/places/place_model.dart";
-
 import "../../authentication/http_client.dart";
 
 class DreamPlaceRepository {
@@ -17,21 +16,13 @@ class DreamPlaceRepository {
 
   Future<List<PlaceModel>> getAllPlaces() async {
     final response = await apiClient.dio.get<Map<String, dynamic>>("/places");
-    
-    if (response.data == null) {
-      return <PlaceModel>[];
-    }
-    
-    final placesData = response.data!["places"];
-    if (placesData == null) {
-      return <PlaceModel>[];
-    }
-    
-    final placesList = placesData as List<dynamic>? ?? <dynamic>[];
-    
-    return placesList
-        .map((e) => PlaceModel.fromJson(e as Map<String, dynamic>))
-        .toList();
+
+    final data = response.data;
+    if (data == null) return <PlaceModel>[];
+
+    final results = data["results"] as List<dynamic>? ?? <dynamic>[];
+
+    return results.map((e) => PlaceModel.fromJson(e as Map<String, dynamic>)).toList();
   }
 
   Future<PlaceModel> getPlace(int id) async {
@@ -39,14 +30,17 @@ class DreamPlaceRepository {
     return PlaceModel.fromJson(response.data!);
   }
 
-  Future<PlaceModel> updatePlace(PlaceModel place) async {
-    final response = await apiClient.dio.put<Map<String, dynamic>>("/places/${place.id}", data: place.toJson());
+  Future<PlaceModel> updateIsFavorite(int id, {required bool isFavorite}) async {
+    final response = await apiClient.dio.put<Map<String, dynamic>>(
+      "/places/$id",
+      data: {"isFavourite": isFavorite},
+    );
     return PlaceModel.fromJson(response.data!);
   }
 
-  Future<PlaceModel> updateIsFavorite(int id, {required bool isFavorite}) async {
-    final response = await apiClient.dio.patch<Map<String, dynamic>>("/places/$id", data: {"isFavorite": isFavorite});
-    return PlaceModel.fromJson(response.data!);
+  String buildImageUrl(String filename) {
+    if (filename.isEmpty) return "";
+    return "${apiClient.dio.options.baseUrl}/photos/$filename";
   }
 
   Future<void> deletePlace(int id) async {

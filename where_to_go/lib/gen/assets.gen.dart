@@ -15,22 +15,19 @@ class $AssetsImagesGen {
   const $AssetsImagesGen();
 
   /// File path: assets/images/gambling.jpg
-  AssetGenImage get gambling =>
-      const AssetGenImage('assets/images/gambling.jpg');
+  AssetGenImage get gambling => const AssetGenImage('assets/images/gambling.jpg');
 
   /// File path: assets/images/kr.jpg
   AssetGenImage get kr => const AssetGenImage('assets/images/kr.jpg');
 
   /// File path: assets/images/pentagon.jpg
-  AssetGenImage get pentagon =>
-      const AssetGenImage('assets/images/pentagon.jpg');
+  AssetGenImage get pentagon => const AssetGenImage('assets/images/pentagon.jpg');
 
   /// File path: assets/images/snowdin.jpg
   AssetGenImage get snowdin => const AssetGenImage('assets/images/snowdin.jpg');
 
   /// File path: assets/images/zakopane.jpg
-  AssetGenImage get zakopane =>
-      const AssetGenImage('assets/images/zakopane.jpg');
+  AssetGenImage get zakopane => const AssetGenImage('assets/images/zakopane.jpg');
 
   /// List of all assets
   List<AssetGenImage> get values => [gambling, kr, pentagon, snowdin, zakopane];

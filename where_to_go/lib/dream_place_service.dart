@@ -10,27 +10,21 @@ class DreamPlaceService {
   DreamPlaceService(this.dreamPlaceRepository, this.photosRepository);
 
   Future<PlaceModel> createDreamPlaceWithPhotoUrl({
-  required PlaceModel place,
-  required String photoUrl,
-    }) async {
-  try {
-    print("Downloading & uploading photo from URL...");
+    required PlaceModel place,
+    required String photoUrl,
+  }) async {
+    try {
+      final PhotoModel uploadedPhoto = await photosRepository.uploadPhotoFromUrl(photoUrl);
 
-    await photosRepository.uploadPhotoFromUrl(photoUrl);
+      final placeWithPhoto = place.copyWith(imageUrl: uploadedPhoto.fileName);
 
-    final placeWithPhoto = place.copyWith(
-      imageUrl: photoUrl,
-    );
+      final PlaceModel createdPlace = await dreamPlaceRepository.addPlace(placeWithPhoto);
 
-    print("Creating place: ${placeWithPhoto.toJson()}");
+      final fullImageUrl = dreamPlaceRepository.buildImageUrl(createdPlace.imageUrl);
 
-    final PlaceModel createdPlace = await dreamPlaceRepository.addPlace(placeWithPhoto);
-
-    return createdPlace;
-  } catch (e) {
-    print("DreamPlaceService error: $e");
-    throw Exception("Failed to create place with photo URL: $e");
+      return createdPlace.copyWith(imageUrl: fullImageUrl);
+    } catch (e) {
+      throw Exception("Failed to create place with photo URL: $e");
+    }
   }
-}
-
 }

@@ -7,24 +7,20 @@ class AuthenticationRepository {
   final RemoteAuthenticationRepository remoteAuthRepo;
   final ApiClient apiClient;
 
-  AuthenticationRepository({
-    required this.localAuthRepo,
-    required this.remoteAuthRepo,
-    required this.apiClient
-  });
+  AuthenticationRepository({required this.localAuthRepo, required this.remoteAuthRepo, required this.apiClient});
 
-  Future<bool> isLogged() async{
+  Future<bool> isLogged() async {
     final accessToken = await localAuthRepo.readAccessToken();
     return accessToken != null;
   }
 
-  Future<void> login(String email, String password) async{
+  Future<void> login(String email, String password) async {
     final tokens = await remoteAuthRepo.login(email, password);
     await localAuthRepo.writeAccessToken(tokens.accessToken);
     apiClient.setAccessToken(tokens.accessToken);
   }
 
-  Future<void> register(String email, String password) async{
+  Future<void> register(String email, String password) async {
     final tokens = await remoteAuthRepo.register(email, password);
     await localAuthRepo.writeAccessToken(tokens.accessToken);
     await localAuthRepo.writeRefreshToken(tokens.refreshToken);

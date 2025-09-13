@@ -16,7 +16,7 @@ class LocalAuthenticationRepository {
   }
 
   Future<void> writeRefreshToken(String token) async {
-  await _storage.write(key: "refresh_token", value: token);
+    await _storage.write(key: "refresh_token", value: token);
   }
 
   Future<String?> readRefreshToken() {

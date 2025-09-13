@@ -1,5 +1,5 @@
 import "dart:convert";
-import "package:http/http.dart" as http; 
+import "package:http/http.dart" as http;
 
 class RemoteAuthenticationRepository {
   final baseUrl = "https://backend-api.w.solvro.pl";
@@ -71,9 +71,9 @@ class AuthResponse {
     required this.accessToken,
   });
 
-  factory AuthResponse.fromJson(Map<String, dynamic> json){
+  factory AuthResponse.fromJson(Map<String, dynamic> json) {
     return AuthResponse(
-      accessToken: json["accessToken"] as String, 
+      accessToken: json["accessToken"] as String,
     );
   }
 }
@@ -88,10 +88,7 @@ class RegisterResponse {
   });
 
   factory RegisterResponse.fromJson(Map<String, dynamic> json) {
-    return RegisterResponse(
-      accessToken: json["accessToken"] as String,
-      refreshToken: json["refreshToken"] as String
-    );
+    return RegisterResponse(accessToken: json["accessToken"] as String, refreshToken: json["refreshToken"] as String);
   }
 }
 
@@ -102,9 +99,7 @@ class RefreshResponse {
     required this.refreshToken,
   });
 
-  factory RefreshResponse.fromJson(Map<String, dynamic> json){
-    return RefreshResponse(
-      refreshToken: json["refreshToken"] as String
-    );
+  factory RefreshResponse.fromJson(Map<String, dynamic> json) {
+    return RefreshResponse(refreshToken: json["refreshToken"] as String);
   }
 }
