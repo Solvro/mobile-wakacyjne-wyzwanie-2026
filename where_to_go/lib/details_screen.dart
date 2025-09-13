@@ -66,7 +66,6 @@ class DetailsScreen extends ConsumerWidget {
             body: SingleChildScrollView(
               child: Column(
                 children: [
-                  // Wyśrodkowany obrazek
                   Center(
                     child: Padding(
                       padding: const EdgeInsets.all(12),
