@@ -33,6 +33,15 @@ migrate_working_dir/
 .pub/
 /build/
 lib/gen/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+.idea/
+*.iml
+android/.gradle
+android/captures/
+linux/flutter/ephemeral/
+windows/flutter/ephemeral/
+macos/Flutter/ephemeral/
 *.g.dart
 *.freezed.dart
 
@@ -49,3 +58,4 @@ app.*.map.json
 
 # FVM Version Cache
 .fvm/
+
