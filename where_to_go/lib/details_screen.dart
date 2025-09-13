@@ -66,27 +66,29 @@ class DetailsScreen extends ConsumerWidget {
             body: SingleChildScrollView(
               child: Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black26,
-                            blurRadius: 8,
-                            offset: Offset(0, 4),
-                          )
-                        ],
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Image.network(
-                          "https://backend-api.w.solvro.pl/photos/${place.imageUrl}",
-                          fit: BoxFit.cover,
-                          errorBuilder: (ctx, err, stack) => const SizedBox(
-                            height: 200,
-                            child: Center(child: Icon(Icons.broken_image)),
+                  // Wyśrodkowany obrazek
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 8,
+                              offset: Offset(0, 4),
+                            )
+                          ],
+                        ),
+                        child: Hero(
+                          tag: place.name,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Image.network(
+                              "https://backend-api.w.solvro.pl/photos/${place.imageUrl}",
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ),
@@ -95,10 +97,10 @@ class DetailsScreen extends ConsumerWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           place.name,
-                          textAlign: TextAlign.center,
                           style: const TextStyle(
                             fontSize: 26,
                             fontWeight: FontWeight.bold,
@@ -107,7 +109,6 @@ class DetailsScreen extends ConsumerWidget {
                         const SizedBox(height: 8),
                         Text(
                           place.description,
-                          textAlign: TextAlign.center,
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
@@ -117,6 +118,11 @@ class DetailsScreen extends ConsumerWidget {
                       ],
                     ),
                   ),
+                  const SizedBox(height: 16),
+                  const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  ),
+                  const SizedBox(height: 16),
                 ],
               ),
             ),
