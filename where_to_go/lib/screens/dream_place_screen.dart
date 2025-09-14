@@ -8,7 +8,8 @@ import "../models/dream_place.dart";
 import "../providers/auth_providers.dart";
 import "../providers/dream_places_provider.dart";
 import "../providers/theme_provider.dart";
-import "./search_delegate.dart";
+import "../widgets/search_delegate.dart";
+import "../widgets/favorite_button.dart";
 import "add_place_dialog.dart";
 
 class DreamPlacesScreen extends ConsumerWidget {
@@ -174,13 +175,7 @@ class DreamPlacesScreen extends ConsumerWidget {
                                         ),
                                       ),
                                       const SizedBox(width: 6),
-                                      Icon(
-                                        place.isFavourite ?? false ? Icons.favorite : Icons.favorite_border,
-                                        color: (place.isFavourite ?? false)
-                                            ? Colors.red
-                                            : Theme.of(context).iconTheme.color,
-                                        size: 18,
-                                      ),
+                                      FavoriteButton(place: place),
                                     ],
                                   ),
                                 ),

@@ -3,6 +3,7 @@ import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:go_router/go_router.dart";
 import "../providers/dream_places_provider.dart";
+import "../widgets/favorite_button.dart";
 
 class DetailsScreen extends ConsumerStatefulWidget {
   static const route = "/details";
@@ -42,35 +43,7 @@ class _DetailsScreenState extends ConsumerState<DetailsScreen> {
           ),
           title: Text(place.name),
           actions: [
-            IconButton(
-              icon: Icon(place.isFavourite ?? false ? Icons.favorite : Icons.favorite_border),
-              color: (place.isFavourite ?? false) ? Colors.red : null,
-              onPressed: () async {
-                final updated = place.copyWith(
-                  isFavourite: !(place.isFavourite ?? false),
-                );
-                final repo = ref.read(dreamPlaceRepositoryProvider);
-
-                try {
-                  await repo.updateDreamPlace(updated);
-
-                  // odświeżenie po update
-                  ref.invalidate(dreamPlaceProvider(widget.placeId));
-
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Zaktualizowano ulubione!")),
-                    );
-                  }
-                } on Exception catch (e) {
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("Błąd podczas aktualizacji: $e")),
-                    );
-                  }
-                }
-              },
-            ),
+            FavoriteButton(place: place),
           ],
         ),
         body: SingleChildScrollView(
