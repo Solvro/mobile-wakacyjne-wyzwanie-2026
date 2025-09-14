@@ -26,10 +26,11 @@ final dreamPlacesProvider = FutureProvider.autoDispose<List<DreamPlace>>((ref) {
   final sortEnabled = ref.watch(sortEnabledProvider);
   final ascending = ref.watch(ascendingOnlyProvider);
 
+  // Wyświetlanie miejsc posortowanych, albo według domyślnej kolejności
   if (sortEnabled) {
     return repo.fetchDreamPlaceWithSorting(
       ascending: ascending,
-      sortBy: "id",
+      sortBy: "name",
     );
   } else {
     return repo.fetchDreamPlaces();

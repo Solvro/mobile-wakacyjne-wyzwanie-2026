@@ -1,4 +1,4 @@
-// lib/screens/dream_place_screen.dart
+//lib/screens/dream_place_screen.dart
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:go_router/go_router.dart";
@@ -58,27 +58,25 @@ class DreamPlacesScreen extends ConsumerWidget {
     final showFavoritesOnly = ref.watch(showFavoritesOnlyProvider);
     final sessionExpired = ref.watch(sessionExpiredProvider);
 
-    // Obsługa wygasłej sesji
+    // Obsługa wygasłej
     if (sessionExpired) {
-      return Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                "Sesja wygasła",
-                style: TextStyle(fontSize: 18),
-              ),
-              const SizedBox(height: 12),
-              ElevatedButton(
-                onPressed: () {
-                  ref.read(sessionExpiredProvider.notifier).state = false;
-                  GoRouter.of(context).go("/auth");
-                },
-                child: const Text("Zaloguj się ponownie"),
-              ),
-            ],
-          ),
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              "Sesja wygasła",
+              style: TextStyle(fontSize: 18),
+            ),
+            const SizedBox(height: 12),
+            ElevatedButton(
+              onPressed: () {
+                ref.read(sessionExpiredProvider.notifier).state = false;
+                GoRouter.of(context).go("/auth");
+              },
+              child: const Text("Zaloguj się ponownie"),
+            ),
+          ],
         ),
       );
     }
@@ -212,65 +210,72 @@ class DreamPlacesScreen extends ConsumerWidget {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: BottomAppBar(
-          notchMargin: 8,
-          child: SizedBox(
-            height: 72,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // IconButton dla sortowania
-                IconButton(
-                  iconSize: 30,
-                  icon: const Icon(Icons.tune),
-                  color: ref.watch(sortEnabledProvider) ? Colors.blue[600] : null,
-                  onPressed: () {
-                    final sortEnabledNotifier = ref.read(sortEnabledProvider.notifier);
-                    final ascendingNotifier = ref.read(ascendingOnlyProvider.notifier);
-
-                    if (!sortEnabledNotifier.state) {
-                      // Włączamy sortowanie: domyślnie rosnąco
-                      sortEnabledNotifier.state = true;
-                      ascendingNotifier.state = true;
-                    } else {
-                      // Sortowanie włączone: toggle kierunku
-                      ascendingNotifier.state = !ascendingNotifier.state;
-                    }
-
-                    ref.invalidate(dreamPlacesProvider);
-                  },
-                ),
-
-                Row(
-                  children: [
-                    // IconButton dla showFavoritesOnly
-                    IconButton(
+            notchMargin: 8,
+            child: SizedBox(
+              height: 72,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // IconButton dla sortowania
+                  Tooltip(
+                    message: "Sortuj według nazwy",
+                    child: IconButton(
                       iconSize: 30,
-                      icon: Icon(
-                        showFavoritesOnly ? Icons.favorite : Icons.favorite_border,
-                      ),
-                      color: showFavoritesOnly ? Colors.red : null,
+                      icon: const Icon(Icons.tune),
+                      color: ref.watch(ascendingOnlyProvider) ? Colors.blue[600] : null,
                       onPressed: () {
-                        ref.read(showFavoritesOnlyProvider.notifier).state = !showFavoritesOnly;
+                        final sortEnabledNotifier = ref.read(sortEnabledProvider.notifier);
+                        final ascendingNotifier = ref.read(ascendingOnlyProvider.notifier);
+
+                        if (!sortEnabledNotifier.state) {
+                          // Włączamy sortowanie: domyślnie rosnąco
+                          sortEnabledNotifier.state = true;
+                          ascendingNotifier.state = true;
+                        } else {
+                          // Sortowanie włączone: toggle kierunku
+                          ascendingNotifier.state = !ascendingNotifier.state;
+                        }
+
+                        ref.invalidate(dreamPlacesProvider);
                       },
                     ),
-                    // IconButton dla wyszukiwarki
-                    IconButton(
-                      iconSize: 30,
-                      icon: const Icon(Icons.search),
-                      onPressed: () async {
-                        final places = ref.read(dreamPlacesProvider).value ?? [];
-                        await showSearch(
-                          context: context,
-                          delegate: SearchingDelegate(places),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
+                  ),
+                  Row(
+                    children: [
+                      // IconButton dla showFavoritesOnly
+                      Tooltip(
+                        message: "Pokaż ulubione",
+                        child: IconButton(
+                          iconSize: 30,
+                          icon: Icon(
+                            showFavoritesOnly ? Icons.favorite : Icons.favorite_border,
+                          ),
+                          color: showFavoritesOnly ? Colors.red : null,
+                          onPressed: () {
+                            ref.read(showFavoritesOnlyProvider.notifier).state = !showFavoritesOnly;
+                          },
+                        ),
+                      ),
+                      // IconButton dla wyszukiwarki
+                      Tooltip(
+                        message: "Szukaj miejsca",
+                        child: IconButton(
+                          iconSize: 30,
+                          icon: const Icon(Icons.search),
+                          onPressed: () async {
+                            final places = ref.read(dreamPlacesProvider).value ?? [];
+                            await showSearch(
+                              context: context,
+                              delegate: SearchingDelegate(places),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            )),
       ),
     );
   }

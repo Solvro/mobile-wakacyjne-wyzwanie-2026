@@ -32,7 +32,6 @@ final localAuthRepoProvider = Provider<LocalAuthenticationRepository>((ref) {
   return LocalAuthenticationRepository(secureStorage: secureStorage);
 });
 
-// Provider dla zdalnego repozytorium
 final remoteAuthRepoProvider = Provider<RemoteAuthenticationRepository>((ref) {
   final dio = ref.read(baseDioProvider);
   final localAuthRepo = ref.read(localAuthRepoProvider);
@@ -48,55 +47,58 @@ final authRepositoryProvider = Provider<AuthenticationRepository>((ref) {
     localAuthenticationRepository: localAuthRepo,
     remoteAuthenticationRepository: remoteAuthRepo,
   );
-
   ref.onDispose(authRepo.dispose);
 
   return authRepo;
 });
 
-// 4. Provider stanu sesji (czy token wygasł)
+// 4. Provider flagi wygasłej sesji
 final sessionExpiredProvider = StateProvider<bool>((ref) => false);
 
-// 5. Provider Dio z interceptorami
+// Provider Dio z interceptorami (PO authRepositoryProvider)
 final dioProvider = Provider<Dio>((ref) {
   final authRepo = ref.read(authRepositoryProvider);
   final baseDio = ref.read(baseDioProvider);
-  final sessionExpired = ref.read(sessionExpiredProvider.notifier);
 
   baseDio.interceptors.add(InterceptorsWrapper(
     onRequest: (options, handler) {
-      // Pomijamy refresh token endpoint
       if (!options.path.contains("/auth/refresh")) {
         final token = authRepo.tokens?.accessToken;
         if (token != null && token.isNotEmpty) {
           options.headers["Authorization"] = "Bearer $token";
         }
       }
-      handler.next(options);
+      return handler.next(options);
     },
     onError: (error, handler) async {
-      // Jeśli 401 i nie endpoint refresh token
+      // Jeśli 401 i nie refresh token endpoint
       if (error.response?.statusCode == 401 && !error.requestOptions.path.contains("/auth/refresh")) {
         try {
-          // Próba odświeżenia tokenu
+          // Próba odświeżenia tokena
           await authRepo.refreshToken();
 
+          // Ponowne wysłanie requestu z nowym tokenem
           final newToken = authRepo.tokens?.accessToken;
           if (newToken != null) {
             error.requestOptions.headers["Authorization"] = "Bearer $newToken";
           }
-
           final response = await baseDio.fetch<dynamic>(error.requestOptions);
           return handler.resolve(response);
         } on DioException catch (_) {
-          // Ustawiamy flagę sesji wygasłej
-          sessionExpired.state = true;
+          // Token odświeżenia wygasł -> ustaw flagę sesji
+          ref.read(sessionExpiredProvider.notifier).state = true;
+
+          // Wylogowanie lokalne
           await authRepo.logout();
+
+          // Nie rzucamy wyjątku dalej, ale przekazujemy do handler.next, ekran może pokazać komunikat
+          return handler.next(error);
+        } on Exception {
           return handler.next(error);
         }
+      } else {
+        return handler.next(error);
       }
-
-      handler.next(error);
     },
   ));
 
@@ -110,13 +112,13 @@ final dioProvider = Provider<Dio>((ref) {
   return baseDio;
 });
 
-// 6. Provider stanu autentykacji
+// 5. Provider stanu autentykacji
 final authStateProvider = FutureProvider<bool>((ref) {
   final authRepo = ref.read(authRepositoryProvider);
   return authRepo.isLoggedIn;
 });
 
-// 7. Provider dla tokenów (opcjonalnie)
+// 6. Provider dla tokenów (opcjonalnie)
 final tokensProvider = Provider<AuthenticationTokens?>((ref) {
   final authRepo = ref.read(authRepositoryProvider);
   return authRepo.tokens;
