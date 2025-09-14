@@ -3,7 +3,7 @@ import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:go_router/go_router.dart";
 import "../providers/dream_places_provider.dart";
-import "../widgets/favorite_button.dart";
+import "delete_place_dialog.dart";
 
 class DetailsScreen extends ConsumerStatefulWidget {
   static const route = "/details";
@@ -43,21 +43,28 @@ class _DetailsScreenState extends ConsumerState<DetailsScreen> {
           ),
           title: Text(place.name),
           actions: [
-            Consumer(
-              builder: (context, ref, _) {
-                final placeAsync = ref.watch(dreamPlaceProvider(widget.placeId));
-                return placeAsync.when(
-                  data: (updatedPlace) {
-                    return FavoriteButton(
-                      place: updatedPlace,
-                      iconSize: 30,
+            Tooltip(
+              message: "Usuń miejsce",
+              child: Builder(
+                builder: (localContext) => IconButton(
+                  icon: const Icon(Icons.delete_rounded),
+                  iconSize: 30,
+                  color: Colors.red,
+                  onPressed: () async {
+                    final result = await showDialog<bool>(
+                      context: localContext,
+                      builder: (_) => DeletePlaceDialog(placeId: widget.placeId),
                     );
+                    if (!mounted) return;
+
+                    if (result ?? false) {
+                      // ignore: use_build_context_synchronously
+                      GoRouter.of(localContext).go("/");
+                    }
                   },
-                  loading: () => const SizedBox(),
-                  error: (_, __) => const SizedBox(),
-                );
-              },
-            ),
+                ),
+              ),
+            )
           ],
         ),
         body: SingleChildScrollView(

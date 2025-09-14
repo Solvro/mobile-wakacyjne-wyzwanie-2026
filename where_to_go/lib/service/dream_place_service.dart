@@ -33,4 +33,8 @@ class DreamPlaceService {
       isFavourite: isFavourite,
     );
   }
+
+  Future<void> deleteDreamPlace({required String id}) async {
+    await placesRepo.deleteDreamPlace(int.parse(id));
+  }
 }
