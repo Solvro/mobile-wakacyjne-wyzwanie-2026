@@ -30,3 +30,6 @@ final dreamPlaceProvider = FutureProvider.family<DreamPlace, int>((ref, id) {
   final repo = ref.watch(dreamPlaceRepositoryProvider);
   return repo.fetchDreamPlace(id);
 });
+
+/// Provider dla "tylko ulubionych"
+final showFavoritesOnlyProvider = StateProvider<bool>((ref) => false);

@@ -54,6 +54,7 @@ class DreamPlacesScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncPlaces = ref.watch(dreamPlacesProvider);
+    final showFavoritesOnly = ref.watch(showFavoritesOnlyProvider);
 
     return PopScope(
       canPop: false,
@@ -62,12 +63,25 @@ class DreamPlacesScreen extends ConsumerWidget {
           title: const Text("Ulubione miejsca!"),
           automaticallyImplyLeading: false,
           actions: [
+            // Switch for showFavoritesOnly
+            Consumer(builder: (context, ref, child) {
+              return Tooltip(
+                  message: "Pokaż tylko ulubione",
+                  preferBelow: true,
+                  child: Switch(
+                    value: showFavoritesOnly,
+                    onChanged: (value) {
+                      ref.read(showFavoritesOnlyProvider.notifier).state = value;
+                    },
+                  ));
+            }),
             IconButton(
               icon: const Icon(Icons.logout),
               tooltip: "Wyloguj",
               onPressed: () => _logout(context, ref),
             ),
             PopupMenuButton<ThemeChoice>(
+              tooltip: "Wybierz motyw",
               icon: const Icon(Icons.color_lens),
               onSelected: (choice) async {
                 await ref.read(themeControllerProvider.notifier).setChoice(choice);
@@ -92,69 +106,80 @@ class DreamPlacesScreen extends ConsumerWidget {
         body: asyncPlaces.when(
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (err, stack) => Center(child: Text("Błąd: $err")),
-          data: (places) => places.isEmpty
-              ? const Center(child: Text("Brak miejsc — dodaj coś nowego!"))
-              : GridView.builder(
-                  padding: const EdgeInsets.all(12),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 1.5,
-                    crossAxisSpacing: 8,
-                    mainAxisSpacing: 8,
-                  ),
-                  itemCount: places.length,
-                  itemBuilder: (context, index) {
-                    final place = places[index];
-                    return GestureDetector(
-                      onTap: () => context.go("/details/${place.id}"),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: ColoredBox(
-                          color: Theme.of(context).colorScheme.secondaryContainer,
-                          child: Column(
-                            children: [
-                              Expanded(
-                                child: place.fullimageUrl.isNotEmpty
-                                    ? Image.network(
-                                        place.fullimageUrl,
-                                        fit: BoxFit.cover,
-                                        width: double.infinity,
-                                        errorBuilder: (c, e, s) => const Center(
-                                          child: Icon(Icons.broken_image),
-                                        ),
-                                      )
-                                    : const Center(child: Icon(Icons.image)),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        place.name,
-                                        style: const TextStyle(fontSize: 16),
-                                        textAlign: TextAlign.center,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 6),
-                                    Icon(
-                                      place.isFavourite ?? false ? Icons.favorite : Icons.favorite_border,
-                                      color:
-                                          (place.isFavourite ?? false) ? Colors.red : Theme.of(context).iconTheme.color,
-                                      size: 18,
-                                    ),
-                                  ],
+          data: (places) {
+            // Filtrowanie miejsca jeśli switch jest włączony
+            final filteredPlaces =
+                showFavoritesOnly ? places.where((place) => place.isFavourite ?? false).toList() : places;
+
+            return filteredPlaces.isEmpty
+                ? Center(
+                    child: showFavoritesOnly
+                        ? const Text("Brak ulubionych miejsc")
+                        : const Text("Brak miejsc — dodaj coś nowego!"),
+                  )
+                : GridView.builder(
+                    padding: const EdgeInsets.all(12),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 1.5,
+                      crossAxisSpacing: 8,
+                      mainAxisSpacing: 8,
+                    ),
+                    itemCount: filteredPlaces.length,
+                    itemBuilder: (context, index) {
+                      final place = filteredPlaces[index];
+                      return GestureDetector(
+                        onTap: () => context.go("/details/${place.id}"),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: ColoredBox(
+                            color: Theme.of(context).colorScheme.secondaryContainer,
+                            child: Column(
+                              children: [
+                                Expanded(
+                                  child: place.fullimageUrl.isNotEmpty
+                                      ? Image.network(
+                                          place.fullimageUrl,
+                                          fit: BoxFit.cover,
+                                          width: double.infinity,
+                                          errorBuilder: (c, e, s) => const Center(
+                                            child: Icon(Icons.broken_image),
+                                          ),
+                                        )
+                                      : const Center(child: Icon(Icons.image)),
                                 ),
-                              ),
-                            ],
+                                Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          place.name,
+                                          style: const TextStyle(fontSize: 16),
+                                          textAlign: TextAlign.center,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 6),
+                                      Icon(
+                                        place.isFavourite ?? false ? Icons.favorite : Icons.favorite_border,
+                                        color: (place.isFavourite ?? false)
+                                            ? Colors.red
+                                            : Theme.of(context).iconTheme.color,
+                                        size: 18,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  },
-                ),
+                      );
+                    },
+                  );
+          },
         ),
         floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
