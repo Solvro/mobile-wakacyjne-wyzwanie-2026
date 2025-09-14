@@ -35,7 +35,7 @@ class _DeletePlaceDialogState extends ConsumerState<DeletePlaceDialog> {
         ),
       );
     } finally {
-      if (!mounted) {
+      if (mounted) {
         setState(() {
           _isDeleting = false;
         });
@@ -56,34 +56,35 @@ class _DeletePlaceDialogState extends ConsumerState<DeletePlaceDialog> {
         style: TextStyle(fontSize: 16),
       ),
       actions: [
-        TextButton(
+        ElevatedButton(
           onPressed: _isDeleting ? null : _deleteDreamPlace,
-          style: TextButton.styleFrom(
-            foregroundColor: Colors.white,
+          style: ElevatedButton.styleFrom(
             backgroundColor: Colors.red,
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           ),
           child: _isDeleting
               ? const SizedBox(
                   width: 16,
                   height: 16,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: Colors.white,
-                  ),
+                  child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
                 )
-              : const Text("Tak"),
+              : const Text(
+                  "Tak",
+                  style: TextStyle(color: Colors.white),
+                ),
         ),
-        TextButton(
+        ElevatedButton(
           onPressed: _isDeleting ? null : () => Navigator.of(context).pop(false),
-          style: TextButton.styleFrom(
-            foregroundColor: Colors.black,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.grey.shade200,
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           ),
-          child: const Text("Nie"),
+          child: const Text(
+            "Nie",
+            style: TextStyle(color: Colors.black),
+          ),
         ),
       ],
     );

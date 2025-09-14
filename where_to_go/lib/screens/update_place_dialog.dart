@@ -38,9 +38,7 @@ class _UpdatePlaceDialogState extends ConsumerState<UpdatePlaceDialog> {
   Future<void> _updateDreamPlace() async {
     if (!_formKey.currentState!.validate()) return;
 
-    setState(() {
-      _isUpdating = true;
-    });
+    setState(() => _isUpdating = true);
 
     try {
       final service = ref.read(dreamPlaceServiceProvider);
@@ -57,7 +55,7 @@ class _UpdatePlaceDialogState extends ConsumerState<UpdatePlaceDialog> {
       ref.invalidate(dreamPlaceProvider(widget.place.id!));
       ref.invalidate(dreamPlacesProvider);
 
-      Navigator.of(context).pop();
+      Navigator.of(context).pop(true);
     } on Exception catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -67,22 +65,14 @@ class _UpdatePlaceDialogState extends ConsumerState<UpdatePlaceDialog> {
         ),
       );
     } finally {
-      if (!mounted) {
-        setState(() {
-          _isUpdating = false;
-        });
-      }
+      if (mounted) setState(() => _isUpdating = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      title: const Text(
-        "Edytuj miejsce",
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-      ),
+      title: const Text("Edytuj miejsce"),
       content: Form(
         key: _formKey,
         child: SingleChildScrollView(
@@ -92,27 +82,20 @@ class _UpdatePlaceDialogState extends ConsumerState<UpdatePlaceDialog> {
               TextFormField(
                 controller: _nameController,
                 decoration: const InputDecoration(labelText: "Nazwa miejsca"),
-                validator: (value) => value == null || value.isEmpty ? "Wpisz nazwę" : null,
+                validator: (value) => value == null || value.isEmpty ? "Podaj nazwę" : null,
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 12),
               TextFormField(
                 controller: _descriptionController,
                 decoration: const InputDecoration(labelText: "Opis miejsca"),
                 maxLines: 3,
+                validator: (value) => value == null || value.isEmpty ? "Podaj opis" : null,
               ),
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  const Text("Ulubione"),
-                  Switch(
-                    value: _isFavourite,
-                    onChanged: (val) {
-                      setState(() {
-                        _isFavourite = val;
-                      });
-                    },
-                  ),
-                ],
+              const SizedBox(height: 12),
+              SwitchListTile(
+                value: _isFavourite,
+                onChanged: (val) => setState(() => _isFavourite = val),
+                title: const Text("Ulubione"),
               ),
             ],
           ),
@@ -123,16 +106,15 @@ class _UpdatePlaceDialogState extends ConsumerState<UpdatePlaceDialog> {
           onPressed: _isUpdating ? null : () => Navigator.of(context).pop(false),
           child: const Text("Anuluj"),
         ),
-        TextButton(
+        ElevatedButton(
           onPressed: _isUpdating ? null : _updateDreamPlace,
-          style: TextButton.styleFrom(
-            foregroundColor: Colors.white,
-            backgroundColor: Colors.blue,
+          style: ElevatedButton.styleFrom(
+            minimumSize: const Size(80, 40),
           ),
           child: _isUpdating
               ? const SizedBox(
-                  width: 16,
-                  height: 16,
+                  width: 18,
+                  height: 18,
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
                     color: Colors.white,
