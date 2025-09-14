@@ -4,15 +4,39 @@ import "package:go_router/go_router.dart";
 import "details_screen.dart";
 import "features/database/dream_place_provider.dart";
 import "features/filters/filtered_dream_places_provider.dart";
+import "features/filters/search_query_provider.dart";
 import "features/filters/show_favorites_only_provider.dart";
 import "features/themes/local_theme_repository.dart";
 import "features/themes/theme_notifier.dart";
 
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  late final TextEditingController searchController;
+
+  @override
+  void initState() {
+    super.initState();
+    searchController = TextEditingController();
+    searchController.addListener(() {
+      ref.read(searchQueryProvider.notifier).setQuery(searchController.text);
+    });
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final ref = this.ref;
     final placesAsync = ref.watch(dreamPlacesProvider);
     final themeAsync = ref.watch(themeNotifierProvider);
     final filteredPlaces = ref.watch(filteredDreamPlacesProvider);
@@ -22,6 +46,28 @@ class HomeScreen extends ConsumerWidget {
       backgroundColor: Theme.of(context).colorScheme.tertiary,
       appBar: AppBar(
         title: const Text("Moje wymarzone miejsca"),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(60),
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: SearchBar(
+              controller: searchController,
+              hintText: "Szukaj...",
+              leading: const Icon(Icons.search),
+              trailing: [
+                if (ref.watch(searchQueryProvider).isNotEmpty)
+                  IconButton(
+                    icon: const Icon(Icons.clear),
+                    onPressed: () {
+                      searchController.clear();
+                      ref.read(searchQueryProvider.notifier).clear();
+                    },
+                  ),
+              ],
+              onChanged: (_) {},
+            ),
+          ),
+        ),
         actions: [
           Row(
             children: [
