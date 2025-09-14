@@ -153,6 +153,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         child: ElevatedButton(
                           onPressed: _login,
                           style: ElevatedButton.styleFrom(
+                            backgroundColor: theme.colorScheme.primary,
+                            foregroundColor: theme.colorScheme.onSecondary,
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),

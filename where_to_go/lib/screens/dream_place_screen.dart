@@ -196,9 +196,24 @@ class DreamPlacesScreen extends ConsumerWidget {
                   IconButton(
                     iconSize: 30,
                     icon: const Icon(Icons.tune),
-                    color: ascendingListSort ? Colors.blue[600] : null,
-                    onPressed: () {},
+                    color: ref.watch(sortEnabledProvider) ? Colors.blue[600] : null,
+                    onPressed: () {
+                      final sortEnabledNotifier = ref.read(sortEnabledProvider.notifier);
+                      final ascendingNotifier = ref.read(ascendingOnlyProvider.notifier);
+
+                      if (!sortEnabledNotifier.state) {
+                        // Włączamy sortowanie: domyślnie rosnąco
+                        sortEnabledNotifier.state = true;
+                        ascendingNotifier.state = true;
+                      } else {
+                        // Sortowanie włączone: toggle kierunku
+                        ascendingNotifier.state = !ascendingNotifier.state;
+                      }
+
+                      ref.invalidate(dreamPlacesProvider);
+                    },
                   ),
+
                   Row(
                     children: [
                       // IconButton dla showFavoritesOnly

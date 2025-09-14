@@ -53,9 +53,10 @@ class DreamPlaceRepository {
   }) async {
     final sortDirection = ascending ? "asc" : "desc";
 
-    final response = await _dio.get<Map<String, dynamic>>(
-      "/places/?sort=$sortDirection&sortBy=$sortBy",
-    );
+    final response = await _dio.get<Map<String, dynamic>>("/places", queryParameters: {
+      "sort": sortDirection,
+      "sortBy": sortBy,
+    });
 
     if (response.statusCode == 200 && response.data != null) {
       final items = response.data!["results"] as List<dynamic>? ?? [];

@@ -94,9 +94,9 @@ final dioProvider = Provider<Dio>((ref) {
 
   // Dodatkowe pokazywanie requestów po dodaniu nagłówków (mam dosyć szukania w kodzie, czy endpointy są dobre)
   baseDio.interceptors.add(LogInterceptor(
-    requestBody: true,
-    responseBody: true,
-    responseHeader: false,
+    requestBody: true, // log body requestu
+    responseBody: true, // log body odpowiedzi
+    logPrint: print, // custom log function
   ));
 
   return baseDio;
