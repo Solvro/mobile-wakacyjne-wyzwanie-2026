@@ -1,22 +1,13 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 
-import "app_database.dart";
 import "app_router.dart";
-import "providers.dart";
-import "repository.dart";
 import "theme/app_theme.dart";
 import "theme/local_theme_repository.dart";
 import "theme/theme_notifier.dart";
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  final container = ProviderContainer();
-  final db = container.read(databaseProvider);
-
-  await seedDatabase(db);
-
   runApp(
     const ProviderScope(
       child: MyApp(),
@@ -31,24 +22,25 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final themeAsync = ref.watch(themeNotifierProvider);
     final appThemeEnum = themeAsync.valueOrNull ?? AppThemeMode.system;
-    final phoneBrightness = MediaQuery.of(context).platformBrightness;
 
     final appTheme = switch (appThemeEnum) {
       AppThemeMode.light => AppTheme().light,
       AppThemeMode.dark => AppTheme().dark,
-      AppThemeMode.system => phoneBrightness == Brightness.dark ? AppTheme().dark : AppTheme().light,
+      AppThemeMode.system => AppTheme().light,
     };
+
+    final router = createRouter(ref);
 
     return MaterialApp.router(
       title: "Dream Place App",
       theme: appTheme,
-      routerConfig: goRouter,
+      routerConfig: router,
     );
   }
 }
 
-Future<void> seedDatabase(AppDatabase db) async {
-  final repo = Repository(db);
+/* Future<void> seedDatabase(AppDatabase db) async {
+  final repo = PlacesRepository(db);
 
   final existingPlaces = await repo.getAllPlaces();
   if (existingPlaces.isNotEmpty) {
@@ -230,4 +222,4 @@ Future<void> seedDatabase(AppDatabase db) async {
   ];
 
   await db.batch((batch) => batch.insertAll(db.infoColumns, infoColumnsSeed));
-}
+} */

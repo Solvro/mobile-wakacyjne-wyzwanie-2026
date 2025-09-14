@@ -1,10 +1,9 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 
-import "../providers.dart";
+import "../places_providers.dart";
 
 class DetailsScreen extends ConsumerWidget {
-  static const route = "/details";
   final int id;
 
   const DetailsScreen({super.key, required this.id});
@@ -12,17 +11,28 @@ class DetailsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final place = ref.watch(placeDetailsProvider(id));
-    final infoColumns = ref.watch(infoColumnsProvider(id));
+    //final infoColumns = ref.watch(infoColumnsProvider(id));
 
     return place.when(
         loading: () => const Scaffold(body: Center(child: CircularProgressIndicator())),
         error: (error, stackTrace) => Scaffold(body: Center(child: Text("Error: $error"))),
         data: (place) {
-          final isFavorited = place.isFavorite;
+          final isFavorited = place.isFavourite;
+          final placeName = place.name.split(RegExp(r",\s*")).first;
+          final photo = ref.watch(photoProvider(place.imageUrl));
+
+          final Widget imageWidget = photo.when(
+            data: (photoBytes) => Image.memory(
+              photoBytes,
+              fit: BoxFit.cover,
+            ),
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (error, stack) => const Icon(Icons.error),
+          );
 
           return Scaffold(
             appBar: AppBar(
-              title: Text(place.title),
+              title: Text(place.name),
               actions: [
                 IconButton(
                   icon: AnimatedSwitcher(
@@ -36,7 +46,7 @@ class DetailsScreen extends ConsumerWidget {
                   ),
                   onPressed: () async {
                     await ref.read(repositoryProvider).updateFavorite(place.id, isFavorite: !isFavorited);
-                    ref.invalidate(placeDetailsProvider(id));
+                    invalidateProviders(ref, id);
                   },
                 )
               ],
@@ -44,10 +54,8 @@ class DetailsScreen extends ConsumerWidget {
             body: Column(
               children: [
                 Hero(
-                  tag: place.title,
-                  child: place.imagePath.isNotEmpty
-                      ? Image.network(place.imagePath, fit: BoxFit.cover)
-                      : Container(height: 200, color: Colors.grey.shade300),
+                  tag: place.name,
+                  child: place.imageUrl.isNotEmpty ? imageWidget : Container(height: 200, color: Colors.grey.shade300),
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 16, 16, 40),
@@ -55,7 +63,7 @@ class DetailsScreen extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        place.placeName,
+                        placeName,
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                       const SizedBox(
@@ -66,7 +74,7 @@ class DetailsScreen extends ConsumerWidget {
                     ],
                   ),
                 ),
-                infoColumns.when(
+                /*infoColumns.when(
                   loading: () => const Center(child: CircularProgressIndicator()),
                   error: (error, stackTrace) => Center(child: Text("Error: $error")),
                   data: (columns) => Row(
@@ -78,7 +86,7 @@ class DetailsScreen extends ConsumerWidget {
                             ))
                         .toList(),
                   ),
-                )
+                )*/
               ],
             ),
           );
@@ -86,7 +94,7 @@ class DetailsScreen extends ConsumerWidget {
   }
 }
 
-class InfoColumn extends StatelessWidget {
+/*class InfoColumn extends StatelessWidget {
   const InfoColumn({super.key, required this.icon, required this.text});
 
   final IconData icon;
@@ -139,3 +147,4 @@ enum PlaceIcon {
     );
   }
 }
+*/

@@ -18,6 +18,8 @@ class AppTheme implements AppThemeData {
         textTheme: GoogleFonts.latoTextTheme(_textTheme),
         appBarTheme: _appBarTheme,
         cardTheme: _cardTheme.data,
+        inputDecorationTheme: _inputDecorationTheme,
+        elevatedButtonTheme: elevatedButtonTheme,
         useMaterial3: true,
       );
 
@@ -38,6 +40,10 @@ class AppTheme implements AppThemeData {
               color: Colors.grey[800],
             )
             .data,
+        inputDecorationTheme: _inputDecorationTheme.copyWith(
+          fillColor: Colors.grey[800],
+        ),
+        elevatedButtonTheme: elevatedButtonTheme,
         useMaterial3: true,
       );
 }
@@ -53,12 +59,11 @@ const TextTheme _textTheme = TextTheme(
   titleSmall: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
 );
 
-final AppBarTheme _appBarTheme = AppBarTheme(
+const AppBarTheme _appBarTheme = AppBarTheme(
   backgroundColor: ColorConsts.primary,
   foregroundColor: ColorConsts.onPrimary,
   elevation: 2,
   centerTitle: true,
-  titleTextStyle: _textTheme.headlineSmall?.copyWith(color: ColorConsts.onPrimary),
 );
 
 final CardTheme _cardTheme = CardTheme(
@@ -68,6 +73,32 @@ final CardTheme _cardTheme = CardTheme(
     borderRadius: BorderRadius.circular(12),
   ),
   margin: const EdgeInsets.all(8),
+);
+
+final InputDecorationTheme _inputDecorationTheme = InputDecorationTheme(
+  border: OutlineInputBorder(
+    borderRadius: BorderRadius.circular(8),
+    borderSide: BorderSide.none,
+  ),
+  filled: true,
+  fillColor: ColorConsts.surface,
+  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+  floatingLabelBehavior: FloatingLabelBehavior.never,
+  hintStyle: const TextStyle(
+    color: Colors.grey,
+  ),
+);
+
+final ElevatedButtonThemeData elevatedButtonTheme = ElevatedButtonThemeData(
+  style: ElevatedButton.styleFrom(
+    backgroundColor: ColorConsts.primary,
+    foregroundColor: ColorConsts.onPrimary,
+    textStyle: _textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold, color: ColorConsts.onPrimary),
+    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(8),
+    ),
+  ),
 );
 
 extension AppThemeX on BuildContext {
