@@ -170,6 +170,7 @@ class DreamPlacesScreen extends ConsumerWidget {
         ),
         floatingActionButton: FloatingActionButton(
           child: const Icon(
+            size: 30,
             Icons.add,
           ),
           onPressed: () async {
@@ -184,40 +185,41 @@ class DreamPlacesScreen extends ConsumerWidget {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: BottomAppBar(
-          notchMargin: 8,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              IconButton(
-                icon: const Icon(Icons.tune),
-                onPressed: () {},
-              ),
-              Row(
+            notchMargin: 8,
+            child: SizedBox(
+              height: 72,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Switch for showFavoritesOnly
-                  Consumer(
-                    builder: (context, ref, child) {
-                      return IconButton(
-                        tooltip: "Pokaż tylko ulubione",
+                  IconButton(
+                    iconSize: 30,
+                    icon: const Icon(Icons.tune),
+                    onPressed: () {},
+                  ),
+                  Row(
+                    children: [
+                      // IconButton dla showFavoritesOnly
+                      IconButton(
+                        iconSize: 30,
                         icon: Icon(
                           showFavoritesOnly ? Icons.favorite : Icons.favorite_border,
-                          color: showFavoritesOnly ? Colors.red : null,
                         ),
+                        color: showFavoritesOnly ? Colors.red : null,
                         onPressed: () {
                           ref.read(showFavoritesOnlyProvider.notifier).state = !showFavoritesOnly;
                         },
-                      );
-                    },
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.search),
-                    onPressed: () {},
+                      ),
+                      // IconButton dla
+                      IconButton(
+                        iconSize: 30,
+                        icon: const Icon(Icons.search),
+                        onPressed: () {},
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
-          ),
-        ),
+            )),
       ),
     );
   }
