@@ -4,6 +4,7 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:go_router/go_router.dart";
 import "../providers/dream_places_provider.dart";
 import "delete_place_dialog.dart";
+import "update_place_dialog.dart";
 
 class DetailsScreen extends ConsumerStatefulWidget {
   static const route = "/details";
@@ -64,7 +65,29 @@ class _DetailsScreenState extends ConsumerState<DetailsScreen> {
                   },
                 ),
               ),
-            )
+            ),
+            Tooltip(
+              message: "Edytuj miejsce",
+              child: Builder(
+                builder: (localContext) => IconButton(
+                  icon: const Icon(Icons.edit),
+                  color: Colors.black,
+                  iconSize: 30,
+                  onPressed: () async {
+                    final result = await showDialog<bool>(
+                      context: localContext,
+                      builder: (_) => UpdatePlaceDialog(place: place),
+                    );
+                    if (!mounted) return;
+
+                    if (result ?? false) {
+                      // ignore: use_build_context_synchronously
+                      GoRouter.of(localContext).go("/");
+                    }
+                  },
+                ),
+              ),
+            ),
           ],
         ),
         body: SingleChildScrollView(

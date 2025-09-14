@@ -37,4 +37,8 @@ class DreamPlaceService {
   Future<void> deleteDreamPlace({required String id}) async {
     await placesRepo.deleteDreamPlace(int.parse(id));
   }
+
+  Future<void> updateDreamPlace({required DreamPlace place}) async {
+    await placesRepo.updateDreamPlace(place);
+  }
 }

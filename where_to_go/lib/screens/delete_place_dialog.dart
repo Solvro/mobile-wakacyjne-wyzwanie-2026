@@ -1,9 +1,10 @@
+// lib/screens/delete_place_dialog.dart
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "../providers/dream_places_provider.dart";
 
 class DeletePlaceDialog extends ConsumerStatefulWidget {
-  final int placeId; // <-- dodany id
+  final int placeId;
 
   const DeletePlaceDialog({super.key, required this.placeId});
 
