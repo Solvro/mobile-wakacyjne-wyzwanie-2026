@@ -8,6 +8,7 @@ import "../models/dream_place.dart";
 import "../providers/auth_providers.dart";
 import "../providers/dream_places_provider.dart";
 import "../providers/theme_provider.dart";
+import "./search_delegate.dart";
 import "add_place_dialog.dart";
 
 class DreamPlacesScreen extends ConsumerWidget {
@@ -209,11 +210,17 @@ class DreamPlacesScreen extends ConsumerWidget {
                           ref.read(showFavoritesOnlyProvider.notifier).state = !showFavoritesOnly;
                         },
                       ),
-                      // IconButton dla
+                      // IconButton dla wyszukiwarki
                       IconButton(
                         iconSize: 30,
                         icon: const Icon(Icons.search),
-                        onPressed: () {},
+                        onPressed: () async {
+                          final places = ref.read(dreamPlacesProvider).value ?? [];
+                          await showSearch(
+                            context: context,
+                            delegate: SearchingDelegate(places),
+                          );
+                        },
                       ),
                     ],
                   ),
