@@ -46,6 +46,25 @@ class DreamPlaceRepository {
     }
   }
 
+  // Pobieranie wszystkich miejsc (z sortowaniem po nazwie)
+  Future<List<DreamPlace>> fetchDreamPlaceWithSorting({
+    required bool ascending,
+    required String sortBy,
+  }) async {
+    final sortDirection = ascending ? "asc" : "desc";
+
+    final response = await _dio.get<Map<String, dynamic>>(
+      "/places/?sort=$sortDirection&sortBy=$sortBy",
+    );
+
+    if (response.statusCode == 200 && response.data != null) {
+      final items = response.data!["results"] as List<dynamic>? ?? [];
+      return items.map((e) => DreamPlace.fromJson(e as Map<String, dynamic>)).toList();
+    } else {
+      throw Exception("Błąd podczas pobierania miejsc (${response.statusCode})");
+    }
+  }
+
   // Pobieranie pojedynczego miejsca
   Future<DreamPlace> fetchDreamPlace(int id) async {
     final response = await _dio.get<Map<String, dynamic>>("/places/$id");

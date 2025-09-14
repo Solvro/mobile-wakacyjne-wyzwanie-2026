@@ -192,9 +192,11 @@ class DreamPlacesScreen extends ConsumerWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  // IconButton dla sortowania
                   IconButton(
                     iconSize: 30,
                     icon: const Icon(Icons.tune),
+                    color: ascendingListSort ? Colors.blue[600] : null,
                     onPressed: () {},
                   ),
                   Row(

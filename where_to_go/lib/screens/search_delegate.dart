@@ -71,22 +71,26 @@ class SearchingDelegate extends SearchDelegate<DreamPlace?> {
 
   Widget _buildPlaceTile(BuildContext context, DreamPlace place, {bool dense = false}) {
     return ListTile(
-      dense: dense,
+      dense: false,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       leading: SizedBox(
-        width: 50,
-        height: 50,
+        width: 100,
+        height: 100,
         child: place.fullimageUrl.isNotEmpty
             ? ClipRRect(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(4),
                 child: Image.network(
                   place.fullimageUrl,
                   fit: BoxFit.cover,
-                  errorBuilder: (c, e, s) => const Icon(Icons.broken_image, size: 30),
+                  errorBuilder: (c, e, s) => const Icon(Icons.broken_image, size: 40),
                 ),
               )
-            : const Icon(Icons.image, size: 30),
+            : const Icon(Icons.image, size: 40),
       ),
-      title: Text(place.name),
+      title: Text(
+        place.name,
+        style: const TextStyle(fontSize: 18),
+      ),
       onTap: () {
         close(context, place);
         context.go("/details/${place.id}");
