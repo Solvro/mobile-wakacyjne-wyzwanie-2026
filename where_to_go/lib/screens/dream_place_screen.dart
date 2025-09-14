@@ -8,8 +8,8 @@ import "../models/dream_place.dart";
 import "../providers/auth_providers.dart";
 import "../providers/dream_places_provider.dart";
 import "../providers/theme_provider.dart";
-import "../widgets/search_delegate.dart";
 import "../widgets/favorite_button.dart";
+import "../widgets/search_delegate.dart";
 import "add_place_dialog.dart";
 
 class DreamPlacesScreen extends ConsumerWidget {
@@ -131,12 +131,12 @@ class DreamPlacesScreen extends ConsumerWidget {
                         : const Text("Brak miejsc — dodaj coś nowego!"),
                   )
                 : GridView.builder(
-                    padding: const EdgeInsets.all(12),
+                    padding: const EdgeInsets.all(8),
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
-                      childAspectRatio: 1.5,
-                      crossAxisSpacing: 8,
-                      mainAxisSpacing: 8,
+                      crossAxisSpacing: 6,
+                      mainAxisSpacing: 6,
+                      childAspectRatio: 0.9, // kafelek trochę wyższy
                     ),
                     itemCount: filteredPlaces.length,
                     itemBuilder: (context, index) {
@@ -150,33 +150,44 @@ class DreamPlacesScreen extends ConsumerWidget {
                             child: Column(
                               children: [
                                 Expanded(
-                                  child: place.fullimageUrl.isNotEmpty
-                                      ? Image.network(
-                                          place.fullimageUrl,
-                                          fit: BoxFit.cover,
-                                          width: double.infinity,
-                                          errorBuilder: (c, e, s) => const Center(
-                                            child: Icon(Icons.broken_image),
-                                          ),
-                                        )
-                                      : const Center(child: Icon(Icons.image)),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8),
-                                  child: Row(
+                                  flex: 3,
+                                  child: Stack(
                                     children: [
-                                      Expanded(
-                                        child: Text(
-                                          place.name,
-                                          style: const TextStyle(fontSize: 16),
-                                          textAlign: TextAlign.center,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
+                                      Positioned.fill(
+                                        child: place.fullimageUrl.isNotEmpty
+                                            ? Image.network(
+                                                place.fullimageUrl,
+                                                fit: BoxFit.cover,
+                                                width: double.infinity,
+                                                errorBuilder: (c, e, s) => const Center(
+                                                  child: Icon(Icons.broken_image),
+                                                ),
+                                              )
+                                            : const Center(child: Icon(Icons.image)),
                                       ),
-                                      const SizedBox(width: 6),
-                                      FavoriteButton(place: place),
+                                      Positioned(
+                                        right: 1,
+                                        bottom: 1,
+                                        child: FavoriteButton(
+                                            place: place,
+                                            iconSize: 30,
+                                            backgroundColor: Theme.of(context).colorScheme.onPrimary),
+                                      ),
                                     ],
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                                    child: Center(
+                                      child: Text(
+                                        place.name,
+                                        style: const TextStyle(fontSize: 16),
+                                        textAlign: TextAlign.center,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ],

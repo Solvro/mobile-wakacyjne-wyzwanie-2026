@@ -43,7 +43,21 @@ class _DetailsScreenState extends ConsumerState<DetailsScreen> {
           ),
           title: Text(place.name),
           actions: [
-            FavoriteButton(place: place),
+            Consumer(
+              builder: (context, ref, _) {
+                final placeAsync = ref.watch(dreamPlaceProvider(widget.placeId));
+                return placeAsync.when(
+                  data: (updatedPlace) {
+                    return FavoriteButton(
+                      place: updatedPlace,
+                      iconSize: 30,
+                    );
+                  },
+                  loading: () => const SizedBox(),
+                  error: (_, __) => const SizedBox(),
+                );
+              },
+            ),
           ],
         ),
         body: SingleChildScrollView(
