@@ -33,3 +33,7 @@ final dreamPlaceProvider = FutureProvider.family<DreamPlace, int>((ref, id) {
 
 /// Provider dla "tylko ulubionych"
 final showFavoritesOnlyProvider = StateProvider<bool>((ref) => false);
+
+/// Providery dla wyszukiwania
+final searchQueryProvider = StateProvider<String>((ref) => "");
+final isSearchingProvider = StateProvider<bool>((ref) => false);

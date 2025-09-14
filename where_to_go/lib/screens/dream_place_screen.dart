@@ -63,23 +63,6 @@ class DreamPlacesScreen extends ConsumerWidget {
           title: const Text("Ulubione miejsca!"),
           automaticallyImplyLeading: false,
           actions: [
-            // Switch for showFavoritesOnly
-            Consumer(builder: (context, ref, child) {
-              return Tooltip(
-                  message: "Pokaż tylko ulubione",
-                  preferBelow: true,
-                  child: Switch(
-                    value: showFavoritesOnly,
-                    onChanged: (value) {
-                      ref.read(showFavoritesOnlyProvider.notifier).state = value;
-                    },
-                  ));
-            }),
-            IconButton(
-              icon: const Icon(Icons.logout),
-              tooltip: "Wyloguj",
-              onPressed: () => _logout(context, ref),
-            ),
             PopupMenuButton<ThemeChoice>(
               tooltip: "Wybierz motyw",
               icon: const Icon(Icons.color_lens),
@@ -101,13 +84,17 @@ class DreamPlacesScreen extends ConsumerWidget {
                 ),
               ],
             ),
+            IconButton(
+              icon: const Icon(Icons.logout),
+              tooltip: "Wyloguj",
+              onPressed: () => _logout(context, ref),
+            ),
           ],
         ),
         body: asyncPlaces.when(
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (err, stack) => Center(child: Text("Błąd: $err")),
           data: (places) {
-            // Filtrowanie miejsca jeśli switch jest włączony
             final filteredPlaces =
                 showFavoritesOnly ? places.where((place) => place.isFavourite ?? false).toList() : places;
 
@@ -182,7 +169,9 @@ class DreamPlacesScreen extends ConsumerWidget {
           },
         ),
         floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.add),
+          child: const Icon(
+            Icons.add,
+          ),
           onPressed: () async {
             final newPlace = await showDialog<DreamPlace>(
               context: context,
@@ -192,6 +181,42 @@ class DreamPlacesScreen extends ConsumerWidget {
               ref.invalidate(dreamPlacesProvider);
             }
           },
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        bottomNavigationBar: BottomAppBar(
+          notchMargin: 8,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.tune),
+                onPressed: () {},
+              ),
+              Row(
+                children: [
+                  // Switch for showFavoritesOnly
+                  Consumer(
+                    builder: (context, ref, child) {
+                      return IconButton(
+                        tooltip: "Pokaż tylko ulubione",
+                        icon: Icon(
+                          showFavoritesOnly ? Icons.favorite : Icons.favorite_border,
+                          color: showFavoritesOnly ? Colors.red : null,
+                        ),
+                        onPressed: () {
+                          ref.read(showFavoritesOnlyProvider.notifier).state = !showFavoritesOnly;
+                        },
+                      );
+                    },
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.search),
+                    onPressed: () {},
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
