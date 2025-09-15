@@ -13,22 +13,40 @@ DreamPlacesRepository dreamPlacesRepository(Ref ref) {
   return DreamPlacesRepository(dio);
 }
 
+enum SortOrder { asc, desc }
+
+enum SortBy { name, id }
+
 @riverpod
 class DreamPlaces extends _$DreamPlaces {
-  @override
-  Future<List<DreamPlace>> build() async {
-    // Poczekaj aż auth będzie gotowy
-    await ref.watch(authNotifierProvider.future);
+  late SortOrder _sortOrder;
+  late SortBy _sortBy;
 
+  @override
+  Future<List<DreamPlace>> build({
+    SortOrder sortOrder = SortOrder.asc,
+    SortBy sortBy = SortBy.name,
+  }) async {
+    _sortOrder = sortOrder;
+    _sortBy = sortBy;
+
+    await ref.watch(authNotifierProvider.future);
     final repo = ref.watch(dreamPlacesRepositoryProvider);
-    return repo.getAllPlaces();
+
+    return repo.getAllPlaces(
+      sortOrder: _sortOrder == SortOrder.asc ? "asc" : "desc",
+      sortBy: _sortBy == SortBy.name ? "name" : "id",
+    );
   }
 
   Future<void> refresh() async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() {
       final repo = ref.watch(dreamPlacesRepositoryProvider);
-      return repo.getAllPlaces();
+      return repo.getAllPlaces(
+        sortOrder: _sortOrder == SortOrder.asc ? "asc" : "desc",
+        sortBy: _sortBy == SortBy.name ? "name" : "id",
+      );
     });
   }
 

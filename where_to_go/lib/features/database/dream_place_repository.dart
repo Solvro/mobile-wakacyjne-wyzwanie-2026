@@ -9,8 +9,14 @@ class DreamPlacesRepository {
 
   DreamPlacesRepository(this._dio);
 
-  Future<List<DreamPlace>> getAllPlaces() async {
-    final response = await _dio.get<Map<String, dynamic>>("/places?sort=asc&sortBy=name");
+  Future<List<DreamPlace>> getAllPlaces({required String sortOrder, required String sortBy}) async {
+    final response = await _dio.get<Map<String, dynamic>>(
+      "/places",
+      queryParameters: {
+        "sort": sortOrder,
+        "sortBy": sortBy,
+      },
+    );
     final data = response.data?["results"] as List<dynamic>? ?? [];
     logger.d("Odpowiedź serwera (getAllPlaces): ${response.data}");
 

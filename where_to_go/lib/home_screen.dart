@@ -6,6 +6,7 @@ import "features/database/dream_place_provider.dart";
 import "features/filters/filtered_dream_places_provider.dart";
 import "features/filters/search_query_provider.dart";
 import "features/filters/show_favorites_only_provider.dart";
+import "features/filters/sort_providers.dart";
 import "features/themes/local_theme_repository.dart";
 import "features/themes/theme_notifier.dart";
 
@@ -37,7 +38,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final ref = this.ref;
-    final placesAsync = ref.watch(dreamPlacesProvider);
+    final sortOrder = ref.watch(sortOrderProvider);
+    final sortBy = ref.watch(sortByProvider);
+    final placesAsync = ref.watch(dreamPlacesProvider(sortOrder: sortOrder, sortBy: sortBy));
     final themeAsync = ref.watch(themeNotifierProvider);
     final filteredPlaces = ref.watch(filteredDreamPlacesProvider);
     final showFavorites = ref.watch(showFavoritesOnlyProvider);
@@ -80,6 +83,26 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 },
               ),
             ],
+          ),
+          IconButton(
+            icon: Icon(
+              sortOrder == SortOrder.asc ? Icons.arrow_upward : Icons.arrow_downward,
+            ),
+            tooltip: "Kolejność sortowania",
+            onPressed: () {
+              final current = ref.read(sortOrderProvider);
+              ref.read(sortOrderProvider.notifier).state = current == SortOrder.asc ? SortOrder.desc : SortOrder.asc;
+            },
+          ),
+          IconButton(
+            icon: Icon(
+              sortBy == SortBy.name ? Icons.text_fields : Icons.numbers,
+            ),
+            tooltip: "Pole sortowania",
+            onPressed: () {
+              final current = ref.read(sortByProvider);
+              ref.read(sortByProvider.notifier).state = current == SortBy.name ? SortBy.id : SortBy.name;
+            },
           ),
           switch (themeAsync) {
             AsyncData(value: final currentTheme) => IconButton(

@@ -11,7 +11,9 @@ class DetailsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final placesAsync = ref.watch(dreamPlacesProvider);
+    final placesAsync = ref.watch(
+      dreamPlacesProvider(),
+    );
 
     return switch (placesAsync) {
       AsyncLoading() => const Scaffold(
@@ -29,8 +31,10 @@ class DetailsScreen extends ConsumerWidget {
             );
           }
 
-          final matching = value.where((p) => p.id == parsedId).toList();
-          if (matching.isEmpty) {
+          final place =
+              value.where((p) => p.id == parsedId).isNotEmpty ? value.firstWhere((p) => p.id == parsedId) : null;
+
+          if (place == null) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               if (Navigator.canPop(context)) {
                 Navigator.of(context).pop();
@@ -42,8 +46,6 @@ class DetailsScreen extends ConsumerWidget {
             );
           }
 
-          final place = matching.first;
-
           return Scaffold(
             appBar: AppBar(
               title: Text(place.name),
@@ -53,7 +55,7 @@ class DetailsScreen extends ConsumerWidget {
                     place.isFavourite ? Icons.favorite : Icons.favorite_border,
                     color: place.isFavourite ? Colors.red : null,
                   ),
-                  onPressed: () => ref.read(dreamPlacesProvider.notifier).toggleFavourite(id),
+                  onPressed: () => ref.read(dreamPlacesProvider().notifier).toggleFavourite(id),
                 ),
                 IconButton(
                   icon: const Icon(Icons.delete),
@@ -162,7 +164,7 @@ class DetailsScreen extends ConsumerWidget {
     }
 
     try {
-      await ref.read(dreamPlacesProvider.notifier).deletePlace(placeId.toString());
+      await ref.read(dreamPlacesProvider().notifier).deletePlace(placeId.toString());
       messenger.showSnackBar(const SnackBar(content: Text("Miejsce zostało usunięte")));
     } on DioException catch (e) {
       messenger.showSnackBar(SnackBar(content: Text("Błąd podczas usuwania: ${e.message}")));

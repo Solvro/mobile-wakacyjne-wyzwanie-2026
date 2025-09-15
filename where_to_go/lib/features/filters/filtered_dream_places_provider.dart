@@ -4,12 +4,19 @@ import "../database/dream_place_provider.dart";
 import "../models/dream_place.dart";
 import "search_query_provider.dart";
 import "show_favorites_only_provider.dart";
+import "sort_providers.dart";
 
 part "filtered_dream_places_provider.g.dart";
 
 @riverpod
 List<DreamPlace> filteredDreamPlaces(Ref ref) {
-  final placesAsync = ref.watch(dreamPlacesProvider);
+  final sortOrder = ref.watch(sortOrderProvider);
+  final sortBy = ref.watch(sortByProvider);
+
+  final placesAsync = ref.watch(
+    dreamPlacesProvider(sortOrder: sortOrder, sortBy: sortBy),
+  );
+
   final showFavoritesOnly = ref.watch(showFavoritesOnlyProvider);
   final searchQuery = ref.watch(searchQueryProvider).toLowerCase();
 
