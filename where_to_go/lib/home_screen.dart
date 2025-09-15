@@ -128,29 +128,82 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             separatorBuilder: (_, __) => const Divider(height: 4),
             itemBuilder: (context, index) {
               final place = filteredPlaces[index];
-              return Card(
-                child: ListTile(
-                  horizontalTitleGap: 12,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  leading: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.network(
-                      "https://backend-api.w.solvro.pl/photos/${place.imageUrl}",
-                      width: 60,
-                      fit: BoxFit.cover,
+
+              return Dismissible(
+                key: ValueKey(place.id),
+                direction: DismissDirection.endToStart,
+                background: Container(
+                  color: Colors.red,
+                  alignment: Alignment.centerRight,
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: const Icon(Icons.delete, color: Colors.white),
+                ),
+                confirmDismiss: (direction) async {
+                  final confirm = await showDialog<bool>(
+                    context: context,
+                    builder: (ctx) => AlertDialog(
+                      title: const Text("Usuń miejsce"),
+                      content: const Text(
+                        "Czy na pewno chcesz usunąć to miejsce? Tej operacji nie można cofnąć.",
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(ctx, false),
+                          child: const Text("Anuluj"),
+                        ),
+                        TextButton(
+                          onPressed: () => Navigator.pop(ctx, true),
+                          child: const Text("Usuń", style: TextStyle(color: Colors.red)),
+                        ),
+                      ],
                     ),
+                  );
+                  return confirm ?? false;
+                },
+                onDismissed: (direction) async {
+                  final scaffoldMessenger = ScaffoldMessenger.of(context);
+
+                  try {
+                    final notifier = ref.read(
+                      dreamPlacesProvider(sortOrder: sortOrder, sortBy: sortBy).notifier,
+                    );
+                    await notifier.deletePlace(place.id.toString());
+
+                    scaffoldMessenger.showSnackBar(
+                      SnackBar(content: Text("Usunięto: ${place.name}")),
+                    );
+                  } on Exception catch (e) {
+                    scaffoldMessenger.showSnackBar(
+                      SnackBar(content: Text("Błąd podczas usuwania: $e")),
+                    );
+                  }
+                },
+                child: Card(
+                  child: ListTile(
+                    horizontalTitleGap: 12,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    leading: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.network(
+                        place.imageUrl.isNotEmpty
+                            ? "https://backend-api.w.solvro.pl/photos/${place.imageUrl}"
+                            : "https://via.placeholder.com/60",
+                        width: 60,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    title: Text(
+                      place.name,
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    ),
+                    trailing: Icon(
+                      place.isFavourite ? Icons.favorite : Icons.favorite_border,
+                      color: place.isFavourite ? Colors.red : null,
+                    ),
+                    onTap: () async {
+                      await GoRouter.of(context).push("${DetailsScreen.route}/${place.id}");
+                    },
                   ),
-                  title: Text(
-                    place.name,
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                  ),
-                  trailing: Icon(
-                    place.isFavourite ? Icons.favorite : Icons.favorite_border,
-                    color: place.isFavourite ? Colors.red : null,
-                  ),
-                  onTap: () async {
-                    await GoRouter.of(context).push("${DetailsScreen.route}/${place.id}");
-                  },
                 ),
               );
             },
