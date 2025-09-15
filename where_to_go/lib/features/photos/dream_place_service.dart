@@ -27,4 +27,28 @@ class DreamPlaceService {
 
     return dreamPlacesRepository.addPlace(newPlace);
   }
+
+  Future<DreamPlace> updateDreamPlaceWithPhoto({
+    required int id,
+    required String name,
+    required String description,
+    File? photo,
+    required String currentImageUrl,
+    required bool isFavourite,
+  }) async {
+    var imageUrl = currentImageUrl;
+    if (photo != null) {
+      imageUrl = await photosRepository.uploadPhoto(photo);
+    }
+
+    final updatedPlace = DreamPlace(
+      id: id,
+      name: name,
+      description: description,
+      imageUrl: imageUrl,
+      isFavourite: isFavourite,
+    );
+
+    return dreamPlacesRepository.updatePlace(updatedPlace);
+  }
 }

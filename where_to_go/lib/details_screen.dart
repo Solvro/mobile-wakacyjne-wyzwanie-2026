@@ -1,6 +1,7 @@
 import "package:dio/dio.dart";
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:go_router/go_router.dart";
 import "features/database/dream_place_provider.dart";
 
 class DetailsScreen extends ConsumerWidget {
@@ -56,6 +57,12 @@ class DetailsScreen extends ConsumerWidget {
                     color: place.isFavourite ? Colors.red : null,
                   ),
                   onPressed: () => ref.read(dreamPlacesProvider().notifier).toggleFavourite(id),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.edit),
+                  onPressed: () async {
+                    await GoRouter.of(context).push("/edit/${place.id}", extra: place);
+                  },
                 ),
                 IconButton(
                   icon: const Icon(Icons.delete),

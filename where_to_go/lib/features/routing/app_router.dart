@@ -6,6 +6,7 @@ import "../../create_dream_place_screen.dart";
 import "../../details_screen.dart";
 import "../../home_screen.dart";
 import "../auth/auth_provider.dart";
+import "../models/dream_place.dart";
 
 final goRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -21,6 +22,13 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: "/create",
         builder: (context, state) => const CreateDreamPlaceScreen(),
+      ),
+      GoRoute(
+        path: "/edit/:id",
+        builder: (context, state) {
+          final dreamPlace = state.extra! as DreamPlace;
+          return CreateDreamPlaceScreen(dreamPlace: dreamPlace);
+        },
       ),
       GoRoute(
         path: "${DetailsScreen.route}/:id",

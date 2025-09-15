@@ -6,9 +6,12 @@ import "package:go_router/go_router.dart";
 import "package:image_picker/image_picker.dart";
 import "../features/photos/dream_place_service_provider.dart";
 import "features/database/dream_place_provider.dart";
+import "features/models/dream_place.dart";
 
 class CreateDreamPlaceScreen extends ConsumerStatefulWidget {
-  const CreateDreamPlaceScreen({super.key});
+  final DreamPlace? dreamPlace;
+
+  const CreateDreamPlaceScreen({super.key, this.dreamPlace});
 
   @override
   ConsumerState<CreateDreamPlaceScreen> createState() => _CreateDreamPlaceScreenState();
@@ -21,6 +24,17 @@ class _CreateDreamPlaceScreenState extends ConsumerState<CreateDreamPlaceScreen>
   XFile? _selectedImage;
   var _isLoading = false;
 
+  bool get isEditMode => widget.dreamPlace != null;
+
+  @override
+  void initState() {
+    super.initState();
+    if (isEditMode) {
+      _nameController.text = widget.dreamPlace!.name;
+      _descriptionController.text = widget.dreamPlace!.description;
+    }
+  }
+
   Future<void> _pickImage() async {
     final picker = ImagePicker();
     final picked = await picker.pickImage(source: ImageSource.gallery);
@@ -31,7 +45,7 @@ class _CreateDreamPlaceScreenState extends ConsumerState<CreateDreamPlaceScreen>
 
   Future<void> _submitForm() async {
     if (!_formKey.currentState!.validate()) return;
-    if (_selectedImage == null) {
+    if (!isEditMode && _selectedImage == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Wybierz zdjęcie")),
       );
@@ -42,23 +56,38 @@ class _CreateDreamPlaceScreenState extends ConsumerState<CreateDreamPlaceScreen>
     try {
       final service = ref.read(dreamPlaceServiceProvider);
 
-      await service.createDreamPlaceWithPhoto(
-        name: _nameController.text,
-        description: _descriptionController.text,
-        photo: File(_selectedImage!.path),
-      );
-      ref.invalidate(dreamPlacesProvider);
+      if (isEditMode) {
+        await service.updateDreamPlaceWithPhoto(
+          id: widget.dreamPlace!.id!,
+          name: _nameController.text,
+          description: _descriptionController.text,
+          photo: _selectedImage != null ? File(_selectedImage!.path) : null,
+          currentImageUrl: widget.dreamPlace!.imageUrl,
+          isFavourite: widget.dreamPlace!.isFavourite,
+        );
 
-      if (!mounted) return;
+        ref.invalidate(dreamPlacesProvider);
 
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-          context.go("/");
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Miejsce dodane pomyślnie")),
-          );
-        }
-      });
+        if (!mounted) return;
+        GoRouter.of(context).go("/");
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Miejsce zaktualizowane")),
+        );
+      } else {
+        await service.createDreamPlaceWithPhoto(
+          name: _nameController.text,
+          description: _descriptionController.text,
+          photo: File(_selectedImage!.path),
+        );
+
+        ref.invalidate(dreamPlacesProvider);
+
+        if (!mounted) return;
+        GoRouter.of(context).go("/");
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Miejsce dodane")),
+        );
+      }
     } on DioException catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -82,7 +111,7 @@ class _CreateDreamPlaceScreenState extends ConsumerState<CreateDreamPlaceScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Dodaj nowe miejsce"),
+        title: Text(isEditMode ? "Edytuj miejsce" : "Dodaj nowe miejsce"),
         actions: [
           IconButton(
             icon: const Icon(Icons.check),
@@ -125,15 +154,18 @@ class _CreateDreamPlaceScreenState extends ConsumerState<CreateDreamPlaceScreen>
                           border: Border.all(color: Colors.grey),
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: _selectedImage == null
-                            ? const Center(child: Icon(Icons.add_photo_alternate, size: 50))
-                            : Image.file(File(_selectedImage!.path), fit: BoxFit.cover),
+                        child: _selectedImage != null
+                            ? Image.file(File(_selectedImage!.path), fit: BoxFit.cover)
+                            : (isEditMode
+                                ? Image.network("https://backend-api.w.solvro.pl/photos/${widget.dreamPlace!.imageUrl}",
+                                    fit: BoxFit.cover)
+                                : const Center(child: Icon(Icons.add_photo_alternate, size: 50))),
                       ),
                     ),
                     const SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: _isLoading ? null : _submitForm,
-                      child: const Text("Dodaj miejsce"),
+                      child: Text(isEditMode ? "Zapisz zmiany" : "Dodaj miejsce"),
                     ),
                   ],
                 ),
