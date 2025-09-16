@@ -27,9 +27,7 @@ class DreamPlacesRepositoryRemote implements DreamPlacesRepository {
   Future<void> _refresh() async {
     final res = await _dio.get<List<dynamic>>(ApiPaths.dreamPlaces);
     final data = res.data ?? const <dynamic>[];
-    _cache = data
-        .map((e) => _fromJson(e as Map<String, dynamic>))
-        .toList(growable: false);
+    _cache = data.map((e) => _fromJson(e as Map<String, dynamic>)).toList(growable: false);
 
     if (!_controller.isClosed) {
       _controller.add(List.unmodifiable(_cache));
@@ -99,9 +97,7 @@ class DreamPlacesRepositoryRemote implements DreamPlacesRepository {
   }
 
   @override
-  Future<void> seedIfEmpty() async {
-
-  }
+  Future<void> seedIfEmpty() async {}
 
   Future<void> dispose() async {
     await _controller.close();
@@ -119,9 +115,9 @@ DreamPlace _fromJson(Map<String, dynamic> j) {
 }
 
 Map<String, dynamic> _toJson(DreamPlace p) => <String, dynamic>{
-      "id": p.id,                
+      "id": p.id,
       "name": p.name,
       "description": p.description,
-      "imageUrl": p.assetPath,    
-      "isFavorite": p.isFavourite 
+      "imageUrl": p.assetPath,
+      "isFavorite": p.isFavourite
     };

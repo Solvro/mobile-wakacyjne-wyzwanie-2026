@@ -5,7 +5,8 @@ class AuthenticationRepository {
   AuthenticationRepository({
     required LocalAuthenticationRepository local,
     required RemoteAuthenticationRepository remote,
-  }) : _local = local, _remote = remote;
+  })  : _local = local,
+        _remote = remote;
 
   final LocalAuthenticationRepository _local;
   final RemoteAuthenticationRepository _remote;

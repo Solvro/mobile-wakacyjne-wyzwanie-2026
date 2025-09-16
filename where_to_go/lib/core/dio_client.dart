@@ -5,7 +5,7 @@ import "../features/auth/authentication_repository.dart";
 
 Dio buildAuthorizedDio(AuthenticationRepository auth) {
   final dio = Dio(BaseOptions(
-    baseUrl: ApiConfig.baseUrl, 
+    baseUrl: ApiConfig.baseUrl,
     headers: {
       "Content-Type": "application/json",
       "Accept": "application/json",
@@ -32,7 +32,6 @@ Dio buildAuthorizedDio(AuthenticationRepository auth) {
       }
       handler.next(options);
     },
-
     onError: (error, handler) async {
       final status = error.response?.statusCode;
       if (status != 401) {

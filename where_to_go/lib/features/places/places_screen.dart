@@ -27,8 +27,7 @@ class PlacesScreen extends ConsumerWidget {
           actions: [
             IconButton(
               tooltip: "Odśwież",
-              onPressed: () =>
-                  ref.read(dreamPlacesControllerProvider.notifier).refresh(),
+              onPressed: () => ref.read(dreamPlacesControllerProvider.notifier).refresh(),
               icon: const Icon(Icons.refresh),
             ),
             IconButton(
@@ -52,9 +51,7 @@ class PlacesScreen extends ConsumerWidget {
               Text("Błąd: $err"),
               const SizedBox(height: 12),
               FilledButton(
-                onPressed: () => ref
-                    .read(dreamPlacesControllerProvider.notifier)
-                    .refresh(),
+                onPressed: () => ref.read(dreamPlacesControllerProvider.notifier).refresh(),
                 child: const Text("Spróbuj ponownie"),
               ),
             ],
@@ -67,8 +64,7 @@ class PlacesScreen extends ConsumerWidget {
           actions: [
             IconButton(
               tooltip: "Odśwież",
-              onPressed: () =>
-                  ref.read(dreamPlacesControllerProvider.notifier).refresh(),
+              onPressed: () => ref.read(dreamPlacesControllerProvider.notifier).refresh(),
               icon: const Icon(Icons.refresh),
             ),
             IconButton(
@@ -106,16 +102,12 @@ class PlacesScreen extends ConsumerWidget {
                     subtitle: Text(p.description),
                     trailing: IconButton(
                       icon: Icon(
-                        p.isFavourite
-                            ? Icons.favorite
-                            : Icons.favorite_border,
+                        p.isFavourite ? Icons.favorite : Icons.favorite_border,
                         color: p.isFavourite ? Colors.red : null,
                       ),
                       onPressed: () async {
                         final willBeFav = !p.isFavourite;
-                        await ref
-                            .read(dreamPlacesControllerProvider.notifier)
-                            .toggleFavourite(p.id);
+                        await ref.read(dreamPlacesControllerProvider.notifier).toggleFavourite(p.id);
 
                         if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(

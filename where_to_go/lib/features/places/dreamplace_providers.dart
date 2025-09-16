@@ -15,31 +15,28 @@ final dreamPlacesRepositoryProvider = Provider<DreamPlacesRepository>((ref) {
   return repo;
 });
 
-final dreamPlacesStreamProvider =
-    StreamProvider.autoDispose<List<DreamPlace>>((ref) {
+final dreamPlacesStreamProvider = StreamProvider.autoDispose<List<DreamPlace>>((ref) {
   final repo = ref.watch(dreamPlacesRepositoryProvider);
   return repo.watchAll();
 });
 
-final dreamPlacesProvider =
-    FutureProvider.autoDispose<List<DreamPlace>>((ref) {
+final dreamPlacesProvider = FutureProvider.autoDispose<List<DreamPlace>>((ref) {
   final repo = ref.watch(dreamPlacesRepositoryProvider);
-  return repo.getAll(); 
+  return repo.getAll();
 });
 
-final dreamPlacesControllerProvider = StateNotifierProvider.autoDispose<
-    DreamPlacesController, AsyncValue<List<DreamPlace>>>((ref) {
+final dreamPlacesControllerProvider =
+    StateNotifierProvider.autoDispose<DreamPlacesController, AsyncValue<List<DreamPlace>>>((ref) {
   final repo = ref.watch(dreamPlacesRepositoryProvider);
   return DreamPlacesController(repo);
 });
 
-class DreamPlacesController
-    extends StateNotifier<AsyncValue<List<DreamPlace>>> {
+class DreamPlacesController extends StateNotifier<AsyncValue<List<DreamPlace>>> {
   DreamPlacesController(this._repo) : super(const AsyncValue.loading()) {
     _sub = _repo.watchAll().listen(
-      (items) => state = AsyncValue.data(items),
-      onError: (Object e, StackTrace st) => state = AsyncValue.error(e, st),
-    );
+          (items) => state = AsyncValue.data(items),
+          onError: (Object e, StackTrace st) => state = AsyncValue.error(e, st),
+        );
   }
 
   final DreamPlacesRepository _repo;

@@ -6,23 +6,20 @@ import "features/places/details_screen.dart";
 import "features/places/places_screen.dart";
 
 final appRouter = GoRouter(
-  initialLocation: "/", 
+  initialLocation: "/",
   routes: [
     GoRoute(
       path: "/",
       builder: (context, state) => const AuthGate(),
     ),
-
     GoRoute(
       path: "/auth",
       builder: (context, state) => const AuthScreen(),
     ),
-
     GoRoute(
       path: "/home",
       builder: (context, state) => const PlacesScreen(),
     ),
-
     GoRoute(
       path: "/details/:id",
       builder: (context, state) {

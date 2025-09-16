@@ -2,8 +2,8 @@ class DreamPlace {
   final String id;
   final String name;
   final String description;
-  final String assetPath;  
-  final bool isFavourite;   
+  final String assetPath;
+  final bool isFavourite;
 
   const DreamPlace({
     required this.id,
@@ -35,8 +35,7 @@ class DreamPlace {
       name: json["name"] as String? ?? "",
       description: json["description"] as String? ?? "",
       assetPath: json["imageUrl"] as String? ?? json["photoUrl"] as String? ?? "",
-      isFavourite: json["isFavorite"] as bool? ??
-          json["isFavourite"] as bool? ?? false,
+      isFavourite: json["isFavorite"] as bool? ?? json["isFavourite"] as bool? ?? false,
     );
   }
 
@@ -45,7 +44,7 @@ class DreamPlace {
       "id": id,
       "name": name,
       "description": description,
-      "imageUrl": assetPath, 
+      "imageUrl": assetPath,
       "isFavorite": isFavourite,
     };
   }

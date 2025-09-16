@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:go_router/go_router.dart";
-import "../auth_providers.dart"; 
+import "../auth_providers.dart";
 
 class AuthScreen extends ConsumerStatefulWidget {
   const AuthScreen({super.key});
@@ -14,7 +14,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   final _formKey = GlobalKey<FormState>();
 
   final _emailC = TextEditingController();
-  final _usernameC = TextEditingController(); 
+  final _usernameC = TextEditingController();
   final _passC = TextEditingController();
   final _pass2C = TextEditingController();
 
@@ -36,7 +36,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
 
     final auth = ref.read(authRepositoryProvider);
     final email = _emailC.text.trim();
-    final pass  = _passC.text;
+    final pass = _passC.text;
 
     try {
       if (_isLogin) {
@@ -144,11 +144,8 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                     ),
                   const SizedBox(height: 8),
                   TextButton(
-                    onPressed: () => setState(() => _isLogin = !_isLogin),
-                    child: Text(_isLogin
-                        ? "Nie masz konta? Zarejestruj się"
-                        : "Masz już konto? Zaloguj się")
-                  )
+                      onPressed: () => setState(() => _isLogin = !_isLogin),
+                      child: Text(_isLogin ? "Nie masz konta? Zarejestruj się" : "Masz już konto? Zaloguj się"))
                 ]),
               ),
             ),

@@ -7,12 +7,10 @@ class CreateDreamPlaceScreen extends ConsumerStatefulWidget {
   const CreateDreamPlaceScreen({super.key});
 
   @override
-  ConsumerState<CreateDreamPlaceScreen> createState() =>
-      _CreateDreamPlaceScreenState();
+  ConsumerState<CreateDreamPlaceScreen> createState() => _CreateDreamPlaceScreenState();
 }
 
-class _CreateDreamPlaceScreenState
-    extends ConsumerState<CreateDreamPlaceScreen> {
+class _CreateDreamPlaceScreenState extends ConsumerState<CreateDreamPlaceScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameCtrl = TextEditingController();
   final _descCtrl = TextEditingController();
@@ -36,7 +34,7 @@ class _CreateDreamPlaceScreenState
     setState(() => _saving = true);
     try {
       final place = DreamPlace(
-        id: "", 
+        id: "",
         name: _nameCtrl.text.trim(),
         description: _descCtrl.text,
         assetPath: _imageCtrl.text.trim(),
@@ -74,8 +72,7 @@ class _CreateDreamPlaceScreenState
                 controller: _nameCtrl,
                 decoration: const InputDecoration(labelText: "Nazwa *"),
                 textInputAction: TextInputAction.next,
-                validator: (v) =>
-                    (v == null || v.trim().isEmpty) ? "Podaj nazwę" : null,
+                validator: (v) => (v == null || v.trim().isEmpty) ? "Podaj nazwę" : null,
               ),
               const SizedBox(height: 12),
               TextFormField(

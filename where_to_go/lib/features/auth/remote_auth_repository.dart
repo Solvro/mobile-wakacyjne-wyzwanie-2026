@@ -5,7 +5,7 @@ class RemoteAuthenticationRepository {
   RemoteAuthenticationRepository(this._dio);
   final Dio _dio;
 
-    Future<({String access, String refresh})> login({
+  Future<({String access, String refresh})> login({
     required String email,
     required String password,
   }) async {
@@ -22,7 +22,8 @@ class RemoteAuthenticationRepository {
       refresh: data["refreshToken"] as String,
     );
   }
-    Future<({String access, String refresh})> register({
+
+  Future<({String access, String refresh})> register({
     required String email,
     required String password,
   }) async {
@@ -39,7 +40,8 @@ class RemoteAuthenticationRepository {
       refresh: data["refreshToken"] as String,
     );
   }
-    Future<String> refreshToken({required String refreshToken}) async {
+
+  Future<String> refreshToken({required String refreshToken}) async {
     final res = await _dio.post<Map<String, dynamic>>(
       ApiPaths.refresh,
       data: {"refreshToken": refreshToken},
