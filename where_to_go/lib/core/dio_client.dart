@@ -94,8 +94,8 @@ Dio buildAuthorizedDio(AuthenticationRepository auth) {
         refreshCompleter!.complete(null);
         await auth.logout();
         return handler.next(error);
-      } catch (_) {
-        refreshCompleter!.completeError(_);
+      } catch (e) {
+        refreshCompleter!.completeError(e);
         await auth.logout();
         return handler.next(error);
       } finally {
