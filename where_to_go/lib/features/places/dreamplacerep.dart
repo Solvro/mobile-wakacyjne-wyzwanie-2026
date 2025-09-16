@@ -1,4 +1,6 @@
-import "package:hive/hive.dart";
+import "dart:async";
+import "package:dio/dio.dart";
+import "../../core/api_path.dart";
 import "dreamplace.dart";
 
 abstract class DreamPlacesRepository {
@@ -13,84 +15,113 @@ abstract class DreamPlacesRepository {
   Future<void> seedIfEmpty();
 }
 
-class DreamPlacesRepositoryHive implements DreamPlacesRepository {
-  static const boxName = "dream_places";
+class DreamPlacesRepositoryRemote implements DreamPlacesRepository {
+  DreamPlacesRepositoryRemote(this._dio);
 
-  final Box<DreamPlace> box;
-  DreamPlacesRepositoryHive(this.box);
+  final Dio _dio;
 
-  @override
-  Stream<List<DreamPlace>> watchAll() {
-    return box.watch().map((_) => box.values.toList()).startWith(box.values.toList());
+  final _controller = StreamController<List<DreamPlace>>.broadcast();
+  var _cache = <DreamPlace>[];
+  var _initialized = false;
+
+  Future<void> _refresh() async {
+    final res = await _dio.get<List<dynamic>>(ApiPaths.dreamPlaces);
+    final data = res.data ?? const <dynamic>[];
+    _cache = data
+        .map((e) => _fromJson(e as Map<String, dynamic>))
+        .toList(growable: false);
+
+    if (!_controller.isClosed) {
+      _controller.add(List.unmodifiable(_cache));
+    }
+  }
+
+  Future<void> _ensureInit() async {
+    if (_initialized) return;
+    _initialized = true;
+    await _refresh();
   }
 
   @override
-  Future<List<DreamPlace>> getAll() async => box.values.toList();
+  Stream<List<DreamPlace>> watchAll() async* {
+    await _ensureInit();
+    yield List.unmodifiable(_cache);
+    yield* _controller.stream;
+  }
 
   @override
-  Future<void> add(DreamPlace place) => box.put(place.id, place);
+  Future<List<DreamPlace>> getAll() async {
+    await _ensureInit();
+    return List.unmodifiable(_cache);
+  }
 
   @override
-  Future<void> update(DreamPlace place) => box.put(place.id, place);
+  Future<void> add(DreamPlace place) async {
+    final body = Map<String, dynamic>.from(_toJson(place))..remove("id");
+    await _dio.post<void>(ApiPaths.dreamPlaces, data: body);
+    await _refresh();
+  }
 
   @override
-  Future<void> delete(String id) => box.delete(id);
+  Future<void> update(DreamPlace place) async {
+    try {
+      await _dio.patch<void>(ApiPaths.dreamPlaceById(place.id), data: _toJson(place));
+    } on DioException catch (e) {
+      final sc = e.response?.statusCode ?? 0;
+      if (sc == 404 || sc == 405) {
+        await _dio.put<void>(ApiPaths.dreamPlaceById(place.id), data: _toJson(place));
+      } else {
+        rethrow;
+      }
+    }
+    await _refresh();
+  }
+
+  @override
+  Future<void> delete(String id) async {
+    await _dio.delete<void>(ApiPaths.dreamPlaceById(id));
+    await _refresh();
+  }
 
   @override
   Future<void> toggleFavourite(String id) async {
-    final current = box.get(id);
-    if (current == null) return;
-    await box.put(id, current.copyWith(isFavourite: !current.isFavourite));
+    final idx = _cache.indexWhere((p) => p.id == id);
+    if (idx == -1) {
+      await _refresh();
+      return;
+    }
+    final newValue = !_cache[idx].isFavourite;
+    await _dio.patch<void>(
+      ApiPaths.dreamPlaceById(id),
+      data: {"isFavorite": newValue},
+    );
+    await _refresh();
   }
 
   @override
   Future<void> seedIfEmpty() async {
-    if (box.isNotEmpty) return;
 
-    final sample = <DreamPlace>[
-      const DreamPlace(
-        id: "1",
-        name: "Manchester, Anglia",
-        description: "Miasto futbolu",
-        assetPath: "assets/images/manchester.jpg",
-        isFavourite: true,
-      ),
-      const DreamPlace(
-        id: "2",
-        name: "Santorini, Grecja",
-        description: "Grecja",
-        assetPath: "assets/images/santorini.jpg",
-      ),
-      const DreamPlace(
-        id: "3",
-        name: "Barcelona, Hiszpania",
-        description: "Katalonia",
-        assetPath: "assets/images/barcelona.jpg",
-        isFavourite: true,
-      ),
-      const DreamPlace(
-        id: "4",
-        name: "Rzym, Włochy",
-        description: "Makaron",
-        assetPath: "assets/images/rome.jpg",
-      ),
-      const DreamPlace(
-        id: "5",
-        name: "Paryż, Francja",
-        description: "Wieża",
-        assetPath: "assets/images/paris.jpg",
-      ),
-    ];
+  }
 
-    for (final p in sample) {
-      await box.put(p.id, p);
-    }
+  Future<void> dispose() async {
+    await _controller.close();
   }
 }
 
-extension _StartWith<T> on Stream<T> {
-  Stream<T> startWith(T first) async* {
-    yield first;
-    yield* this;
-  }
+DreamPlace _fromJson(Map<String, dynamic> j) {
+  return DreamPlace(
+    id: (j["id"] ?? j["_id"] ?? "").toString(),
+    name: (j["name"] ?? j["title"] ?? "") as String,
+    description: (j["description"] ?? "") as String,
+    assetPath: (j["assetPath"] ?? j["imageUrl"] ?? j["photoUrl"] ?? "") as String,
+    isFavourite: (j["isFavorite"] ?? j["isFavourite"] ?? j["favorite"] ?? false) as bool,
+  );
 }
+
+Map<String, dynamic> _toJson(DreamPlace p) => <String, dynamic>{
+      "id": p.id,                
+      "name": p.name,
+      "description": p.description,
+      "imageUrl": p.assetPath,    
+      "isFavorite": p.isFavourite 
+    };

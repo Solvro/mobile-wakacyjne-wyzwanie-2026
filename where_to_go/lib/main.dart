@@ -1,25 +1,13 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
-import "package:hive_flutter/hive_flutter.dart";
 
 import "app_router.dart";
-import "features/places/dreamplace.dart";
-import "features/places/dreamplace_adapter.dart";
-import "features/places/dreamplacerep.dart" show DreamPlacesRepositoryHive;
 import "theme/app.theme.dart";
 import "theme/local_theme.dart";
 import "theme/providers.dart";
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  await Hive.initFlutter();
-  Hive.registerAdapter(DreamPlaceAdapter());
-  final box = await Hive.openBox<DreamPlace>(DreamPlacesRepositoryHive.boxName);
-
-  final repo = DreamPlacesRepositoryHive(box);
-  await repo.seedIfEmpty();
-
   runApp(const ProviderScope(child: MyApp()));
 }
 
