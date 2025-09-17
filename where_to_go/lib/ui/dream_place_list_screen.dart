@@ -3,6 +3,8 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:go_router/go_router.dart";
 
 import "../features/places/places_provider.dart";
+import "../features/theme/local_theme_repository.dart";
+import "../features/theme/theme_notifier.dart";
 import "../models/dream_place.dart";
 import "dream_place_screen.dart";
 
@@ -16,6 +18,9 @@ class DreamPlaceListScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Where2Go"),
+        actions: const [
+          _ThemeToggleButton(),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(8, 20, 8, 0),
@@ -26,6 +31,26 @@ class DreamPlaceListScreen extends ConsumerWidget {
           children: places.map((place) => DreamPlaceListTile(place: place)).toList(),
         ),
       ),
+    );
+  }
+}
+
+class _ThemeToggleButton extends ConsumerWidget {
+  const _ThemeToggleButton();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final mode = ref.watch(themeNotifierProvider).asData?.value ??
+        (MediaQuery.platformBrightnessOf(context) == Brightness.light ? AppThemeMode.light : AppThemeMode.dark);
+    final isLight = mode == AppThemeMode.light;
+    final icon = isLight ? Icons.light_mode : Icons.dark_mode;
+
+    return IconButton(
+      icon: Icon(icon),
+      onPressed: () async {
+        final next = isLight ? AppThemeMode.dark : AppThemeMode.light;
+        await ref.read(themeNotifierProvider.notifier).setThemeMode(next);
+      },
     );
   }
 }
@@ -62,7 +87,9 @@ class DreamPlaceListTile extends StatelessWidget {
                   Icon(
                     place.isFavorited ? Icons.favorite : Icons.favorite_border,
                     size: 16,
-                    color: place.isFavorited ? Colors.red : const Color(0xFF141414),
+                    color: place.isFavorited
+                        ? Theme.of(context).colorScheme.error
+                        : (Theme.of(context).iconTheme.color ?? Theme.of(context).colorScheme.onSurface),
                   ),
                 ],
               ),

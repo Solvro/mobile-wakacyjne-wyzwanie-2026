@@ -12,10 +12,12 @@ class DreamPlaceScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     final place = ref.watch(placesProvider).firstWhere((place) => place.id == placeId);
 
     return Scaffold(
-        backgroundColor: const Color(0xFFFAFAFA),
+        backgroundColor: colorScheme.surface,
         appBar: AppBar(
           title: Text(place.name),
           actions: [
@@ -26,7 +28,8 @@ class DreamPlaceScreen extends ConsumerWidget {
                 icon: Icon(
                   place.isFavorited ? Icons.favorite : Icons.favorite_border,
                 ),
-                color: place.isFavorited ? Colors.red : const Color(0xFF141414))
+                color:
+                    place.isFavorited ? colorScheme.error : theme.appBarTheme.foregroundColor ?? colorScheme.onSurface)
           ],
         ),
         body: Column(children: [
@@ -61,18 +64,16 @@ class DreamPlaceHeader extends StatelessWidget {
           children: [
             Text(
               name,
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF141414),
-              ),
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
             const SizedBox(
               height: 8,
             ),
             Text(
               description,
-              style: const TextStyle(fontSize: 16),
+              style: Theme.of(context).textTheme.bodyMedium,
             )
           ],
         ));
@@ -98,10 +99,7 @@ class DreamPlaceAttractions extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  "Top Attractions",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
+                _SectionTitle(text: "Top Attractions"),
                 SizedBox(
                   height: 8,
                 ),
@@ -133,7 +131,30 @@ class DreamPlaceAttractionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [Icon(attraction.icon), Text(attraction.label)],
+      children: [
+        Icon(
+          attraction.icon,
+          color: Theme.of(context).iconTheme.color,
+        ),
+        Text(
+          attraction.label,
+          style: Theme.of(context).textTheme.bodyMedium,
+        )
+      ],
     );
+  }
+}
+
+class _SectionTitle extends StatelessWidget {
+  const _SectionTitle({required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    final textStyle = Theme.of(context).textTheme.titleLarge?.copyWith(
+          fontWeight: FontWeight.bold,
+        );
+    return Text(text, style: textStyle);
   }
 }
