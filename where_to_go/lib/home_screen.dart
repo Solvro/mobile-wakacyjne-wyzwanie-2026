@@ -213,7 +213,7 @@ class HomeScreen extends ConsumerWidget {
                         color: palette.getPrimaryColor(currentTheme, context),
                         border: Border(
                           top: BorderSide(
-                            color: palette.getSecondaryColor(currentTheme, context).withOpacity(0.2),
+                            color: palette.getSecondaryColor(currentTheme, context),
                             width: 0.5,
                           ),
                         ),

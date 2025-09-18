@@ -128,8 +128,8 @@ class DreamPlaceScreen extends ConsumerWidget {
                               onPressed: () async {
                                 try {
                                   // Navigate to PlacesFormView in edit mode by passing the existing dreamPlace data
-                                  final result = await Navigator.of(context).push(
-                                    MaterialPageRoute(
+                                  final result = await Navigator.of(context).push<bool>(
+                                    MaterialPageRoute<bool>(
                                       builder: (context) => PlacesFormView(
                                         existingPlace: dreamPlace, // Pass the current place data
                                       ),
@@ -137,7 +137,7 @@ class DreamPlaceScreen extends ConsumerWidget {
                                   );
 
                                   // If we got back successfully, invalidate the provider to refresh the data
-                                  if (result == true) {
+                                  if (result != null) {
                                     ref.invalidate(dreamPlacesProvider);
                                   }
                                 } on Object catch (e) {

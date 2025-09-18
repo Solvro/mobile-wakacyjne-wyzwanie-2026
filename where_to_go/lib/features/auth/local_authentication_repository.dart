@@ -11,7 +11,6 @@ class LocalAuthenticationRepositoryImpl extends LocalAuthenticationRepository {
 
   @override
   Future<void> saveTokens(String accessToken, String refreshToken) async {
-    print("Saving tokens: accessToken=$accessToken, refreshToken=$refreshToken");
     await _storage.write(key: "access_token", value: accessToken);
     await _storage.write(key: "refresh_token", value: refreshToken);
   }

@@ -82,7 +82,6 @@ class AuthView extends HookConsumerWidget {
                         final response = await authRepo.signIn(email, password);
 
                         if (response.$1.trim().isNotEmpty && response.$2.trim().isNotEmpty) {
-                          print("got tokens in sign in");
                           final accessToken = response.$1;
                           final refreshToken = response.$2;
                           await authRepo.saveTokens(accessToken, refreshToken);
@@ -109,10 +108,8 @@ class AuthView extends HookConsumerWidget {
                       try {
                         final response = await authRepo.logIn(email, password);
                         if (response.$1.trim().isNotEmpty && response.$2.trim().isNotEmpty) {
-                          print("got tokens in log in");
                           final accessToken = response.$1;
                           final refreshToken = response.$2;
-                          print("access: $accessToken, refresh: $refreshToken");
                           await authRepo.saveTokens(accessToken, refreshToken);
                           ref.invalidate(tokensProvider);
                         }
