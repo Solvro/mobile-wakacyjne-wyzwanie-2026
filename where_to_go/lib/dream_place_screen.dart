@@ -5,6 +5,7 @@ import "features/auth/tokens_provider.dart";
 import "features/database/dream_place_provider.dart";
 import "features/theme/local_theme_provider.dart";
 import "features/theme/theme.dart";
+import "places_form_view.dart";
 
 class DreamPlaceScreen extends ConsumerWidget {
   final int id;
@@ -121,6 +122,42 @@ class DreamPlaceScreen extends ConsumerWidget {
                             ),
                           ),
                           const Spacer(),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 12, left: 16, right: 16),
+                            child: ElevatedButton.icon(
+                              onPressed: () async {
+                                try {
+                                  // Navigate to PlacesFormView in edit mode by passing the existing dreamPlace data
+                                  final result = await Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => PlacesFormView(
+                                        existingPlace: dreamPlace, // Pass the current place data
+                                      ),
+                                    ),
+                                  );
+
+                                  // If we got back successfully, invalidate the provider to refresh the data
+                                  if (result == true) {
+                                    ref.invalidate(dreamPlacesProvider);
+                                  }
+                                } on Object catch (e) {
+                                  if (!context.mounted) return;
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text("Failed to open edit screen: $e")),
+                                  );
+                                }
+                              },
+                              icon: Icon(Icons.edit, color: themePalette.getPrimaryColor(currentTheme, context)),
+                              label: Text("Edit Dream Place",
+                                  style: TextStyle(color: themePalette.getPrimaryColor(currentTheme, context))),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: themePalette.getSecondaryColor(currentTheme, context),
+                                foregroundColor: themePalette.getPrimaryColor(currentTheme, context),
+                                padding: const EdgeInsets.symmetric(vertical: 14),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                              ),
+                            ),
+                          ),
                           Padding(
                             padding: const EdgeInsets.only(bottom: 36, left: 16, right: 16),
                             child: ElevatedButton.icon(

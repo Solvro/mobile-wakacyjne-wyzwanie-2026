@@ -60,6 +60,43 @@ class DreamPlaceRepository {
     return <dynamic>[];
   }
 
+  Future<List<dynamic>> getAllDreamPlacesWithSorting(Ref ref, String sort) async {
+    debugPrint("entering getAllDreamPlacesWithSorting");
+
+    final tokens = await ref.read(tokensProvider.future);
+    final accessToken = tokens.$1;
+    if (accessToken == null) {
+      debugPrint("getAllDreamPlacesWithSorting: no access token -> returning empty list");
+      return <dynamic>[];
+    }
+
+    dio.options.headers = {
+      "Authorization": "Bearer $accessToken",
+    };
+
+    Response<dynamic>? response;
+    try {
+      // request dynamic response and inspect contents
+      response = await dio.get<dynamic>(
+        "/places?sort=$sort&sortBy=string",
+        options: Options(headers: {"Authorization": "Bearer $accessToken"}),
+      );
+    } on DioException catch (dioErr) {
+      debugPrint("getAllDreamPlacesWithSorting: network error: ${dioErr.message}");
+      return <dynamic>[];
+    } on Object catch (e) {
+      debugPrint("getAllDreamPlacesWithSorting: unexpected error: $e");
+      return <dynamic>[];
+    }
+
+    if (response.statusCode == 200) {
+      final data = response.data;
+      return [data];
+    }
+
+    return <dynamic>[];
+  }
+
   Future<void> updateDreamplace(DreamPlace place) async {
     await dio.put<Map<String, dynamic>>("/places/${place.id}", data: {
       "name": place.name,

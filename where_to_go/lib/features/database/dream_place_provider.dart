@@ -1,4 +1,5 @@
 import "package:riverpod_annotation/riverpod_annotation.dart";
+import "../sorting/sorting_provider.dart";
 import "dream_place_repository.dart";
 
 @riverpod
@@ -11,8 +12,14 @@ final dreamPlaceRepositoryProvider = FutureProvider<DreamPlaceRepository>((ref) 
 @riverpod
 final dreamPlacesProvider = FutureProvider((ref) async {
   final repo = await ref.watch(dreamPlaceRepositoryProvider.future);
-  final dreamPlaces = await repo.getAllDreamPlaces(ref);
-  return dreamPlaces;
+  final sorting = ref.watch(sortingProviderProvider);
+  if (sorting) {
+    final dreamPlaces = await repo.getAllDreamPlacesWithSorting(ref, "ascending");
+    return dreamPlaces;
+  } else {
+    final dreamPlaces = await repo.getAllDreamPlaces(ref);
+    return dreamPlaces;
+  }
 });
 
 @riverpod

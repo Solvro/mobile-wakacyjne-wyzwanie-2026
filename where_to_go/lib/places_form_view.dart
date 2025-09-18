@@ -9,7 +9,12 @@ import "features/theme/local_theme_provider.dart";
 import "features/theme/theme.dart" show ThemePalette;
 
 class PlacesFormView extends ConsumerStatefulWidget {
-  const PlacesFormView({super.key});
+  final Map<String, dynamic>? existingPlace;
+
+  const PlacesFormView({
+    this.existingPlace,
+    super.key,
+  });
 
   @override
   ConsumerState<PlacesFormView> createState() => _PlacesFormViewState();
@@ -30,6 +35,21 @@ class _PlacesFormViewState extends ConsumerState<PlacesFormView> {
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
 
+  bool get isEditMode => widget.existingPlace != null;
+
+  String? _existingImageUrl;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (isEditMode) {
+      _nameController.text = widget.existingPlace?["name"] as String;
+      _descriptionController.text = widget.existingPlace?["description"] as String;
+      _existingImageUrl = widget.existingPlace?["imageUrl"] as String?;
+    }
+  }
+
   // Helper to pick image
   Future<void> _pickImage() async {
     try {
@@ -49,7 +69,7 @@ class _PlacesFormViewState extends ConsumerState<PlacesFormView> {
   }
 
   Future<void> _submit() async {
-    if (!(_formKey.currentState?.validate() ?? false) || _pickedImage == null) {
+    if (!(_formKey.currentState?.validate() ?? false) || (_pickedImage == null && _existingImageUrl == null)) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Please fill all fields and select an image.")),
@@ -69,41 +89,63 @@ class _PlacesFormViewState extends ConsumerState<PlacesFormView> {
         "Authorization": "Bearer $accessToken",
       };
 
-      // Upload image file
-      final formData = FormData.fromMap({
-        "file": await MultipartFile.fromFile(_pickedImage!.path),
-      });
+      String? imageUrl = _existingImageUrl;
+      if (_pickedImage != null) {
+        // Upload the new image - existing code for image upload
+        final formData = FormData.fromMap({
+          "file": await MultipartFile.fromFile(_pickedImage!.path),
+        });
 
-      Response<Map<String, dynamic>> photoResponse;
-      try {
-        photoResponse = await repo.dio.post<Map<String, dynamic>>("/photos/upload", data: formData);
-      } on DioException catch (dioErr) {
-        if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Photo upload failed: ${dioErr.message}")));
-        return;
-      } on Object catch (e) {
-        if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Photo upload failed: $e")));
-        return;
+        try {
+          final photoResponse = await repo.dio.post<Map<String, dynamic>>("/photos/upload", data: formData);
+          imageUrl = photoResponse.data?["filename"] as String?;
+        } on DioException catch (dioErr) {
+          // Error handling - same as your existing code
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Photo upload failed: ${dioErr.message}")),
+          );
+          return;
+        } on Object catch (e) {
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Photo upload failed: $e")),
+          );
+          return;
+        }
       }
 
-      // Use the returned photo reference for imageUrl
-      final imageUrl = photoResponse.data?["filename"] as String?;
-
       try {
-        await repo.dio.post<Map<String, dynamic>>(
-          "/places",
-          data: {
-            "name": name,
-            "description": description,
-            "imageUrl": imageUrl,
-            "isFavourite": false,
-          },
-        );
-        if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Place created successfully")),
-        );
+        if (isEditMode) {
+          final placeId = widget.existingPlace?["id"] as int;
+          await repo.dio.put<Map<String, dynamic>>(
+            "/places/$placeId",
+            data: {
+              "name": name,
+              "description": description,
+              "imageUrl": imageUrl,
+              "isFavourite": widget.existingPlace?["isFavourite"] ?? false,
+            },
+          );
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Place updated successfully")),
+          );
+        } else {
+          await repo.dio.post<Map<String, dynamic>>(
+            "/places",
+            data: {
+              "name": name,
+              "description": description,
+              "imageUrl": imageUrl,
+              "isFavourite": false,
+            },
+          );
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Place created successfully")),
+          );
+        }
       } on DioException catch (dioErr) {
         if (!mounted) return;
         ScaffoldMessenger.of(context)
@@ -187,7 +229,7 @@ class _PlacesFormViewState extends ConsumerState<PlacesFormView> {
                     validator: _notEmptyValidator,
                   ),
                   const SizedBox(height: 12),
-                  Text("Image", style: textStyle),
+                  Text(isEditMode ? "Change the image" : "Pick an Image", style: textStyle),
                   const SizedBox(height: 8),
                   if (_pickedImage != null) Image.file(_pickedImage!, height: 120) else const Text("No image selected"),
                   ElevatedButton(
@@ -198,13 +240,13 @@ class _PlacesFormViewState extends ConsumerState<PlacesFormView> {
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                     ),
-                    child: const Text("Pick Image"),
+                    child: Text(isEditMode ? "Change Image" : "Pick Image", style: TextStyle(color: primaryColor)),
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton.icon(
                     onPressed: _submit,
                     icon: Icon(Icons.save, color: primaryColor),
-                    label: Text("Create Dreamspace", style: TextStyle(color: primaryColor)),
+                    label: Text("Create Dreamplace", style: TextStyle(color: primaryColor)),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: secondaryColor,
                       foregroundColor: primaryColor,
