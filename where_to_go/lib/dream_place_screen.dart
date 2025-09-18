@@ -18,9 +18,7 @@ class DreamPlaceScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeAsync = ref.watch(localThemeNotifierProvider);
-    // Watch the repository AsyncValue (AsyncValue<DreamPlaceRepository>)
 
-    // Or (preferred) use the provider that already returns places:
     final dreamPlacesAsync = ref.watch(dreamPlacesProvider);
     final tokenAsync = ref.watch(tokensProvider);
     final dreamPlacesRepositoryAsync = ref.watch(dreamPlaceRepositoryProvider);
@@ -33,7 +31,6 @@ class DreamPlaceScreen extends ConsumerWidget {
                 final themePalette = ThemePalette();
                 return dreamPlacesAsync.when(
                   data: (data) {
-                    // Normalize types from dynamic responses to concrete maps/lists
                     final results = (data.first as Map<String, dynamic>)["results"] as List<dynamic>;
                     final dreamPlaces = results.cast<Map<String, dynamic>>();
                     final dreamPlace = dreamPlaces.firstWhere((dp) => dp["id"] == id);
@@ -58,9 +55,7 @@ class DreamPlaceScreen extends ConsumerWidget {
                             ),
                             onPressed: () async {
                               try {
-                                // trigger the toggle provider and await completion
                                 await repo.toggleFavourite(id);
-                                // ensure places are refetched / UI updated
                                 ref.invalidate(dreamPlacesProvider);
                               } on Object {
                                 if (!context.mounted) return;
@@ -127,16 +122,14 @@ class DreamPlaceScreen extends ConsumerWidget {
                             child: ElevatedButton.icon(
                               onPressed: () async {
                                 try {
-                                  // Navigate to PlacesFormView in edit mode by passing the existing dreamPlace data
                                   final result = await Navigator.of(context).push<bool>(
                                     MaterialPageRoute<bool>(
                                       builder: (context) => PlacesFormView(
-                                        existingPlace: dreamPlace, // Pass the current place data
+                                        existingPlace: dreamPlace,
                                       ),
                                     ),
                                   );
 
-                                  // If we got back successfully, invalidate the provider to refresh the data
                                   if (result != null) {
                                     ref.invalidate(dreamPlacesProvider);
                                   }

@@ -21,6 +21,7 @@ final tokensProvider = FutureProvider<(String?, String?)>((ref) async {
     debugPrint("[TokensProvider] Attempting to refresh token...");
     // final freshAccess = await authRepo.refreshToken(refresh) as String;
     final freshAccess = access;
+    // ^ switch between these two lines to mitigate the problem coming with the not working refreshing of tokens.
 
     debugPrint("[TokensProvider] Token refreshed successfully. New access token: ${freshAccess.substring(0, 10)}...");
     // persist fresh tokens and return them
