@@ -3,7 +3,7 @@ import "dreamplace.dart";
 
 class DreamPlaceAdapter extends TypeAdapter<DreamPlace> {
   @override
-  final typeId = 1;
+  final int typeId = 1;
 
   @override
   DreamPlace read(BinaryReader reader) {
@@ -11,12 +11,13 @@ class DreamPlaceAdapter extends TypeAdapter<DreamPlace> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
+
     return DreamPlace(
       id: fields[0] as String,
       name: fields[1] as String,
       description: fields[2] as String,
       assetPath: fields[3] as String,
-      isFavourite: fields[4] as bool,
+      isFavorite: fields[4] as bool,
     );
   }
 
@@ -33,6 +34,6 @@ class DreamPlaceAdapter extends TypeAdapter<DreamPlace> {
       ..writeByte(3)
       ..write(obj.assetPath)
       ..writeByte(4)
-      ..write(obj.isFavourite);
+      ..write(obj.isFavorite);
   }
 }

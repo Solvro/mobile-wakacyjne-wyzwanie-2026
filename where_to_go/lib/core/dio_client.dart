@@ -1,12 +1,12 @@
 import "dart:async";
 import "package:dio/dio.dart";
-import "../core/api_path.dart";
 import "../features/auth/authentication_repository.dart";
+import "api_path.dart";
 
 Dio buildAuthorizedDio(AuthenticationRepository auth) {
   final dio = Dio(BaseOptions(
-    baseUrl: ApiConfig.baseUrl,
-    headers: {
+    baseUrl: ApiPaths.baseUrl,
+    headers: const {
       "Content-Type": "application/json",
       "Accept": "application/json",
     },
@@ -17,12 +17,13 @@ Dio buildAuthorizedDio(AuthenticationRepository auth) {
   ));
 
   dio.interceptors.add(LogInterceptor(
+    request: true,
     requestBody: true,
     responseBody: true,
     responseHeader: false,
   ));
 
-  Completer<String?>? refreshCompleter;
+  Completer<bool>? refreshCompleter;
 
   dio.interceptors.add(InterceptorsWrapper(
     onRequest: (options, handler) async {
@@ -32,76 +33,43 @@ Dio buildAuthorizedDio(AuthenticationRepository auth) {
       }
       handler.next(options);
     },
-    onError: (error, handler) async {
-      final status = error.response?.statusCode;
-      if (status != 401) {
-        return handler.next(error);
+    onError: (err, handler) async {
+      final status = err.response?.statusCode ?? 0;
+
+      final path = err.requestOptions.path;
+      if (status != 401 || path == ApiPaths.refresh) {
+        return handler.next(err);
       }
 
-      if (refreshCompleter != null) {
-        try {
-          final newToken = await refreshCompleter!.future;
-          if (newToken == null || newToken.isEmpty) {
-            await auth.logout();
-            return handler.next(error);
-          }
-          final req = error.requestOptions;
-          req.headers["Authorization"] = "Bearer $newToken";
-          final clone = await dio.fetch<dynamic>(req);
-          return handler.resolve(clone);
-        } on Exception catch (_) {
-          await auth.logout();
-          return handler.next(error);
-        }
+      refreshCompleter ??= Completer<bool>()..complete(_runRefresh(auth));
+      final ok = await refreshCompleter!.future.catchError((_) => false);
+      refreshCompleter = null;
+
+      if (!ok) {
+        await auth.logout();
+        return handler.next(err);
       }
 
-      refreshCompleter = Completer<String?>();
+      final newAccess = await auth.readAccessToken();
+      final ro = err.requestOptions;
+      ro.headers["Authorization"] = "Bearer $newAccess";
+
       try {
-        final refreshToken = await auth.readRefreshToken();
-        if (refreshToken == null || refreshToken.isEmpty) {
-          refreshCompleter!.complete(null);
-          await auth.logout();
-          return handler.next(error);
-        }
-
-        final bare = Dio(BaseOptions(
-          baseUrl: ApiConfig.baseUrl,
-          headers: {"Content-Type": "application/json", "Accept": "application/json"},
-          connectTimeout: const Duration(seconds: 10),
-          receiveTimeout: const Duration(seconds: 10),
-          validateStatus: (s) => s != null && s < 500,
-        ));
-
-        final resp = await bare.post<Map<String, dynamic>>(
-          ApiPaths.refresh,
-          data: {"refreshToken": refreshToken},
-        );
-
-        if (resp.statusCode == 200) {
-          final newAccess = (resp.data?["accessToken"] as String?) ?? "";
-          if (newAccess.isNotEmpty) {
-            await auth.saveAccessToken(newAccess);
-            refreshCompleter!.complete(newAccess);
-
-            final req = error.requestOptions;
-            req.headers["Authorization"] = "Bearer $newAccess";
-            final clone = await dio.fetch<dynamic>(req);
-            return handler.resolve(clone);
-          }
-        }
-
-        refreshCompleter!.complete(null);
-        await auth.logout();
-        return handler.next(error);
-      } catch (e) {
-        refreshCompleter!.completeError(e);
-        await auth.logout();
-        return handler.next(error);
-      } finally {
-        refreshCompleter = null;
+        final cloneResponse = await dio.fetch<Response<dynamic>>(ro);
+        return handler.resolve(cloneResponse);
+      } on Exception catch (_) {
+        return handler.next(err);
       }
     },
   ));
 
   return dio;
+}
+
+Future<bool> _runRefresh(AuthenticationRepository auth) async {
+  try {
+    return await auth.refreshToken();
+  } on Exception catch (_) {
+    return false;
+  }
 }

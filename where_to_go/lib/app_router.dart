@@ -24,7 +24,7 @@ final appRouter = GoRouter(
       path: "/details/:id",
       builder: (context, state) {
         final id = state.pathParameters["id"]!;
-        return DetailsScreen(id: id);
+        return DetailsScreen(placeId: id);
       },
     ),
   ],

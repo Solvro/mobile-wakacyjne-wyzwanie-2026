@@ -72,7 +72,7 @@ class DreamPlacesController extends StateNotifier<AsyncValue<List<DreamPlace>>> 
     await _repo.delete(id);
   }
 
-  Future<void> toggleFavourite(String id) async {
-    await _repo.toggleFavourite(id);
+  Future<void> toggleFavorite(String id) async {
+    await _repo.toggleFavorite(id);
   }
 }

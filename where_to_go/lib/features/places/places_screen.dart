@@ -1,148 +1,136 @@
 import "dart:async";
-
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:go_router/go_router.dart";
 
 import "../../theme/selector.dart";
 import "../auth/auth_providers.dart";
-import "create_dreamplace_screen.dart" as create;
 import "details_screen.dart";
-import "dreamplace_providers.dart";
+import "places_provider.dart";
 
 class PlacesScreen extends ConsumerWidget {
   const PlacesScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(dreamPlacesControllerProvider);
+    final places = ref.watch(placesProvider);
 
-    return state.when(
-      loading: () => const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      ),
-      error: (err, _) => Scaffold(
-        appBar: AppBar(
-          title: const Text("Dream Place"),
-          actions: [
-            IconButton(
-              tooltip: "Odśwież",
-              onPressed: () => ref.read(dreamPlacesControllerProvider.notifier).refresh(),
-              icon: const Icon(Icons.refresh),
-            ),
-            IconButton(
-              tooltip: "Wyloguj",
-              onPressed: () async {
-                await ref.read(authRepositoryProvider).logout();
-                if (context.mounted) context.go("/auth");
-              },
-              icon: const Icon(Icons.logout),
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8),
-              child: ThemeSelector(),
-            ),
-          ],
-        ),
-        body: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text("Błąd: $err"),
-              const SizedBox(height: 12),
-              FilledButton(
-                onPressed: () => ref.read(dreamPlacesControllerProvider.notifier).refresh(),
-                child: const Text("Spróbuj ponownie"),
-              ),
-            ],
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Dream Place"),
+        actions: [
+          IconButton(
+            tooltip: "Odśwież",
+            onPressed: () => ref.read(placesProvider.notifier).refresh(),
+            icon: const Icon(Icons.refresh),
           ),
-        ),
+          IconButton(
+            tooltip: "Wyloguj",
+            onPressed: () async {
+              await ref.read(authRepositoryProvider).logout();
+              if (context.mounted) context.go("/auth");
+            },
+            icon: const Icon(Icons.logout),
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8),
+            child: ThemeSelector(),
+          ),
+        ],
       ),
-      data: (places) => Scaffold(
-        appBar: AppBar(
-          title: const Text("Dream Place"),
-          actions: [
-            IconButton(
-              tooltip: "Odśwież",
-              onPressed: () => ref.read(dreamPlacesControllerProvider.notifier).refresh(),
-              icon: const Icon(Icons.refresh),
-            ),
-            IconButton(
-              tooltip: "Wyloguj",
-              onPressed: () async {
-                await ref.read(authRepositoryProvider).logout();
-                if (context.mounted) context.go("/auth");
-              },
-              icon: const Icon(Icons.logout),
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8),
-              child: ThemeSelector(),
-            ),
-          ],
-        ),
-        body: places.isEmpty
-            ? const Center(
-                child: Text(
-                  "Brak danych",
-                  textAlign: TextAlign.center,
-                ),
-              )
-            : ListView.separated(
-                itemCount: places.length,
-                separatorBuilder: (_, __) => const Divider(height: 1),
-                itemBuilder: (context, i) {
-                  final p = places[i];
-                  return ListTile(
-                    leading: ClipRRect(
-                      borderRadius: BorderRadius.circular(6),
-                      child: _PlaceImage(path: p.assetPath),
+      body: places.isEmpty
+          ? const Center(child: Text("Brak danych"))
+          : ListView.separated(
+              itemCount: places.length,
+              separatorBuilder: (_, __) => const Divider(height: 1),
+              itemBuilder: (context, i) {
+                final p = places[i];
+                return ListTile(
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(6),
+                    child: _PlaceImage(path: p.imagePath),
+                  ),
+                  title: Text(p.title),
+                  subtitle: Text(p.subtitle),
+                  trailing: IconButton(
+                    icon: Icon(
+                      p.isFavorite ? Icons.favorite : Icons.favorite_border,
+                      color: p.isFavorite ? Colors.red : null,
                     ),
-                    title: Text(p.name),
-                    subtitle: Text(p.description),
-                    trailing: IconButton(
-                      icon: Icon(
-                        p.isFavourite ? Icons.favorite : Icons.favorite_border,
-                        color: p.isFavourite ? Colors.red : null,
-                      ),
-                      onPressed: () async {
-                        final willBeFav = !p.isFavourite;
-                        await ref.read(dreamPlacesControllerProvider.notifier).toggleFavourite(p.id);
-
-                        if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                '${p.name}: ${willBeFav ? "dodano do ulubionych" : "usunięto z ulubionych"}',
-                              ),
-                              duration: const Duration(milliseconds: 900),
-                            ),
-                          );
-                        }
-                      },
-                    ),
-                    onTap: () {
-                      unawaited(context.push("${DetailsScreen.route}/${p.id}"));
+                    onPressed: () {
+                      ref.read(placesProvider.notifier).toggleFavorite(p.id);
+                      final willBeFav = !p.isFavorite;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            '${p.title}: ${willBeFav ? "dodano do ulubionych" : "usunięto z ulubionych"}',
+                          ),
+                          duration: const Duration(milliseconds: 900),
+                        ),
+                      );
                     },
-                  );
-                },
-              ),
-        floatingActionButton: FloatingActionButton(
-          tooltip: "Dodaj miejsce",
-          onPressed: () {
-            unawaited(
-              Navigator.of(context).push<void>(
-                MaterialPageRoute<void>(
-                  builder: (_) => const create.CreateDreamPlaceScreen(),
-                ),
-              ),
-            );
-          },
-          child: const Icon(Icons.add),
-        ),
+                  ),
+                  onTap: () {
+                    // Proste przejście bez ingerencji w go_router:
+                    unawaited(
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => DetailsScreen(placeId: p.id),
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+      floatingActionButton: FloatingActionButton(
+        tooltip: "Dodaj miejsce",
+        onPressed: () => _showAddDialog(context, ref),
+        child: const Icon(Icons.add),
       ),
     );
   }
+}
+
+Future<void> _showAddDialog(BuildContext context, WidgetRef ref) async {
+  final titleCtrl = TextEditingController();
+  final subtitleCtrl = TextEditingController();
+  final descCtrl = TextEditingController();
+  final imageCtrl = TextEditingController(text: "assets/images/paryz.jpg");
+
+  await showDialog<void>(
+    context: context,
+    builder: (ctx) => AlertDialog(
+      title: const Text("Nowe miejsce"),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(controller: titleCtrl, decoration: const InputDecoration(labelText: "Tytuł")),
+            TextField(controller: subtitleCtrl, decoration: const InputDecoration(labelText: "Podtytuł")),
+            TextField(controller: descCtrl, decoration: const InputDecoration(labelText: "Opis")),
+            TextField(controller: imageCtrl, decoration: const InputDecoration(labelText: "Obraz (asset lub URL)")),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Anuluj")),
+        FilledButton(
+          onPressed: () {
+            if (titleCtrl.text.trim().isEmpty) return;
+            ref.read(placesProvider.notifier).add(
+                  title: titleCtrl.text.trim(),
+                  subtitle: subtitleCtrl.text.trim(),
+                  description: descCtrl.text.trim(),
+                  imagePath: imageCtrl.text.trim(),
+                );
+            Navigator.pop(ctx);
+          },
+          child: const Text("Dodaj"),
+        ),
+      ],
+    ),
+  );
 }
 
 class _PlaceImage extends StatelessWidget {

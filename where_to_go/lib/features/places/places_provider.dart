@@ -63,4 +63,39 @@ class Places extends _$Places {
         if (p.id == id) p.copyWith(isFavorite: !p.isFavorite) else p,
     ];
   }
+
+  void refresh() {
+    state = List<Place>.from(_initialPlaces);
+  }
+
+  void add({
+    required String title,
+    String subtitle = "",
+    String description = "",
+    String? imagePath,
+    Color backgroundColor = const Color(0xFFE0E0E0),
+  }) {
+    final path = (imagePath != null && imagePath.trim().isNotEmpty)
+        ? imagePath.trim()
+        : "https://picsum.photos/seed/${DateTime.now().millisecondsSinceEpoch}/800/600";
+
+    final id = DateTime.now().microsecondsSinceEpoch.toString();
+    final newPlace = Place(
+      id: id,
+      title: title,
+      subtitle: subtitle,
+      description: description,
+      imagePath: path,
+      backgroundColor: backgroundColor,
+      isFavorite: false,
+    );
+    state = [...state, newPlace];
+  }
+
+  Place? byId(String id) {
+    for (final p in state) {
+      if (p.id == id) return p;
+    }
+    return null;
+  }
 }

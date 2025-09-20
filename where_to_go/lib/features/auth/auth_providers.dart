@@ -17,10 +17,26 @@ final localAuthRepoProvider = Provider<LocalAuthenticationRepository>((ref) {
 });
 
 final _baseDioProvider = Provider<Dio>((ref) {
-  return Dio(BaseOptions(
-    baseUrl: ApiConfig.baseUrl,
-    headers: {"Content-Type": "application/json"},
+  final dio = Dio(BaseOptions(
+    baseUrl: ApiPaths.baseUrl,
+    headers: const {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+    },
+    connectTimeout: const Duration(seconds: 10),
+    receiveTimeout: const Duration(seconds: 15),
+    sendTimeout: const Duration(seconds: 15),
+    validateStatus: (s) => s != null && s < 500,
   ));
+
+  dio.interceptors.add(LogInterceptor(
+    request: true,
+    requestBody: true,
+    responseBody: true,
+    responseHeader: false,
+  ));
+
+  return dio;
 });
 
 final remoteAuthRepoProvider = Provider<RemoteAuthenticationRepository>((ref) {
@@ -39,6 +55,6 @@ final dioProvider = Provider<Dio>((ref) {
   return buildAuthorizedDio(auth);
 });
 
-final isLoggedInProvider = FutureProvider<bool>((ref) {
+final isLoggedInProvider = FutureProvider<bool>((ref) async {
   return ref.read(authRepositoryProvider).isLoggedIn();
 });

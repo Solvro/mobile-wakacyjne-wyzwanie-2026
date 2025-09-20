@@ -20,8 +20,14 @@ class $AssetsImagesGen {
   /// File path: assets/images/manchester.jpg
   AssetGenImage get manchester => const AssetGenImage('assets/images/manchester.jpg');
 
+  /// File path: assets/images/paris.jpg
+  AssetGenImage get paris => const AssetGenImage('assets/images/paris.jpg');
+
   /// File path: assets/images/paryz.jpg
   AssetGenImage get paryz => const AssetGenImage('assets/images/paryz.jpg');
+
+  /// File path: assets/images/rome.jpg
+  AssetGenImage get rome => const AssetGenImage('assets/images/rome.jpg');
 
   /// File path: assets/images/rzym.jpg
   AssetGenImage get rzym => const AssetGenImage('assets/images/rzym.jpg');
@@ -30,7 +36,7 @@ class $AssetsImagesGen {
   AssetGenImage get santorini => const AssetGenImage('assets/images/santorini.jpg');
 
   /// List of all assets
-  List<AssetGenImage> get values => [barcelona, manchester, paryz, rzym, santorini];
+  List<AssetGenImage> get values => [barcelona, manchester, paris, paryz, rome, rzym, santorini];
 }
 
 class Assets {

@@ -3,14 +3,14 @@ class DreamPlace {
   final String name;
   final String description;
   final String assetPath;
-  final bool isFavourite;
+  final bool isFavorite;
 
   const DreamPlace({
     required this.id,
     required this.name,
     required this.description,
     required this.assetPath,
-    this.isFavourite = false,
+    this.isFavorite = false,
   });
 
   DreamPlace copyWith({
@@ -18,14 +18,14 @@ class DreamPlace {
     String? name,
     String? description,
     String? assetPath,
-    bool? isFavourite,
+    bool? isFavorite,
   }) {
     return DreamPlace(
       id: id ?? this.id,
       name: name ?? this.name,
       description: description ?? this.description,
       assetPath: assetPath ?? this.assetPath,
-      isFavourite: isFavourite ?? this.isFavourite,
+      isFavorite: isFavorite ?? this.isFavorite,
     );
   }
 
@@ -35,7 +35,7 @@ class DreamPlace {
       name: json["name"] as String? ?? "",
       description: json["description"] as String? ?? "",
       assetPath: json["imageUrl"] as String? ?? json["photoUrl"] as String? ?? "",
-      isFavourite: json["isFavorite"] as bool? ?? json["isFavourite"] as bool? ?? false,
+      isFavorite: json["isFavorite"] as bool? ?? json["isFavourite"] as bool? ?? false,
     );
   }
 
@@ -45,7 +45,7 @@ class DreamPlace {
       "name": name,
       "description": description,
       "imageUrl": assetPath,
-      "isFavorite": isFavourite,
+      "isFavorite": isFavorite,
     };
   }
 }

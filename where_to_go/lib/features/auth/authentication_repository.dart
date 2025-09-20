@@ -18,15 +18,40 @@ class AuthenticationRepository {
 
   Future<void> login({required String email, required String password}) async {
     final tokens = await _remote.login(email: email, password: password);
-    await _local.saveTokens(accessToken: tokens.access, refreshToken: tokens.refresh);
+    await _local.saveTokens(
+      accessToken: tokens.access,
+      refreshToken: tokens.refresh,
+    );
   }
 
   Future<void> register({required String email, required String password}) async {
     final tokens = await _remote.register(email: email, password: password);
-    await _local.saveTokens(accessToken: tokens.access, refreshToken: tokens.refresh);
+    await _local.saveTokens(
+      accessToken: tokens.access,
+      refreshToken: tokens.refresh,
+    );
   }
 
-  Future<void> logout() => _local.clear();
+  Future<void> logout() async {
+    try {
+      await _remote.logout();
+    } on Exception catch (_) {}
+    await _local.clear();
+  }
+
+  Future<bool> refreshToken() async {
+    final refresh = await _local.readRefreshToken();
+    if (refresh == null || refresh.isEmpty) return false;
+
+    final tokens = await _remote.refresh(refreshToken: refresh);
+    if (tokens == null) return false;
+
+    await _local.saveTokens(
+      accessToken: tokens.access,
+      refreshToken: tokens.refresh,
+    );
+    return true;
+  }
 
   Future<String?> readAccessToken() => _local.readAccessToken();
   Future<String?> readRefreshToken() => _local.readRefreshToken();
