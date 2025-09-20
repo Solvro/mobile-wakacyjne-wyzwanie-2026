@@ -30,7 +30,6 @@ final _baseDioProvider = Provider<Dio>((ref) {
   ));
 
   dio.interceptors.add(LogInterceptor(
-    request: true,
     requestBody: true,
     responseBody: true,
     responseHeader: false,
@@ -55,6 +54,6 @@ final dioProvider = Provider<Dio>((ref) {
   return buildAuthorizedDio(auth);
 });
 
-final isLoggedInProvider = FutureProvider<bool>((ref) async {
+final isLoggedInProvider = FutureProvider<bool>((ref) {
   return ref.read(authRepositoryProvider).isLoggedIn();
 });

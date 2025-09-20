@@ -40,9 +40,15 @@ class RemoteAuthenticationRepository {
       );
     } on DioException catch (e) {
       final status = e.response?.statusCode;
-      final msg = (e.response?.data is Map && e.response?.data["message"] is String)
-          ? e.response?.data["message"] as String
-          : e.message ?? "Błąd sieci";
+      String msg;
+
+      final data = e.response?.data;
+      if (data is Map<String, dynamic> && data["message"] is String) {
+        msg = data["message"] as String;
+      } else {
+        msg = e.message ?? "Błąd sieci";
+      }
+
       throw ApiAuthException(msg, status: status);
     }
   }
@@ -74,9 +80,15 @@ class RemoteAuthenticationRepository {
       );
     } on DioException catch (e) {
       final status = e.response?.statusCode;
-      final msg = (e.response?.data is Map && e.response?.data["message"] is String)
-          ? e.response?.data["message"] as String
-          : e.message ?? "Błąd sieci";
+      String msg;
+
+      final data = e.response?.data;
+      if (data is Map<String, dynamic> && data["message"] is String) {
+        msg = data["message"] as String;
+      } else {
+        msg = e.message ?? "Błąd sieci";
+      }
+
       throw ApiAuthException(msg, status: status);
     }
   }
@@ -86,7 +98,7 @@ class RemoteAuthenticationRepository {
   }) async {
     try {
       final res = await _dio.post<Map<String, dynamic>>(
-        ApiPaths.refresh, // "/api/auth/refresh"
+        ApiPaths.refresh,
         data: {"refreshToken": refreshToken},
       );
       if (res.statusCode == null || res.statusCode! >= 400 || res.data == null) {
@@ -95,7 +107,7 @@ class RemoteAuthenticationRepository {
       final data = res.data!;
       return (
         access: data["accessToken"]?.toString() ?? "",
-        refresh: (data["refreshToken"]?.toString()) ?? refreshToken,
+        refresh: data["refreshToken"]?.toString() ?? refreshToken,
       );
     } on DioException {
       return null;

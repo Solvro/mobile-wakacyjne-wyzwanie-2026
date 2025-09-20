@@ -17,7 +17,6 @@ Dio buildAuthorizedDio(AuthenticationRepository auth) {
   ));
 
   dio.interceptors.add(LogInterceptor(
-    request: true,
     requestBody: true,
     responseBody: true,
     responseHeader: false,

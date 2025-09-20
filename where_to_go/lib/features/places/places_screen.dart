@@ -71,7 +71,6 @@ class PlacesScreen extends ConsumerWidget {
                     },
                   ),
                   onTap: () {
-                    // Proste przejście bez ingerencji w go_router:
                     unawaited(
                       Navigator.of(context).push(
                         MaterialPageRoute(

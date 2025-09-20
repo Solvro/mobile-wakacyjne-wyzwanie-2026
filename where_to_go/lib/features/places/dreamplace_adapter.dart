@@ -3,7 +3,7 @@ import "dreamplace.dart";
 
 class DreamPlaceAdapter extends TypeAdapter<DreamPlace> {
   @override
-  final int typeId = 1;
+  final typeId = 1;
 
   @override
   DreamPlace read(BinaryReader reader) {

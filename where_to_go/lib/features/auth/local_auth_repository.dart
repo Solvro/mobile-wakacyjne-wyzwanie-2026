@@ -4,8 +4,8 @@ class LocalAuthenticationRepository {
   LocalAuthenticationRepository(this._storage);
   final FlutterSecureStorage _storage;
 
-  static const String kAccess = "access_token";
-  static const String kRefresh = "refresh_token";
+  static const kAccess = "access_token";
+  static const kRefresh = "refresh_token";
 
   Future<void> saveTokens({
     required String accessToken,
