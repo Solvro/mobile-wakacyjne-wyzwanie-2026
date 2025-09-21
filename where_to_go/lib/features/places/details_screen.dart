@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "places_provider.dart";
-//import "place.dart";
 
 class DetailsScreen extends ConsumerWidget {
   const DetailsScreen({super.key, required this.placeId});

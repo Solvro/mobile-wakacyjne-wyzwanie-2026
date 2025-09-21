@@ -76,3 +76,5 @@ class DreamPlacesController extends StateNotifier<AsyncValue<List<DreamPlace>>> 
     await _repo.toggleFavorite(id);
   }
 }
+
+final showFavoritesProvider = StateProvider<bool>((ref) => false);
