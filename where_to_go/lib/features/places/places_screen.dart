@@ -20,12 +20,11 @@ class PlacesScreen extends ConsumerWidget {
     final places = ref.watch(placesProvider);
     final showOnlyFav = ref.watch(showFavoritesProvider);
     final query = ref.watch(searchQueryProvider).toLowerCase();
-    final order = ref.watch(sortOrderProvider); 
+    final order = ref.watch(sortOrderProvider);
     final visible = places.where((p) {
       final matchesFav = !showOnlyFav || p.isFavorite;
-      final matchesQuery = query.isEmpty ||
-          p.title.toLowerCase().contains(query) ||
-          p.subtitle.toLowerCase().contains(query);
+      final matchesQuery =
+          query.isEmpty || p.title.toLowerCase().contains(query) || p.subtitle.toLowerCase().contains(query);
       return matchesFav && matchesQuery;
     }).toList();
 
@@ -38,14 +37,12 @@ class PlacesScreen extends ConsumerWidget {
             onPressed: () => ref.read(placesProvider.notifier).refresh(),
             icon: const Icon(Icons.refresh),
           ),
-
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 160),
               child: TextField(
-                onChanged: (v) =>
-                    ref.read(searchQueryProvider.notifier).state = v,
+                onChanged: (v) => ref.read(searchQueryProvider.notifier).state = v,
                 decoration: const InputDecoration(
                   hintText: "Szukaj...",
                   isDense: true,
@@ -55,7 +52,6 @@ class PlacesScreen extends ConsumerWidget {
               ),
             ),
           ),
-
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -65,12 +61,10 @@ class PlacesScreen extends ConsumerWidget {
               ),
               Switch(
                 value: showOnlyFav,
-                onChanged: (v) =>
-                    ref.read(showFavoritesProvider.notifier).state = v,
+                onChanged: (v) => ref.read(showFavoritesProvider.notifier).state = v,
               ),
             ],
           ),
-
           IconButton(
             tooltip: order == SortOrder.titleAsc ? "Sortuj Z→A" : "Sortuj A→Z",
             onPressed: () => ref.read(placesProvider.notifier).toggleSortOrder(),
@@ -78,7 +72,6 @@ class PlacesScreen extends ConsumerWidget {
               order == SortOrder.titleAsc ? Icons.sort_by_alpha : Icons.swap_vert,
             ),
           ),
-
           IconButton(
             tooltip: "Wyloguj",
             onPressed: () async {
@@ -152,8 +145,7 @@ class PlacesScreen extends ConsumerWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         IconButton(
-                          tooltip:
-                              p.isFavorite ? "Usuń z ulubionych" : "Dodaj do ulubionych",
+                          tooltip: p.isFavorite ? "Usuń z ulubionych" : "Dodaj do ulubionych",
                           icon: Icon(
                             p.isFavorite ? Icons.favorite : Icons.favorite_border,
                             color: p.isFavorite ? Colors.red : null,
@@ -174,8 +166,7 @@ class PlacesScreen extends ConsumerWidget {
                         IconButton(
                           tooltip: "Edytuj",
                           icon: const Icon(Icons.edit),
-                          onPressed: () =>
-                              _showPlaceForm(context, ref, initial: p),
+                          onPressed: () => _showPlaceForm(context, ref, initial: p),
                         ),
                       ],
                     ),
@@ -194,7 +185,7 @@ class PlacesScreen extends ConsumerWidget {
             ),
       floatingActionButton: FloatingActionButton(
         tooltip: "Dodaj miejsce",
-        onPressed: () => _showPlaceForm(context, ref), 
+        onPressed: () => _showPlaceForm(context, ref),
         child: const Icon(Icons.add),
       ),
     );
@@ -235,8 +226,7 @@ Future<void> _showPlaceForm(
             ),
             TextField(
               controller: imageCtrl,
-              decoration:
-                  const InputDecoration(labelText: "Obraz (asset lub URL)"),
+              decoration: const InputDecoration(labelText: "Obraz (asset lub URL)"),
             ),
           ],
         ),
