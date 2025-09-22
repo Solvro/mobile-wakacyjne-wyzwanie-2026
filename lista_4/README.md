@@ -7,24 +7,25 @@
 ## Authentication
 
 1. Stwórz `LocalAuthenticationRepository`, które ma za zadanie:
-    - zapisywać access i refresh token
-    - odczytywać access i refresh token
-    - usuwać access i refresh token
 
- w bezpieczny sposób i lokalnie na urządzeniu mobilnym (za pomocą keychain). Możesz użyć paczki typu: [flutter_secure_storage](https://pub.dev/packages/flutter_secure_storage) lub podobnej.  
+   - zapisywać access i refresh token
+   - odczytywać access i refresh token
+   - usuwać access i refresh token
+
+     w bezpieczny sposób i lokalnie na urządzeniu mobilnym (za pomocą keychain). Możesz użyć paczki typu: [flutter_secure_storage](https://pub.dev/packages/flutter_secure_storage) lub podobnej.
 
 2. Stwórz `RemoteAuthenticationRepository`, które ma za zadanie wysyłać żądania do API związane z authem:
-    - logowanie
-    - rejestracja
-    - odświeżenie tokenu
+   - logowanie
+   - rejestracja
+   - odświeżenie tokenu
 3. Stwórz `AuthenticationRepository`, które wykorzystuje `LocalAuthenticationRepository` i `RemoteAuthenticationRepository` i ma metody, które:
-    - odczytuje stan zalogowania (sprawdza i odczytuje token zapisany lokalnie. Niestety backend nie zwraca nam `expiredAt` tokenu, więc nie możemy w prosty sposób go tutaj odswiezyć ani sprawdzić czy nie jest przeterminowany)
-    - loguje się (wysyła żądanie logowania do serwera i w przypadku sukcesu zapisuje tokeny lokalnie)
-    - rejestruje się (wysyła żądanie rejestracji do serwera i w przypadku sukcesu zapisuje tokeny lokalnie)
-    - wylogowuje się (usuwa tokeny lokalnie)
+   - odczytuje stan zalogowania (sprawdza i odczytuje token zapisany lokalnie. Niestety backend nie zwraca nam `expiredAt` tokenu, więc nie możemy w prosty sposób go tutaj odswiezyć ani sprawdzić czy nie jest przeterminowany)
+   - loguje się (wysyła żądanie logowania do serwera i w przypadku sukcesu zapisuje tokeny lokalnie)
+   - rejestruje się (wysyła żądanie rejestracji do serwera i w przypadku sukcesu zapisuje tokeny lokalnie)
+   - wylogowuje się (usuwa tokeny lokalnie)
 4. Udostępniaj stan zalogowania za pomocą rozwiązania do global state management (np. riverpod). `AuthenticationRepository` może od razu wykorzystywać jakieś rozwiązanie i udostępniać to bezpośrednio lub możesz stworzyć dodatkową warstwę w postaci `AuthProvidera`/`AuthNotifiera`
 5. Stwórz singleton lub fabrykę (możesz wykorzystać np. `riverpoda` albo `get_it`) klienta http (np. z paczki `dio`), który ma wstrzyknięty token do headerów, jeśli user jest zalogowany. Będziemy wykorzystywać tego klienta wszędzie gdzie będziemy mieli potrzebę komunikować się z serwerem na endpointach, które wymagają zalogowania. Do stworzenia go wykorzystaj `AuthenticationRepository` albo `AuthProvider`/`AuthNotifiera`.
-6. Niestety backend nie zwraca `expiredAt`, czyli timestampa wygaśnięcia access tokenu, więc flow odświeżania sesji jest jako **ZADANIE DLA CHĘTNYCH**. W tym przypadku (jak nie ma `expiredAt`) jedyną opcją jest zrobienie wrappera lub proxy na wysyłane żądania lub całego klienta http, który będzie odświeżał token i powtarzał żądania w razie odrzucenia aktualnego tokenu. Nie jest to jednak najoptymalniejsze ani najprostsze, więc nie jest obowiązkowe zadanie. W wersji obowiązkowej, można założyć, że refresh token się nie przeterminowuje. 
+6. Niestety backend nie zwraca `expiredAt`, czyli timestampa wygaśnięcia access tokenu, więc flow odświeżania sesji jest jako **ZADANIE DLA CHĘTNYCH**. W tym przypadku (jak nie ma `expiredAt`) jedyną opcją jest zrobienie wrappera lub proxy na wysyłane żądania lub całego klienta http, który będzie odświeżał token i powtarzał żądania w razie odrzucenia aktualnego tokenu. Nie jest to jednak najoptymalniejsze ani najprostsze, więc nie jest obowiązkowe zadanie. W wersji obowiązkowej, można założyć, że refresh token się nie przeterminowuje.
 
 ## UI Logowania i Rejestracji
 
@@ -51,12 +52,12 @@ Wymienimy naszą lokalną bazę danych z dream miejscami na serwerowe API. Jeśl
 
 1. Jeśli na poprzedniej liście jeszcze nie zaimplementowaliście formularza/widoku do tworzenia nowych miejsc, czas go dodać teraz.
 2. Stwórzcie widok/formularz tworzenia `CreateDreamPlaceScreen` i umieście go gdzieś w aplikacji. Formularze w flutterze można zrobić na wiele sposobów:
-    - klasycznie [https://docs.flutter.dev/cookbook/forms/validation](https://docs.flutter.dev/cookbook/forms/validation), [https://medium.com/@ugamakelechi501/understanding-flutter-forms-a-detailed-guide-for-beginner-1e797da9a610](https://medium.com/@ugamakelechi501/understanding-flutter-forms-a-detailed-guide-for-beginner-1e797da9a610)
-    - flutter reactive forms (z opcjonalną generacją kodu): [https://pub.dev/packages/reactive_forms](https://pub.dev/packages/reactive_forms)
-    - flutter form builder: [https://pub.dev/packages/flutter_form_builder](https://pub.dev/packages/flutter_form_builder)
-    - jeśli ktoś lubi hooki: [https://pub.dev/packages/flutter_hook_form/example](https://pub.dev/packages/flutter_hook_form/example)
-    - jeśli ktoś lubi BLoCa: [https://pub.dev/packages/flutter_form_bloc](https://pub.dev/packages/flutter_form_bloc)
-    - i wiele wiele innych :))
+   - klasycznie [https://docs.flutter.dev/cookbook/forms/validation](https://docs.flutter.dev/cookbook/forms/validation), [https://medium.com/@ugamakelechi501/understanding-flutter-forms-a-detailed-guide-for-beginner-1e797da9a610](https://medium.com/@ugamakelechi501/understanding-flutter-forms-a-detailed-guide-for-beginner-1e797da9a610)
+   - flutter reactive forms (z opcjonalną generacją kodu): [https://pub.dev/packages/reactive_forms](https://pub.dev/packages/reactive_forms)
+   - flutter form builder: [https://pub.dev/packages/flutter_form_builder](https://pub.dev/packages/flutter_form_builder)
+   - jeśli ktoś lubi hooki: [https://pub.dev/packages/flutter_hook_form/example](https://pub.dev/packages/flutter_hook_form/example)
+   - jeśli ktoś lubi BLoCa: [https://pub.dev/packages/flutter_form_bloc](https://pub.dev/packages/flutter_form_bloc)
+   - i wiele wiele innych :))
 3. Pamiętajcie żeby było to gdzieś dostępne w nawigacji np. jako floating action button, app bar action, zakładka w nav/top barze lub cokolwiek innego.
 
 ### Uploadowanie zdjęć
