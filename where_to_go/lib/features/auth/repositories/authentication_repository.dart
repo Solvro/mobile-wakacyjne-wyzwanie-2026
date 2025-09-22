@@ -1,3 +1,1 @@
-class AuthenticationRepository {
-  
-}
+class AuthenticationRepository {}
