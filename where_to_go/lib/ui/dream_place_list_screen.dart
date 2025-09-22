@@ -2,10 +2,10 @@ import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:go_router/go_router.dart";
 
+import "../db/database.dart";
 import "../features/places/places_provider.dart";
 import "../features/theme/local_theme_repository.dart";
 import "../features/theme/theme_notifier.dart";
-import "../models/dream_place.dart";
 import "dream_place_screen.dart";
 
 class DreamPlaceListScreen extends ConsumerWidget {
@@ -13,7 +13,7 @@ class DreamPlaceListScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final places = ref.watch(placesProvider);
+    final placesAsync = ref.watch(placesProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -24,11 +24,15 @@ class DreamPlaceListScreen extends ConsumerWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(8, 20, 8, 0),
-        child: GridView.count(
-          crossAxisCount: 2,
-          mainAxisSpacing: 12,
-          childAspectRatio: 0.9,
-          children: places.map((place) => DreamPlaceListTile(place: place)).toList(),
+        child: placesAsync.when(
+          data: (List<DreamPlace> places) => GridView.count(
+            crossAxisCount: 2,
+            mainAxisSpacing: 12,
+            childAspectRatio: 0.9,
+            children: places.map<Widget>((place) => DreamPlaceListTile(place: place)).toList(),
+          ),
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (Object e, StackTrace st) => Center(child: Text("Error: $e")),
         ),
       ),
     );
@@ -73,7 +77,7 @@ class DreamPlaceListTile extends StatelessWidget {
                 aspectRatio: 1,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(12),
-                  child: Image.asset(place.imagePath, fit: BoxFit.cover),
+                  child: Image.network(place.imageUrl, fit: BoxFit.cover),
                 ),
               ),
             ),

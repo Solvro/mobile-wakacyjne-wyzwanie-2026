@@ -1,47 +1,67 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 
+import "../features/places/place_repository.dart";
 import "../features/places/places_provider.dart";
-import "../models/dream_place.dart";
 
 class DreamPlaceScreen extends ConsumerWidget {
   const DreamPlaceScreen({super.key, required this.placeId});
 
   static const route = "/places";
-  final String placeId;
+  final int? placeId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final place = ref.watch(placesProvider).firstWhere((place) => place.id == placeId);
+    final id = placeId;
+    if (id == null) {
+      return const Scaffold(body: Center(child: Text("Invalid place id")));
+    }
+    final placeAsync = ref.watch(placeByIdProvider(id));
 
-    return Scaffold(
-        backgroundColor: colorScheme.surface,
-        appBar: AppBar(
-          title: Text(place.name),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  ref.read(placesProvider.notifier).toggleFavorite(placeId);
+    return placeAsync.when(
+      loading: () => const Scaffold(body: Center(child: CircularProgressIndicator())),
+      error: (e, st) => Scaffold(body: Center(child: Text("Error: $e"))),
+      data: (place) {
+        if (place == null) {
+          return const Scaffold(body: Center(child: Text("Place not found")));
+        }
+
+        return Scaffold(
+          backgroundColor: colorScheme.surface,
+          appBar: AppBar(
+            title: Text(place.name),
+            actions: [
+              IconButton(
+                onPressed: () async {
+                  final repo = ref.read(dreamPlacesRepositoryProvider);
+                  await repo.toggleFavorite(place.id, isFavorite: !place.isFavorited);
                 },
-                icon: Icon(
-                  place.isFavorited ? Icons.favorite : Icons.favorite_border,
-                ),
+                icon: Icon(place.isFavorited ? Icons.favorite : Icons.favorite_border),
                 color:
-                    place.isFavorited ? colorScheme.error : theme.appBarTheme.foregroundColor ?? colorScheme.onSurface)
-          ],
-        ),
-        body: Column(children: [
-          Image.asset(place.imagePath, fit: BoxFit.cover),
-          DreamPlaceHeader(
-            name: place.name,
-            description: place.description,
+                    place.isFavorited ? colorScheme.error : theme.appBarTheme.foregroundColor ?? colorScheme.onSurface,
+              )
+            ],
           ),
-          DreamPlaceAttractions(
-            attractions: place.attractions,
-          )
-        ]));
+          body: Column(
+            children: [
+              AspectRatio(
+                aspectRatio: 16 / 9,
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Image.network(place.imageUrl, fit: BoxFit.cover),
+                ),
+              ),
+              DreamPlaceHeader(
+                name: place.name,
+                description: place.description,
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
 
@@ -77,84 +97,5 @@ class DreamPlaceHeader extends StatelessWidget {
             )
           ],
         ));
-  }
-}
-
-class DreamPlaceAttractions extends StatelessWidget {
-  final List<Attraction> attractions;
-
-  const DreamPlaceAttractions({
-    super.key,
-    required this.attractions,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const Padding(
-          padding: EdgeInsets.all(16),
-          child: SizedBox(
-            width: double.infinity,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _SectionTitle(text: "Top Attractions"),
-                SizedBox(
-                  height: 8,
-                ),
-              ],
-            ),
-          ),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: attractions
-              .map((attraction) => DreamPlaceAttractionTile(
-                    attraction: attraction,
-                  ))
-              .toList(),
-        )
-      ],
-    );
-  }
-}
-
-class DreamPlaceAttractionTile extends StatelessWidget {
-  final Attraction attraction;
-
-  const DreamPlaceAttractionTile({
-    super.key,
-    required this.attraction,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Icon(
-          attraction.icon,
-          color: Theme.of(context).iconTheme.color,
-        ),
-        Text(
-          attraction.label,
-          style: Theme.of(context).textTheme.bodyMedium,
-        )
-      ],
-    );
-  }
-}
-
-class _SectionTitle extends StatelessWidget {
-  const _SectionTitle({required this.text});
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    final textStyle = Theme.of(context).textTheme.titleLarge?.copyWith(
-          fontWeight: FontWeight.bold,
-        );
-    return Text(text, style: textStyle);
   }
 }

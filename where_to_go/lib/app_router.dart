@@ -13,7 +13,8 @@ final goRouter = GoRouter(
     GoRoute(
       path: "${DreamPlaceScreen.route}/:id",
       builder: (context, state) {
-        final id = state.pathParameters["id"]!;
+        final raw = state.pathParameters["id"]!;
+        final id = int.tryParse(raw);
         return DreamPlaceScreen(placeId: id);
       },
     ),
