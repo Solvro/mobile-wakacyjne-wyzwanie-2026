@@ -17,39 +17,16 @@ PlacesRepository repository(Ref ref) {
 }
 
 @riverpod
-class AllPlaces extends _$AllPlaces {
-  @override
-  FutureOr<List<DreamPlace>> build() async {
-    final repo = ref.watch(repositoryProvider);
-    return repo.getAllPlaces();
-  }
-
-  Future<void> refresh() async {
-    state = const AsyncLoading();
-    state = await AsyncValue.guard(() async {
-      final repo = ref.read(repositoryProvider);
-      return repo.getAllPlaces();
-    });
-  }
+Future<List<DreamPlace>> allPlaces(Ref ref, {SortOrder? sort}) {
+  final repo = ref.read(repositoryProvider);
+  return repo.getAllPlaces(sort: sort);
 }
 
 @riverpod
-class FavoritePlaces extends _$FavoritePlaces {
-  @override
-  FutureOr<List<DreamPlace>> build() async {
-    final repo = ref.read(repositoryProvider);
-    final all = await repo.getAllPlaces();
-    return all.where((p) => p.isFavourite).toList();
-  }
-
-  Future<void> refresh() async {
-    state = const AsyncLoading();
-    state = await AsyncValue.guard(() async {
-      final repo = ref.read(repositoryProvider);
-      final all = await repo.getAllPlaces();
-      return all.where((p) => p.isFavourite).toList();
-    });
-  }
+Future<List<DreamPlace>> favoritePlaces(Ref ref, {SortOrder? sort}) async {
+  final repo = ref.read(repositoryProvider);
+  final all = await repo.getAllPlaces(sort: sort);
+  return all.where((p) => p.isFavourite).toList();
 }
 
 @riverpod

@@ -19,6 +19,7 @@ class AppRoutes {
   static const String register = "/register";
   static const String settings = "/settings";
   static const String create = "/create";
+  static const String edit = "/edit/";
 }
 
 GoRouter createRouter(WidgetRef ref) {
@@ -56,7 +57,14 @@ GoRouter createRouter(WidgetRef ref) {
       ),
       GoRoute(
         path: AppRoutes.create,
-        builder: (context, state) => CreateDreamPlaceScreen(),
+        builder: (context, state) => const CreateOrEditDreamPlaceScreen(),
+      ),
+      GoRoute(
+        path: "${AppRoutes.edit}:id",
+        builder: (context, state) {
+          final id = int.parse(state.pathParameters["id"]!);
+          return CreateOrEditDreamPlaceScreen(editId: id);
+        },
       ),
     ],
     refreshListenable: authListener,

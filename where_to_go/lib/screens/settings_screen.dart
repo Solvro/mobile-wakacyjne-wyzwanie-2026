@@ -1,7 +1,9 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
-import "package:go_router/go_router.dart";
 import "../auth/auth_provider.dart";
+import "../theme/local_theme_repository.dart";
+import "../theme/theme_notifier.dart";
+import "shared_widgets/app_navigation_bar.dart";
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -9,6 +11,7 @@ class SettingsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authNotifier = ref.read(authNotifierProvider.notifier);
+    final themeNotifier = ref.watch(themeNotifierProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(
@@ -16,6 +19,13 @@ class SettingsScreen extends ConsumerWidget {
       ),
       body: ListView(
         children: [
+          ListTile(
+            leading: Icon(ref.watch(themeNotifierProvider).value == AppThemeMode.light
+                ? Icons.dark_mode_rounded
+                : Icons.light_mode_rounded),
+            title: const Text("Zmień motyw"),
+            onTap: themeNotifier.toggleTheme,
+          ),
           ListTile(
             leading: const Icon(Icons.refresh),
             title: const Text("Odśwież login"),
@@ -50,36 +60,7 @@ class SettingsScreen extends ConsumerWidget {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_rounded),
-            label: "Strona główna",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite_rounded),
-            label: "Ulubione",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings_rounded),
-            label: "Ustawienia",
-          ),
-        ],
-        selectedItemColor: Theme.of(context).colorScheme.primary,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        iconSize: 32,
-        currentIndex: 2,
-        onTap: (index) {
-          if (index == 0) {
-            context.go("/");
-          } else if (index == 1) {
-            context.go("/favorites");
-          } else if (index == 2) {
-            context.go("/settings");
-          }
-        },
-      ),
+      bottomNavigationBar: const AppNavigationBar(currentIndex: 2),
     );
   }
 }

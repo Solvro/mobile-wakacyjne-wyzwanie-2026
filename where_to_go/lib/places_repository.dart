@@ -6,6 +6,13 @@ import "package:reactive_image_picker/reactive_image_picker.dart";
 
 import "models/dream_place.dart";
 
+enum SortOrder {
+  asc,
+  desc;
+
+  String get value => name;
+}
+
 class PlacesRepository {
   final Dio _dio;
 
@@ -13,11 +20,11 @@ class PlacesRepository {
     unawaited(getAllPlaces());
   }
 
-  Future<List<DreamPlace>> getAllPlaces() async {
+  Future<List<DreamPlace>> getAllPlaces({SortOrder? sort}) async {
     final response = await _dio.get<Map<String, dynamic>>(
       "/places",
       queryParameters: {
-        "sort": "asc",
+        "sort": sort?.value ?? SortOrder.asc.value,
         "sortBy": "name",
       },
     );
@@ -77,6 +84,25 @@ class PlacesRepository {
     );
 
     return (response.data?["filename"] ?? "") as String;
+  }
+
+  Future<void> updatePlaceFromForm(
+      {required int id,
+      required String city,
+      required String country,
+      required String description,
+      XFile? imageFile}) async {
+    String filename = "";
+    if (imageFile != null) {
+      filename = await addPhoto(imageFile);
+    } else {
+      final existingPlace = await getPlaceById(id);
+      if (existingPlace != null) {
+        filename = existingPlace.imageUrl;
+      }
+    }
+    final name = "$city, $country";
+    await updatePlace(DreamPlace(id: id, name: name, description: description, imageUrl: filename));
   }
 
   /* // InfoColumns

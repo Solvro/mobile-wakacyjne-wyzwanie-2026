@@ -32,7 +32,7 @@ class RegisterScreen extends ConsumerWidget {
                 controller: usernameController,
                 decoration: const InputDecoration(
                   labelText: "Nazwa użytkownika",
-                  hintText: "Nazwa użytkownika",
+                  hintText: "Wprowadź nazwę użytkownika",
                 ),
               ),
               const SizedBox(height: 24),
@@ -40,7 +40,7 @@ class RegisterScreen extends ConsumerWidget {
                 controller: emailController,
                 decoration: const InputDecoration(
                   labelText: "E-mail",
-                  hintText: "E-mail",
+                  hintText: "Wprowadź adres e-mail",
                 ),
               ),
               const SizedBox(height: 24),
@@ -48,7 +48,7 @@ class RegisterScreen extends ConsumerWidget {
                 controller: passwordController,
                 decoration: const InputDecoration(
                   labelText: "Hasło",
-                  hintText: "Hasło",
+                  hintText: "Wprowadź hasło",
                 ),
                 obscureText: true,
               ),

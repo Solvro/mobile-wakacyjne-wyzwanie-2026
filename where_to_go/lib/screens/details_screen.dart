@@ -1,6 +1,8 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:go_router/go_router.dart";
 
+import "../app_router.dart";
 import "../places_providers.dart";
 
 class DetailsScreen extends ConsumerWidget {
@@ -35,6 +37,12 @@ class DetailsScreen extends ConsumerWidget {
               title: Text(place.name),
               actions: [
                 IconButton(
+                  icon: const Icon(Icons.edit_rounded),
+                  onPressed: () async {
+                    await context.push("${AppRoutes.edit}${place.id}");
+                  },
+                ),
+                IconButton(
                   icon: AnimatedSwitcher(
                     duration: const Duration(milliseconds: 300),
                     transitionBuilder: (child, animation) => ScaleTransition(scale: animation, child: child),
@@ -53,40 +61,82 @@ class DetailsScreen extends ConsumerWidget {
             ),
             body: Column(
               children: [
-                Hero(
-                  tag: place.name,
-                  child: place.imageUrl.isNotEmpty ? imageWidget : Container(height: 200, color: Colors.grey.shade300),
+                Column(
+                  children: [
+                    Hero(
+                      tag: place.name,
+                      child:
+                          place.imageUrl.isNotEmpty ? imageWidget : Container(height: 200, color: Colors.grey.shade300),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 40),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            placeName,
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                          const SizedBox(
+                            height: 8,
+                            width: double.infinity,
+                          ),
+                          Text(place.description, style: Theme.of(context).textTheme.bodyLarge),
+                        ],
+                      ),
+                    ),
+                    /*infoColumns.when(
+                      loading: () => const Center(child: CircularProgressIndicator()),
+                      error: (error, stackTrace) => Center(child: Text("Error: $error")),
+                      data: (columns) => Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: columns
+                            .map((e) => InfoColumn(
+                                  icon: PlaceIcon.fromString(e.iconName).icon,
+                                  text: e.infoText,
+                                ))
+                            .toList(),
+                      ),
+                    )*/
+                  ],
                 ),
+                Expanded(child: Container()),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 40),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        placeName,
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                      const SizedBox(
-                        height: 8,
-                        width: double.infinity,
-                      ),
-                      Text(place.description, style: Theme.of(context).textTheme.bodyLarge),
-                    ],
+                  padding: const EdgeInsets.all(32),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      icon: const Icon(Icons.delete_forever_rounded),
+                      label: const Text("Usuń miejsce"),
+                      onPressed: () async {
+                        final confirmed = await showDialog<bool>(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                                  title: const Text("Usunąć to miejsce?"),
+                                  content: const Text(
+                                      "Czy na pewno chcesz usunąć to miejsce? \nTej operacji nie można cofnąć."),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => context.pop(false),
+                                      child: const Text("Anuluj"),
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: () => context.pop(true),
+                                      child: const Text("Usuń"),
+                                    ),
+                                  ],
+                                ));
+                        if (confirmed ?? false) {
+                          await ref.read(repositoryProvider).deletePlace(place.id);
+                          invalidateProviders(ref, id);
+                          if (context.mounted) {
+                            context.pop();
+                          }
+                        }
+                      },
+                    ),
                   ),
-                ),
-                /*infoColumns.when(
-                  loading: () => const Center(child: CircularProgressIndicator()),
-                  error: (error, stackTrace) => Center(child: Text("Error: $error")),
-                  data: (columns) => Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: columns
-                        .map((e) => InfoColumn(
-                              icon: PlaceIcon.fromString(e.iconName).icon,
-                              text: e.infoText,
-                            ))
-                        .toList(),
-                  ),
-                )*/
+                )
               ],
             ),
           );

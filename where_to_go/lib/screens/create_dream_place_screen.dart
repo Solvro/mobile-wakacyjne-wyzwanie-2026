@@ -15,41 +15,44 @@ enum FormKeys {
   image,
 }
 
-class CreateDreamPlaceScreen extends ConsumerWidget {
-  CreateDreamPlaceScreen({super.key});
-
-  final form = fb.group({
-    FormKeys.city.name: ["", Validators.required],
-    FormKeys.country.name: ["", Validators.required],
-    FormKeys.description.name: ["", Validators.required],
-    FormKeys.image.name: FormControl<List<SelectedFile>>(validators: [Validators.required]),
-  });
+class CreateOrEditDreamPlaceScreen extends ConsumerWidget {
+  final int? editId;
+  const CreateOrEditDreamPlaceScreen({super.key, this.editId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final existingPlace = editId != null ? ref.read(placeDetailsProvider(editId!)).value : null;
+    final city = existingPlace?.name.split(RegExp(r",\s*")).first;
+    final country = existingPlace?.name.split(RegExp(r",\s*")).last;
+    final form = fb.group({
+      FormKeys.city.name: [city ?? "", Validators.required],
+      FormKeys.country.name: [country ?? "", Validators.required],
+      FormKeys.description.name: [existingPlace?.description ?? "", Validators.required],
+      FormKeys.image.name:
+          FormControl<List<SelectedFile>>(validators: existingPlace == null ? [Validators.required] : []),
+    });
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Dodaj nowe miejsce"),
+        title: Text(editId != null ? "Edytuj miejsce" : "Dodaj nowe miejsce"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(24),
-        child: _buildForm(context, ref),
+        child: _buildForm(context, ref, form),
       ),
     );
   }
 
-  Widget _buildForm(BuildContext context, WidgetRef ref) {
-    return CreateDreamPlaceForm(form: form);
+  Widget _buildForm(BuildContext context, WidgetRef ref, FormGroup form) {
+    return CreateDreamPlaceForm(form: form, editId: editId);
   }
 }
 
 class CreateDreamPlaceForm extends ConsumerWidget {
-  const CreateDreamPlaceForm({
-    super.key,
-    required this.form,
-  });
+  const CreateDreamPlaceForm({super.key, required this.form, this.editId});
 
   final FormGroup form;
+  final int? editId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -61,7 +64,7 @@ class CreateDreamPlaceForm extends ConsumerWidget {
           children: <Widget>[
             ReactiveTextField<String>(
               formControlName: FormKeys.city.name,
-              decoration: const InputDecoration(labelText: "Miasto"),
+              decoration: const InputDecoration(labelText: "Miasto", hintText: "Wpisz nazwę miasta..."),
               validationMessages: {
                 ValidationMessage.required: (_) => "Miasto jest wymagane",
               },
@@ -71,7 +74,7 @@ class CreateDreamPlaceForm extends ConsumerWidget {
             ),
             ReactiveTextField<String>(
               formControlName: FormKeys.country.name,
-              decoration: const InputDecoration(labelText: "Kraj"),
+              decoration: const InputDecoration(labelText: "Kraj", hintText: "Wpisz nazwęę kraju..."),
               validationMessages: {
                 ValidationMessage.required: (_) => "Kraj jest wymagany",
               },
@@ -83,7 +86,7 @@ class CreateDreamPlaceForm extends ConsumerWidget {
               formControlName: FormKeys.description.name,
               minLines: 1,
               maxLines: 5,
-              decoration: const InputDecoration(labelText: "Opis"),
+              decoration: const InputDecoration(labelText: "Opis", hintText: "Wpisz opis miejsca..."),
               validationMessages: {
                 ValidationMessage.required: (_) => "Opis jest wymagany",
               },
@@ -93,7 +96,7 @@ class CreateDreamPlaceForm extends ConsumerWidget {
             ),
             ReactiveImagePicker(
               formControlName: FormKeys.image.name,
-              decoration: const InputDecoration(labelText: "Obraz", hintText: "Wybierz obraz"),
+              decoration: const InputDecoration(labelText: "Zdjęcie"),
               modes: const [ImagePickerMode.cameraImage, ImagePickerMode.galleryImage],
               selectedImageBuilder: (file) {
                 return Padding(
@@ -107,19 +110,25 @@ class CreateDreamPlaceForm extends ConsumerWidget {
                 final hasError = form.control(FormKeys.image.name).hasError(ValidationMessage.required) &&
                     form.control(FormKeys.image.name).touched;
                 return SizedBox(
-                  height: 24,
+                  height: editId != null ? 48 : 24,
+                  width: double.infinity,
                   child: TextButton(
                     style: ButtonStyle(
                       alignment: Alignment.centerLeft,
                       padding: WidgetStateProperty.all(EdgeInsets.zero),
                     ),
                     onPressed: onPressed,
-                    child: Text("Zdjęcie",
+                    child: Text(
+                        editId != null
+                            ? "Dotknij, aby wybrać nowe zdjęcie \n(pozostaw puste, aby nie zmieniać)"
+                            : "Dotknij, aby wybrać zdjęcie",
                         style: hasError
                             ? Theme.of(context).textTheme.bodyLarge?.copyWith(
                                   color: Theme.of(context).colorScheme.error,
                                 )
-                            : Theme.of(context).textTheme.bodyLarge),
+                            : Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                  color: Colors.grey,
+                                )),
                   ),
                 );
               },
@@ -186,12 +195,12 @@ class CreateDreamPlaceForm extends ConsumerWidget {
             ElevatedButton(
               onPressed: () async {
                 if (form.valid) {
-                  await submitForm(form, context, ref);
+                  await submitForm(form, context, ref, editId);
                 } else {
                   form.markAllAsTouched();
                 }
               },
-              child: const Text("Dodaj"),
+              child: Text(editId != null ? "Zapisz" : "Dodaj"),
             ),
           ],
         ),
@@ -200,7 +209,7 @@ class CreateDreamPlaceForm extends ConsumerWidget {
   }
 }
 
-Future<void> submitForm(FormGroup form, BuildContext context, WidgetRef ref) async {
+Future<void> submitForm(FormGroup form, BuildContext context, WidgetRef ref, int? editId) async {
   final city = form.control(FormKeys.city.name).value as String;
   final country = form.control(FormKeys.country.name).value as String;
   final description = form.control(FormKeys.description.name).value as String;
@@ -208,6 +217,26 @@ Future<void> submitForm(FormGroup form, BuildContext context, WidgetRef ref) asy
 
   try {
     final repo = ref.read(repositoryProvider);
+
+    if (editId != null) {
+      await repo.updatePlaceFromForm(
+        id: editId,
+        city: city,
+        country: country,
+        description: description,
+        imageFile: image.isNotEmpty ? image.first.file! : null,
+      );
+
+      log("Updated place: $city, $country, $description");
+
+      if (!context.mounted) {
+        return;
+      }
+      ref.invalidate(placeDetailsProvider(editId));
+      ref.invalidate(allPlacesProvider);
+      context.pop();
+      return;
+    }
     await repo.addPlaceFromForm(
       city: city,
       country: country,

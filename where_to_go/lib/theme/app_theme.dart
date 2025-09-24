@@ -83,7 +83,7 @@ final InputDecorationTheme _inputDecorationTheme = InputDecorationTheme(
   filled: true,
   fillColor: ColorConsts.surface,
   contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-  floatingLabelBehavior: FloatingLabelBehavior.never,
+  floatingLabelBehavior: FloatingLabelBehavior.always,
   hintStyle: const TextStyle(
     color: Colors.grey,
   ),
