@@ -4,15 +4,19 @@ import "package:shared_preferences/shared_preferences.dart";
 
 import "local_theme_repository.dart";
 
-final sharedPreferencesProvider = FutureProvider<SharedPreferences>((ref) async {
-  return SharedPreferences.getInstance();
-});
+part "theme_providers.g.dart";
 
-final themeRepositoryProvider = Provider<ThemeRepository>((ref) {
+@riverpod
+Future<SharedPreferences> sharedPreferences(Ref ref) async {
+  return SharedPreferences.getInstance();
+}
+
+@riverpod
+ThemeRepository themeRepository(Ref ref) {
   final sharedPreferences = ref.watch(sharedPreferencesProvider).value;
 
   if (sharedPreferences == null) {
     throw Exception("SharedPreferences not initialized");
   }
   return LocalThemeRepository(sharedPreferences);
-});
+}
