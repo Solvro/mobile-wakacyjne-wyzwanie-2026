@@ -17,32 +17,14 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeAsync = ref.watch(themeNotifierProvider);
-    final repoAsync = ref.watch(localThemeRepositoryProvider);
-    ThemeMode themeMode = ThemeMode.system;
-    repoAsync.when(
-      data: (repo) {
-        final stored = repo.getThemeMode();
-        if (stored == null) {
-          themeMode = ThemeMode.system;
-        } else {
-          themeMode = switch (stored) {
-            AppThemeMode.light => ThemeMode.light,
-            AppThemeMode.dark => ThemeMode.dark,
-          };
-        }
-      },
-      error: (_, __) => themeMode = ThemeMode.system,
-      loading: () {
-        themeAsync.whenData((mode) {
-          themeMode = switch (mode) {
-            AppThemeMode.light => ThemeMode.light,
-            AppThemeMode.dark => ThemeMode.dark,
-          };
-        });
-      },
-    );
-
     final appTheme = AppTheme();
+    ThemeMode themeMode = ThemeMode.system;
+    themeAsync.whenData((mode) {
+      themeMode = switch (mode) {
+        AppThemeMode.light => ThemeMode.light,
+        AppThemeMode.dark => ThemeMode.dark,
+      };
+    });
 
     return MaterialApp.router(
       title: "Where2Go",

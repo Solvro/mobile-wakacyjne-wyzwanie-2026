@@ -4,6 +4,7 @@ import "package:go_router/go_router.dart";
 
 import "../db/database.dart";
 import "../features/places/places_provider.dart";
+import "../features/theme/app_theme.dart";
 import "../features/theme/local_theme_repository.dart";
 import "../features/theme/theme_notifier.dart";
 import "dream_place_screen.dart";
@@ -23,18 +24,19 @@ class DreamPlaceListScreen extends ConsumerWidget {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(8, 20, 8, 0),
-        child: placesAsync.when(
-          data: (List<DreamPlace> places) => GridView.count(
-            crossAxisCount: 2,
-            mainAxisSpacing: 12,
-            childAspectRatio: 0.9,
-            children: places.map<Widget>((place) => DreamPlaceListTile(place: place)).toList(),
-          ),
-          loading: () => const Center(child: CircularProgressIndicator()),
-          error: (Object e, StackTrace st) => Center(child: Text("Error: $e")),
-        ),
-      ),
+          padding: const EdgeInsets.fromLTRB(8, 20, 8, 0),
+          child: switch (placesAsync) {
+            AsyncError(:final error, :final stackTrace) => Center(
+                child: Text("Error: $error\n$stackTrace"),
+              ),
+            AsyncValue(value: final places) when places != null => GridView.count(
+                crossAxisCount: 2,
+                mainAxisSpacing: 12,
+                childAspectRatio: 0.9,
+                children: places.map<Widget>((place) => DreamPlaceListTile(place: place)).toList(),
+              ),
+            _ => const Center(child: CircularProgressIndicator()),
+          }),
     );
   }
 }
@@ -91,9 +93,7 @@ class DreamPlaceListTile extends StatelessWidget {
                   Icon(
                     place.isFavorited ? Icons.favorite : Icons.favorite_border,
                     size: 16,
-                    color: place.isFavorited
-                        ? Theme.of(context).colorScheme.error
-                        : (Theme.of(context).iconTheme.color ?? Theme.of(context).colorScheme.onSurface),
+                    color: place.isFavorited ? context.colorScheme.error : context.colorScheme.onSurface,
                   ),
                 ],
               ),
