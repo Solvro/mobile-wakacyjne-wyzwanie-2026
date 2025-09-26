@@ -49,7 +49,7 @@ class _ThemeToggleButton extends ConsumerWidget {
     final mode = ref.watch(themeNotifierProvider).asData?.value ??
         (MediaQuery.platformBrightnessOf(context) == Brightness.light ? AppThemeMode.light : AppThemeMode.dark);
     final isLight = mode == AppThemeMode.light;
-    final icon = isLight ? Icons.light_mode : Icons.dark_mode;
+    final icon = isLight ? Icons.dark_mode : Icons.light_mode;
 
     return IconButton(
       icon: Icon(icon),

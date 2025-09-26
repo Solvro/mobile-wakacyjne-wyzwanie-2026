@@ -5,7 +5,6 @@ import "app_router.dart";
 import "features/theme/app_theme.dart";
 import "features/theme/local_theme_repository.dart";
 import "features/theme/theme_notifier.dart";
-import "gen/fonts.gen.dart";
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -29,12 +28,8 @@ class MyApp extends ConsumerWidget {
     return MaterialApp.router(
       title: "Where2Go",
       themeMode: themeMode,
-      theme: appTheme.light.copyWith(
-        textTheme: appTheme.light.textTheme.apply(fontFamily: FontFamily.plusJakartaSans),
-      ),
-      darkTheme: appTheme.dark.copyWith(
-        textTheme: appTheme.dark.textTheme.apply(fontFamily: FontFamily.plusJakartaSans),
-      ),
+      theme: appTheme.light,
+      darkTheme: appTheme.dark,
       routerConfig: goRouter,
     );
   }
