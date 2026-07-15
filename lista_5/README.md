@@ -1,45 +1,48 @@
-# Lista 5 (Filtrowanie, sortowanie, wyszukiwanie i dokończenie CRUD-a)
+# Lista 5 (Filtrowanie, sortowanie, wyszukiwanie i CRUD)
 
-- Całość listy robimy na podstawie kodu z listy 4 oraz tego samego API.
+- Kontynuacja listy 4, to samo API.
+
+## Formularz CREATE i dokończenie CRUD
+
+Po liście 4 powinny być READ oraz UPDATE `isFavorite`. Dopełnij aplikację do pełnego CRUD:
+
+1. **CREATE** — formularz tworzenia miejsca (`CreateDreamPlaceScreen` lub wspólny ekran create/edit).
+    - Pola np. nazwa, opis; `imageUrl` możesz podać jako tekst / stały placeholder (upload zdjęć nie jest obowiązkowy).
+    - Umieść wejście do formularza w nawigacji (FAB, AppBar, itd.).
+    - Formularze: klasycznie ([dokumentacja](https://docs.flutter.dev/cookbook/forms/validation)) albo inną wybraną biblioteką.
+
+2. **DELETE** — przycisk usuwający miejsce (lista lub szczegóły), albo slide-to-dismiss.
+
+3. **EDIT** — ten sam formularz w trybach `CREATE` i `EDIT` + przycisk otwierający edycję danego miejsca.
+
+4. Upewnij się, że tworzenie i edycja działają end-to-end z API.
 
 ## Filtrowanie
 
-Filtry nie są dostępne w tym API, więc zaimplementujemy to w pełni po stronie klienta (po stronie naszej aplikacji)
+Filtry nie są w API — robimy je po stronie klienta.
 
-1. **Dodaj switch** - albo inny prosty element UI, który pozwoli nam włączać filtr "pokazuj tylko ulubione"
-
-2. **Dodaj zarządzanie stanem** - zdecyduj czy ta flaga to w naszej aplikacji stan globalny czy lokalny i go w ten sposób zaimplementuj.
-
-3. **Filtruj na podstawie tego flitru** - Zepnij stan z tym co widzimy na liście miejsc na ekranie. Można to filtrowanie wydzielić do jakiejś innej warstwy np. jako osobny provider riverpodowy, albo odfiltrować bezpośrednio w UI (jeśli zdecydowaliście się na stan lokalny).
+1. **UI** — switch (lub podobny) „pokazuj tylko ulubione”.
+2. **Stan** — lokalny albo globalny.
+3. **Powiązanie z listą** — odfiltruj miejsca według flagi (provider albo bezpośrednio w UI).
 
 ## Wyszukiwanie
 
-Wyszukanie po nazwie również nie jest dostępne w API, więc zaimplementujemy to po stronie klienta.
+Wyszukiwanie po nazwie też po stronie klienta.
 
-1. **Dodaj pole wyszukiwania** - w głównym ekranie dodaj `SearchBar` lub `TextField` z ikoną wyszukiwania. Na przykład do app bara.
-
-2. **Dodaj zarządzanie stanem** - zdecyduj czy wyszukana fraza to w naszej aplikacji stan globalny czy lokalny i go w ten sposób zaimplementuj.
-
-3. **Użyj szukanej frazy do filtrowania** - Jeżeli twoja fraza to stan globalny, to możesz np. dodać riverpodowy provider `filteredPlaces` który będzie zależeć od pełnej kolekcji miejsc oraz wyszukanej frazy i dokonywać filtrowania po nazwie. Jeśli twoja fraza to stan lokalny, to filtrowania można dokonać bezpośrednio w widgetcie.
-
-4. Jeżeli wyszukanie odbywało się po stronie serwera, to musielibyśmy dodać jeszcze debouncing, ale tutaj nie powinien być potrzebny.
+1. **UI** — `SearchBar` / `TextField` na ekranie głównym (np. w AppBar).
+2. **Stan** — lokalny albo globalny.
+3. **Filtrowanie po frazie** — np. provider `filteredPlaces` albo filtr w widgetcie.
+4. Debouncing nie jest wymagany (wyszukiwanie lokalne).
 
 ## Sortowanie
 
-Sortowanie udostępnia nam API, więc zrobimy je po stronie serwera.
+Sortowanie jest w API — robimy je po stronie serwera.
 
-1. Należy dodać w `DreamPlacesRepository` repository parametr albo dodatkową metodę do fetchowania miejsc z określonym sortowaniem. Sposób na sortowanie należy sprawdzić w dokumentacji API.
+1. W `DreamPlacesRepository` dodaj parametr lub metodę z sortowaniem (szczegóły w dokumentacji API).
+2. Minimum: jedno pole, rosnąco / malejąco (np. nazwa).
+3. W UI prosty przycisk przełączający kolejność + stan (lokalny lub globalny).
+4. Spięcie stanu sortowania z fetchowaniem listy (np. family provider w Riverpod).
 
-2. Jako wymagane minimum wystarczy wybrać jedno pole i dodać możliwość sortowania rosnąco lub malejąco po nim (np. nazwa miejsca).
+## Dla chętnych
 
-3. Wybór kolejności sortowania należy w jakiś prosty sposób zaimplementować w UI np. za pomocą buttona, który "toggluje" kolejność sortowania. Przechowuj to jako jakiś stan (zdecyduj się czy to stan globalny czy lokalny).
-
-4. Należy spiąć stan naszego sortowania z tym jaka metoda w repozytorium pobiera nam miejsca do wyświetlenia na liście miejsc. Przykładowo można to zrobić za pomocą family providera z riverpoda, który jako argument przyjmuje kolejność sortowania, lub jeśli stan kolejności sortowania jest globalny, to provider z listą miejsc może po prostu zależeć od stanu kolejności sortowania.
-
-## Dokończenie CRUDA
-
-Po liscie 4 powinnismy mieć READ, CREATE i ewentualnie UPDATE ale tylko `isFavorite`. Należy teraz do dopełnić naszą apkę do pełnego CRUDa, przez:  
-    - dodanie buttona, który usuwa nasze wymarzone miejsce (na liscie lub w widoku szczegółowym). Alternatywnie można zrobić "slide to dismiss" zamiast buttona.
-    - przerobienie naszego formularza z listy 4, aby obsługiwać dwa tryby: `EDIT` lub `CREATE` i pozwalał za równo na dodawanie nowych jak i edytowanie istniejących elementów w zależności od tego co chcemy zrobić.
-    - Dodanie buttona który otwiera nasz formularz w trybie edycji danego miejsca.
-    - Sprawdźcie czy button do tworzenia z poprzedniej listy nadal działa!
+- Upload zdjęcia na serwer (`PhotosRepository`) i tworzenie / edycja miejsca ze zdjęciem zamiast ręcznego `imageUrl`.

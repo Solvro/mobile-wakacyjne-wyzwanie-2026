@@ -15,18 +15,18 @@ Kurs został zaprojektowany jako intensywny, 7-tygodniowy program, łączący re
 
 ## Spis treści
 
-* Lista 0 (Podstawy Darta i Konfiguracja Środowiska).  
-Zgłębianie kluczowych elementów składni języka Dart, instalacja Flutter SDK oraz przygotowanie profesjonalnego środowiska programistycznego (IDE i emulator/urządzenie).
-* Lista 1 (Podstawowe funkcjonalności Flutter'a).  
-Wprowadzenie do filozofii "Everything's a widget". Praktyczne wykorzystanie widżetów Stateless i Stateful oraz budowanie pierwszych, responsywnych layoutów.
-* Lista 2 (Zarządzanie stanem i nawigacja w aplikacji).  
-Implementacja przepływu danych i logiki za pomocą wzorców zarządzania stanem (Riverpod, flutter_hooks) oraz obsługa nawigacji między ekranami przy użyciu GoRouter API.
-* Lista 3 (Trwałość Danych i Adaptacyjny Interfejs).  
-Wykorzystanie pamięci lokalnej do przechowywania danych aplikacji (np. shared_preferences, sqlite, no-sql) oraz implementacja dynamicznej zmiany motywu (Light/Dark Theme) w oparciu o stan aplikacji.
-* Lista 4 (Pozyskiwanie danych z api i autentykacja użytkownika).  
-Obsługa zapytań HTTP do zewnętrznych API, przetwarzanie danych w formacie JSON oraz implementacja kompletnego procesu autentykacji użytkownika (rejestracja, logowanie).
-* Lista 5 (Filtrowanie, wyszukiwanie i dokończenie CRUD-a).  
-Kompleksowa implementacja operacji CRUD (Create, Read, Update, Delete) na zbiorze danych, uzupełniona o funkcjonalności dynamicznego wyszukiwania i filtrowania wyników.
+* Lista 0 (Dart i środowisko).  
+Składnia Darta, instalacja Flutter SDK, IDE i emulator/urządzenie.
+* Lista 1 (Podstawy Fluttera).  
+Widgety Stateless/Stateful, layout, lista miejsc i ekran szczegółów. Generowanie assets i dopracowanie UI — dla chętnych.
+* Lista 2 (Stan i nawigacja).  
+Flutter Hooks, Riverpod, GoRouter.
+* Lista 3 (Dane lokalne i motyw).  
+shared_preferences, motyw jasny/ciemny, lokalna baza (READ + ulubione).
+* Lista 4 (API i autentykacja).  
+HTTP/JSON, logowanie i rejestracja, podpięcie listy miejsc i ulubionych pod API.
+* Lista 5 (Filtrowanie i CRUD).  
+CREATE/EDIT/DELETE, filtrowanie, wyszukiwanie i sortowanie. Upload zdjęć — dla chętnych.
 
 ## Projekt
 
@@ -41,10 +41,6 @@ Aby zapewnić sprawną organizację kursu oraz efektywną komunikację, wszyscy 
 * **Organizacja Pracy w Git:** Prace nad zadaniami należy prowadzić na osobnej gałęzi (branch) w systemie Git, stosując format nazewnictwa: `{numer_listy}-{imie}-{nazwisko}`.
 
 * **Zgłaszanie Zadań do Sprawdzenia:** Ukończone zadania należy zgłaszać poprzez utworzenie Pull Requesta na platformie GitHub. Tytuł Pull Requesta musi być zgodny ze schematem: `{numer_listy}-{imie}-{nazwisko}` oraz w opisie pull requesta powinny być załączone screenshoty pokazujące stworzone UI. Pipeline (CI/CD) powiązany z Pull Requestem musi przechodzić poprawnie – wszystkie jego kroki muszą świecić się na zielono.
-
-* **Wyznaczenie Recenzentów:** W polu "Reviewers" utworzonego Pull Requesta należy oznaczyć prowadzących kurs: [tomasz-trela](https://github.com/tomasz-trela) oraz [simon-the-shark](https://github.com/simon-the-shark).
-
-* **Proces Code Review:** Wszelkie uwagi, sugestie oraz prośby o poprawki dotyczące kodu będą przekazywane bezpośrednio na platformie GitHub w formie komentarzy w ramach procesu Code Review zgłoszonego Pull Requesta.
 
 * **Chronologia Realizacji Zadań:** Poszczególne listy zadań (moduły) muszą być realizowane w porządku chronologicznym. Ukończenie i zaliczenie danej listy jest warunkiem koniecznym do rozpoczęcia pracy nad kolejną.
 
