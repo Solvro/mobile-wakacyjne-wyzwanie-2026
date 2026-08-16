@@ -34,32 +34,27 @@ class PlacesScreen extends StatelessWidget {
     Place(
       name: "Białe miasteczko Oia",
       imagePath: "assets/images/Wymarzone_miej.jpg",
-      description:
-          "Miejsce, w którym czas zwalnia, a każdy zachód słońca wygląda jak wycięty z pocztówki.",
+      description: "Miejsce, w którym czas zwalnia, a każdy zachód słońca wygląda jak wycięty z pocztówki.",
     ),
     Place(
       name: "Czarne miasteczko Oia",
       imagePath: "assets/images/Wymarzone_miej.jpg",
-      description:
-          "Miejsce, w którym czas zwalnia, a każdy zachód słońca wygląda jak wycięty z pocztówki.",
+      description: "Miejsce, w którym czas zwalnia, a każdy zachód słońca wygląda jak wycięty z pocztówki.",
     ),
     Place(
       name: "Zielone miasteczko Oia",
       imagePath: "assets/images/Wymarzone_miej.jpg",
-      description:
-          "Miejsce, w którym czas zwalnia, a każdy zachód słońca wygląda jak wycięty z pocztówki.",
+      description: "Miejsce, w którym czas zwalnia, a każdy zachód słońca wygląda jak wycięty z pocztówki.",
     ),
     Place(
       name: "Czerwone miasteczko Oia",
       imagePath: "assets/images/Wymarzone_miej.jpg",
-      description:
-          "Miejsce, w którym czas zwalnia, a każdy zachód słońca wygląda jak wycięty z pocztówki.",
+      description: "Miejsce, w którym czas zwalnia, a każdy zachód słońca wygląda jak wycięty z pocztówki.",
     ),
     Place(
       name: "Żółte miasteczko Oia",
       imagePath: "assets/images/Wymarzone_miej.jpg",
-      description:
-          "Miejsce, w którym czas zwalnia, a każdy zachód słońca wygląda jak wycięty z pocztówki.",
+      description: "Miejsce, w którym czas zwalnia, a każdy zachód słońca wygląda jak wycięty z pocztówki.",
     ),
   ];
 
