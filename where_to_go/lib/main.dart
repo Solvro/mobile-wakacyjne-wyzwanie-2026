@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 
 void main() {
-runApp(const MyApp());
+  runApp(const MyApp());
 }
 
 class Place {
@@ -16,16 +16,15 @@ class Place {
   });
 }
 
-
 class MyApp extends StatelessWidget {
-    const MyApp({super.key});
+  const MyApp({super.key});
 
-    @override
-    Widget build(BuildContext context) {
-        return MaterialApp(
-            home: PlacesScreen(),
-        );
-    }
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: PlacesScreen(),
+    );
+  }
 }
 
 class PlacesScreen extends StatelessWidget {
@@ -62,29 +61,28 @@ class PlacesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Miejsca"),
-      ),
-      body: ListView.builder(
-        itemCount: places.length,
-        itemBuilder: (context, index) {
-          final place = places[index];
-          return ListTile(
-            leading: Image.asset(place.imagePath),
-            title: Text(place.name),
-            subtitle: Text(place.description),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => DreamPlaceScreen(place: place),
-                ),
-              );
-            },
-          );
-        },
-      )
-    );
+        appBar: AppBar(
+          title: const Text("Miejsca"),
+        ),
+        body: ListView.builder(
+          itemCount: places.length,
+          itemBuilder: (context, index) {
+            final place = places[index];
+            return ListTile(
+              leading: Image.asset(place.imagePath),
+              title: Text(place.name),
+              subtitle: Text(place.description),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DreamPlaceScreen(place: place),
+                  ),
+                );
+              },
+            );
+          },
+        ));
   }
 }
 
@@ -98,7 +96,6 @@ class DreamPlaceScreen extends StatefulWidget {
 }
 
 class _DreamPlaceScreenState extends State<DreamPlaceScreen> {
-    
   bool _isFavorite = false;
 
   void _toggleFavorite() {
@@ -106,75 +103,68 @@ class _DreamPlaceScreenState extends State<DreamPlaceScreen> {
       _isFavorite = !_isFavorite;
     });
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
-      backgroundColor: Colors.greenAccent,
-      appBar: AppBar(
-        title: Text(widget.place.name),
-        actions: [
-          IconButton(
-            icon: Icon(
-              _isFavorite ? Icons.favorite : Icons.favorite_border,
-              color: const Color.fromARGB(255, 36, 192, 200),
+        backgroundColor: Colors.greenAccent,
+        appBar: AppBar(
+          title: Text(widget.place.name),
+          actions: [
+            IconButton(
+              icon: Icon(
+                _isFavorite ? Icons.favorite : Icons.favorite_border,
+                color: const Color.fromARGB(255, 36, 192, 200),
+              ),
+              onPressed: _toggleFavorite,
             ),
-            onPressed: _toggleFavorite,
-          ),
-        ],
-      ),
-      body: Center(
-        child: Column(
-          children: [
+          ],
+        ),
+        body: Center(
+          child: Column(children: [
             Image.asset(
               widget.place.imagePath,
               fit: BoxFit.cover,
             ),
-            
             Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children:[
+                padding: const EdgeInsets.all(16.0),
+                child: Column(children: [
                   Text(
-                  widget.place.name,
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    widget.place.name,
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    widget.place.description,
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ] //children
+                    )),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Column(
+                  children: [
+                    Icon(Icons.star, color: const Color.fromARGB(255, 10, 234, 43)),
+                    Text("Gwiazdy"),
+                  ],
                 ),
-                SizedBox(height: 8),
-                Text(
-                  widget.place.description,
-                  style: TextStyle(fontSize: 16),
+                Column(
+                  children: [
+                    Icon(Icons.location_on, color: const Color.fromARGB(255, 20, 198, 32)),
+                    Text("Lokacja"),
+                  ],
                 ),
-              ] //children
+                Column(
+                  children: [
+                    Icon(Icons.access_time, color: const Color.fromARGB(255, 50, 139, 30)),
+                    Text("Czas"),
+                  ],
+                ),
+              ],
             )
-          ),
-
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Column(
-                children: [
-                  Icon(Icons.star, color: const Color.fromARGB(255, 10, 234, 43)),
-                  Text("Gwiazdy"),
-                ],
-              ), 
-              Column(
-                children: [
-                  Icon(Icons.location_on, color: const Color.fromARGB(255, 20, 198, 32)),
-                  Text("Lokacja"),
-                ],
+          ] //children
               ),
-              Column(
-                children: [
-                  Icon(Icons.access_time, color: const Color.fromARGB(255, 50, 139, 30)),
-                  Text("Czas"),
-                ],
-              ),
-            ],
-          )
-        ] //children
-      ),
-    )
-  );
-}
+        ));
+  }
 }
