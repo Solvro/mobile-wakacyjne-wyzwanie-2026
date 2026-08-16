@@ -136,7 +136,14 @@ class PlaceCard extends StatelessWidget{
                 onTap: () {
                   Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => DreamPlaceScreen(place))
+                      PageRouteBuilder(
+                          pageBuilder: (context, animation, secondaryAnimation) => DreamPlaceScreen(place),
+                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                            final tween = Tween(begin: Offset(1.0, 0.0), end: Offset.zero);
+                            final curvedAnimation = CurvedAnimation(parent: animation, curve: Curves.ease);
+                            return SlideTransition(position: tween.animate(curvedAnimation), child: child);
+                          }
+                      )
                   );
                 },
                 child: Column(
