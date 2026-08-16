@@ -96,7 +96,7 @@ class HomeScreen extends StatelessWidget {
               description: 'Miasto w południowej Polsce, największa miejscowość w bezpośrednim otoczeniu Tatr, duży ośrodek sportów zimowych',
               features: [
                 Feature('Góry', Icons.terrain),
-                Feature('Tatrzański Park Narodowy', Icons.hiking),
+                Feature('Park Narodowy', Icons.hiking),
                 Feature('Narty', Icons.downhill_skiing)
               ]
             )
