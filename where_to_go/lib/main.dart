@@ -1,3 +1,4 @@
+import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:where_to_go/gen/assets.gen.dart";
 
@@ -25,7 +26,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Wymarzone miejsca'),
-        backgroundColor: Colors.pink[700],
+        backgroundColor: Colors.pink[600],
       ),
       body: ListView(
         children: [
@@ -38,7 +39,7 @@ class HomeScreen extends StatelessWidget {
                   description: 'Nadmorska dzielnica mieszkaniowa na Riwierze Ateńskiej i południowej części Kalyvia Thorikou we wschodniej Attyce.',
                   features: [
                     Feature('Plaża piasczysta', Icons.beach_access),
-                    Feature('Jedzenie', Icons.food_bank),
+                    Feature('Jedzenie', Icons.fastfood),
                     Feature('Słońce', Icons.sunny)
                   ]
               )
@@ -125,10 +126,12 @@ class PlaceCard extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.only(bottom: 0.0, left: 8.0, right: 8.0, top: 8.0),
         child: Card(
-            color: Colors.pink[700],
+            color: Colors.pink[600],
             clipBehavior: Clip.antiAlias,
+            elevation: 5.0,
+            shadowColor: Colors.pink[800],
             child: InkWell(
                 onTap: () {
                   Navigator.push(
@@ -181,7 +184,7 @@ class _DreamPlaceScreenState extends State<DreamPlaceScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.pink[700],
+        backgroundColor: Colors.pink[600],
         title: Text(widget.place.title),
         actions: [
           IconButton(
