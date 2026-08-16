@@ -86,6 +86,20 @@ class HomeScreen extends StatelessWidget {
                     Feature('Nad rzeką', Icons.water)
                   ]
               )
+          ),
+          PlaceCard(
+            place: Place(
+              title: 'Zakopane, Polska',
+              homeImagePath: Assets.images.zakopane.path,
+              pageImagePath: Assets.images.zakopane2.path,
+              pageTitle: 'Zimowa stolica Zakopane',
+              description: 'Miasto w południowej Polsce, największa miejscowość w bezpośrednim otoczeniu Tatr, duży ośrodek sportów zimowych',
+              features: [
+                Feature('Góry', Icons.terrain),
+                Feature('Tatrzański Park Narodowy', Icons.hiking),
+                Feature('Narty', Icons.downhill_skiing)
+              ]
+            )
           )
         ],
       ),
@@ -126,11 +140,11 @@ class PlaceCard extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.only(bottom: 0.0, left: 8.0, right: 8.0, top: 8.0),
+        padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
         child: Card(
             color: Colors.pink[600],
             clipBehavior: Clip.antiAlias,
-            elevation: 5.0,
+            elevation: 2.0,
             shadowColor: Colors.pink[800],
             child: InkWell(
                 onTap: () {
@@ -202,7 +216,7 @@ class _DreamPlaceScreenState extends State<DreamPlaceScreen> {
       ),
       body: Column(
         children: [
-          Image.asset(widget.place.pageImagePath, fit: BoxFit.cover),
+          Image.asset(widget.place.pageImagePath, height: 250, width: double.infinity, fit: BoxFit.cover),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -218,6 +232,7 @@ class _DreamPlaceScreenState extends State<DreamPlaceScreen> {
               ],
             ),
           ),
+          SizedBox(height: 8),
           Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [

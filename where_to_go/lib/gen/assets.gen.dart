@@ -40,6 +40,14 @@ class $AssetsImagesGen {
   /// File path: assets/images/vodice2.jpg
   AssetGenImage get vodice2 => const AssetGenImage('assets/images/vodice2.jpg');
 
+  /// File path: assets/images/zakopane.jpg
+  AssetGenImage get zakopane =>
+      const AssetGenImage('assets/images/zakopane.jpg');
+
+  /// File path: assets/images/zakopane2.jpg
+  AssetGenImage get zakopane2 =>
+      const AssetGenImage('assets/images/zakopane2.jpg');
+
   /// List of all assets
   List<AssetGenImage> get values => [
     lagonisi,
@@ -50,6 +58,8 @@ class $AssetsImagesGen {
     rimini2,
     vodice,
     vodice2,
+    zakopane,
+    zakopane2,
   ];
 }
 
