@@ -25,7 +25,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Wymarzone miejsca'),
+        title: Text('Wymarzone miejsca', style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.pink[600],
       ),
       body: ListView(
@@ -206,11 +206,16 @@ class _DreamPlaceScreenState extends State<DreamPlaceScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.pink[600],
-        title: Text(widget.place.title),
+        title: Text(widget.place.title, style: TextStyle(color: Colors.white)),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          color: Colors.white,
+          onPressed: () => Navigator.pop(context)
+        ),
         actions: [
           IconButton(
             onPressed: _toggleFavorite,
-            icon: Icon(_isFavorited ? Icons.favorite : Icons.favorite_border),
+            icon: Icon(_isFavorited ? Icons.favorite : Icons.favorite_border, color: Colors.white),
           )
         ]
       ),
