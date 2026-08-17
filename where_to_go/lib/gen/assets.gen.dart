@@ -14,11 +14,14 @@ import 'package:flutter/widgets.dart';
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
-  /// File path: assets/images/bankok.png
-  AssetGenImage get bankok => const AssetGenImage('assets/images/bankok.png');
+  /// File path: assets/images/bangkok.png
+  AssetGenImage get bangkok => const AssetGenImage('assets/images/bangkok.png');
+
+  /// File path: assets/images/paris.png
+  AssetGenImage get paris => const AssetGenImage('assets/images/paris.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [bankok];
+  List<AssetGenImage> get values => [bangkok, paris];
 }
 
 abstract final class Assets {

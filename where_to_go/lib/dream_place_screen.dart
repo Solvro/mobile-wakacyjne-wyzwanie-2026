@@ -3,7 +3,12 @@ import "package:flutter/material.dart";
 import "gen/assets.gen.dart";
 
 class DreamPlaceScreen extends StatefulWidget {
-  const DreamPlaceScreen({super.key});
+  const DreamPlaceScreen(
+      {super.key, required this.name, required this.country, required this.description, required this.imagePath});
+  final String name;
+  final String country;
+  final String description;
+  final AssetGenImage imagePath;
 
   @override
   State<DreamPlaceScreen> createState() => _DreamPlaceScreenState();
@@ -27,9 +32,9 @@ class _DreamPlaceScreenState extends State<DreamPlaceScreen> {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        title: const Text(
-          "Bangkok, Thailand",
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
+        title: Text(
+          widget.name,
+          style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
         ),
         backgroundColor: Colors.amber[400],
         elevation: 0,
@@ -65,7 +70,7 @@ class _DreamPlaceScreenState extends State<DreamPlaceScreen> {
                   bottomLeft: Radius.circular(24),
                   bottomRight: Radius.circular(24),
                 ),
-                child: Assets.images.bankok.image(fit: BoxFit.cover),
+                child: widget.imagePath.image(fit: BoxFit.cover),
               ),
             ),
             Padding(
@@ -73,9 +78,9 @@ class _DreamPlaceScreenState extends State<DreamPlaceScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "Bangkok, Thailand",
-                    style: TextStyle(
+                  Text(
+                    "${widget.name} ${widget.country}",
+                    style: const TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
                       color: Colors.black87,
@@ -84,7 +89,7 @@ class _DreamPlaceScreenState extends State<DreamPlaceScreen> {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    "Bangkok is the capital and most populous city of Thailand. It is known for its vibrant street life, cultural landmarks, and bustling markets. The city offers a mix of modern skyscrapers and historic temples, making it a popular destination for travelers seeking both adventure and cultural experiences.",
+                    widget.description,
                     style: TextStyle(
                       fontSize: 15,
                       color: Colors.grey[700],
