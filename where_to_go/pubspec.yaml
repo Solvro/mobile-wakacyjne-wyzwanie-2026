@@ -19,8 +19,8 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  flutter: 3.32.7
-  sdk: ^3.6.2
+  flutter: 3.47.0
+  sdk: ^3.13.0
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -35,7 +35,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
-
+  animations: ^2.2.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -45,10 +45,13 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
   solvro_config: ^1.0.1
-  build_runner: ^2.6.0
-
+  build_runner: ^2.12.0
+  flutter_gen_runner:
+  custom_lint_builder:
+  analyzer:
+  analyzer_plugin:
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -63,7 +66,17 @@ flutter:
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
-
+  assets:
+    # Pafos
+    - assets/images/pafos.jpg
+    # Rzym
+    - assets/images/rzym.jpg
+    # Barcelona
+    - assets/images/barcelona.jpg
+    # Kiszyniów
+    - assets/images/kiszyniow.jpg
+    # Nicea
+    - assets/images/nicea.jpg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 
