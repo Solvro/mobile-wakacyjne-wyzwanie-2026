@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+
 import "gen/assets.gen.dart";
 
 void main() {
@@ -196,7 +197,11 @@ class _DreamPlaceScreenState extends State<DreamPlaceScreen> {
       appBar: AppBar(
         backgroundColor: Colors.pink[600],
         title: Text(widget.place.title, style: const TextStyle(color: Colors.white)),
-        leading: IconButton(icon: const Icon(Icons.arrow_back), color: Colors.white, onPressed: () => Navigator.pop(context)),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          color: Colors.white,
+          onPressed: () => Navigator.pop(context),
+        ),
         actions: [
           IconButton(
             onPressed: _toggleFavorite,
@@ -212,7 +217,10 @@ class _DreamPlaceScreenState extends State<DreamPlaceScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(widget.place.pageTitle, style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w500, height: 1.2)),
+                Text(
+                  widget.place.pageTitle,
+                  style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w500, height: 1.2),
+                ),
                 const SizedBox(height: 8),
                 Text(widget.place.description, style: const TextStyle(fontSize: 15)),
               ],
