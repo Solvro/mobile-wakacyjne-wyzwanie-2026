@@ -92,7 +92,7 @@ class HomeScreen extends StatelessWidget {
               title: 'Zakopane, Polska',
               homeImagePath: Assets.images.zakopane.path,
               pageImagePath: Assets.images.zakopane2.path,
-              pageTitle: 'Zimowa stolica Zakopane',
+              pageTitle: 'Zimowa stolica, Zakopane',
               description: 'Miasto w południowej Polsce, największa miejscowość w bezpośrednim otoczeniu Tatr, duży ośrodek sportów zimowych',
               features: [
                 Feature('Góry', Icons.terrain),
@@ -153,7 +153,7 @@ class PlaceCard extends StatelessWidget{
                       PageRouteBuilder(
                           pageBuilder: (context, animation, secondaryAnimation) => DreamPlaceScreen(place),
                           transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                            final tween = Tween(begin: Offset(1.0, 0.0), end: Offset.zero);
+                            final tween = Tween(begin: const Offset(1.0, 0.0), end: Offset.zero);
                             final curvedAnimation = CurvedAnimation(parent: animation, curve: Curves.ease);
                             return SlideTransition(position: tween.animate(curvedAnimation), child: child);
                           }
