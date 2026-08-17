@@ -53,10 +53,10 @@ class MyApp extends StatelessWidget {
             ),
             subtitle: Text(place.country),
             trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-            onTap: () {
-              Navigator.push(
+            onTap: () async {
+              await Navigator.push<void>(
                 context,
-                MaterialPageRoute(
+                MaterialPageRoute<void>(
                   builder: (context) => DreamPlaceScreen(
                     name: place.name,
                     country: place.country,

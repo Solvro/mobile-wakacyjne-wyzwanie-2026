@@ -24,7 +24,9 @@ class $AssetsImagesGen {
   List<AssetGenImage> get values => [bangkok, paris];
 }
 
-abstract final class Assets {
+class Assets {
+  const Assets._();
+
   static const $AssetsImagesGen images = $AssetsImagesGen();
 }
 

@@ -47,8 +47,8 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
   solvro_config: ^1.0.1
-  build_runner: ^2.12.0
-  flutter_gen_runner:
+  build_runner: ^2.6.0
+  flutter_gen_runner: ^5.11.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
