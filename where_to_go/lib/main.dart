@@ -1,5 +1,6 @@
 import "package:animations/animations.dart";
 import "package:flutter/material.dart";
+
 import "gen/assets.gen.dart";
 
 void main() {
@@ -50,7 +51,6 @@ class Place {
 
 // animacja
 class SharedRouteAnimation extends PageRouteBuilder<void> {
-
   SharedRouteAnimation({required Widget page})
     : super(
         pageBuilder: (context, animation, secondaryAnimation) => page,
