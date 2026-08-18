@@ -1,192 +1,125 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
 void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-    const MyApp({super.key});
+  const MyApp({super.key});
 
-    @override
-    Widget build(BuildContext context) {
-        return MaterialApp(
-            home: Homescreen(),
-            
-        );
-    }
-}
-
-class Homescreen extends StatelessWidget{
-  Homescreen({super.key});
-  final japonia = DreamPlaceScreen(
-    backcolor:Color.fromARGB(255, 110, 110, 233),
-    text1:"Kyoto, dawna stolica Japonii",
-    text2:"Serce japońskiej kultury, które mieści tysiące świątyń, pięknych ogrodów i tradycyjnych herbaciarni.",
-    path:'assets/images/obrazek.webp',
-    listastr:["Jedzenie","Herbata","Świątynie i zamki","Ogrody"],
-    listaicon:[Icon(Icons.restaurant),Icon(Icons.emoji_food_beverage_outlined),Icon(Icons.castle),Icon(Icons.place)],
-    title:"Kyoto, Japonia"
-  );
-  final grecja = DreamPlaceScreen(
-    backcolor:Color.fromARGB(255, 91, 207, 223),
-    text1:"Białe klify Zakynthos",
-    text2:"Jedna z najbardziej malowniczych wysp Grecji.",
-    path:'assets/images/grecja.webp',
-    listastr:["Jedzenie","Nurkowanie","Plaże","Zwiedzanie"],
-    listaicon:[Icon(Icons.restaurant),Icon(Icons.scuba_diving),Icon(Icons.beach_access),Icon(Icons.place)],
-    title:"Zakynthos, Grecja"
-  );
-  final hisz = DreamPlaceScreen(
-    backcolor:Color.fromARGB(255, 238, 223, 90),
-    text1:"Malaga, hiszpańskie miasto portowe",
-    text2:"Słoneczne miasto na wybrzeżu Costa del Sol.",
-    path:'assets/images/hiszpania.webp',
-    listastr:["Jedzenie","Teatr","Surfing","Muzeum Picassa"],
-    listaicon:[Icon(Icons.restaurant),Icon(Icons.theater_comedy),Icon(Icons.surfing),Icon(Icons.art_track)],
-    title:"Malaga, Hiszpania"
-  );
-  final china = DreamPlaceScreen(
-    backcolor:Color.fromARGB(255, 238, 80, 80),
-    text1:"Chongqing - miasto labirynt",
-    text2:"Megamiasto położone w górach, które posiada wielopoziomową architekturę.",
-    path:'assets/images/china.jpg',
-    listastr:["Jedzenie","Miasto mgieł","Podniebny most","Ogrody"],
-    listaicon:[Icon(Icons.restaurant),Icon(Icons.foggy),Icon(Icons.cloud),Icon(Icons.place)],
-    title:"Chongqing, Chiny"
-  );
-  final taj = DreamPlaceScreen(
-    backcolor:Color.fromARGB(255, 177, 230, 92),
-    text1:"Bangkok, stolica Tajlandii",
-    text2:"Najczęściej odwiedzane miasto przez turystów z całego świata.",
-    path:'assets/images/tajlandia.jpg',
-    listastr:["Street food","Nurkowanie","Świątynie i zamki","Dżungla i wyspy"],
-    listaicon:[Icon(Icons.restaurant),Icon(Icons.scuba_diving_outlined),Icon(Icons.castle),Icon(Icons.place)],
-    title:"Bangkok, Tajlandia"
-  );
-
-  ListTile maker(BuildContext context,DreamPlaceScreen dps){
-    return ListTile(
-            
-            title: Expanded(child:Text(dps.title,style:TextStyle(fontSize: 20))),
-            
-            
-            leading: SizedBox(
-              width:MediaQuery.of(context).size.width * 0.4,
-              child:Image.asset(dps.path,fit: BoxFit.cover),
-            ),
-
-            onTap: (){
-              Navigator.push(
-                context, 
-                MaterialPageRoute(builder: (context) => dps));
-                },
-    );
-  }
-  @override
-  Widget build(BuildContext context){
-    return Scaffold(
-      backgroundColor: Color.fromRGBO(76, 108, 248, 0.867),
-      body: ListView(
-        children: [
-          maker(context,japonia),
-          maker(context,grecja),
-          maker(context,hisz),
-          maker(context,taj),
-          maker(context,china)
-
-        ]),
-    
-     appBar: AppBar(
-        backgroundColor:  Color.fromRGBO(38, 72, 165, 0.76),
-        title: Text("Wybierz miejsce"),
-      ),
-    );
-  }
-}
-
-
-class DreamPlaceScreen extends StatefulWidget{
-  final String text1,text2,path,title;
-  final List<String> listastr;
-  final List<Icon> listaicon;
-  final Color backcolor;
-  DreamPlaceScreen({
-    required this.text1,
-    required this.text2,
-    required this.path,
-    required this.title,
-    required this.backcolor,
-    required this.listaicon,
-    required this.listastr,
-    super.key
-  });
-  @override
-  State<DreamPlaceScreen> createState() => _DreamPlaceScreenState();//backcolor,text1,text2,path,listastr,listaicon,title);
-}
-
-class _DreamPlaceScreenState extends State<DreamPlaceScreen> {
-  bool _isFavorited = false;
-  void _toggleFavorite(){
-    setState(() {
-      if(_isFavorited){
-        _isFavorited=false;
-      }else{
-        _isFavorited=true;
-      }
-    });
-  }
-  void onPressed(){
-    _toggleFavorite();
-  }
-  Widget returnIcon(){
-      if(_isFavorited){
-        return Icon(Icons.favorite);
-      }
-       return Icon(Icons.favorite_border);   
-  }
-  _DreamPlaceScreenState();
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
-    return Scaffold(
-      
-      backgroundColor: widget.backcolor,
-      body: SingleChildScrollView(child:
-      Column(
-        children: [
-          Image.asset(widget.path,fit: BoxFit.cover,),
-          Padding(padding: const EdgeInsets.all(16.0),
-          child: 
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start, 
-                children: [
-                  Text(widget.text1,style:TextStyle(fontSize: 20),softWrap:true),
-                  SizedBox(height: 8),
-                  Text(widget.text2,softWrap:true)
-                  ],
-                  
-              ),),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                    Column(children:[widget.listaicon[0],Text(widget.listastr[0])]),
-                    Column(children:[widget.listaicon[1],Text(widget.listastr[1])]),
-                    Column(children:[widget.listaicon[2],Text(widget.listastr[2])]),
-                    Column(children:[widget.listaicon[3],Text(widget.listastr[3])])
-
-                ],
-              )
-          ]),),
-      
-      
-     appBar: AppBar(
-        backgroundColor: 
-        Color.alphaBlend(const Color.fromARGB(120, 51, 47, 51), widget.backcolor),
-        title: Text(widget.title),
-        actions: [IconButton(onPressed: onPressed,
-         icon: returnIcon())
-          ],
+    return MaterialApp(
+      title: "Flutter Demo",
+      theme: ThemeData(
+        // This is the theme of your application.
+        //
+        // TRY THIS: Try running your application with "flutter run". You'll see
+        // the application has a purple toolbar. Then, without quitting the app,
+        // try changing the seedColor in the colorScheme below to Colors.green
+        // and then invoke "hot reload" (save your changes or press the "hot
+        // reload" button in a Flutter-supported IDE, or press "r" if you used
+        // the command line to start the app).
+        //
+        // Notice that the counter didn't reset back to zero; the application
+        // state is not lost during the reload. To reset the state, use hot
+        // restart instead.
+        //
+        // This works for code too, not just values: Most code changes can be
+        // tested with just a hot reload.
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
       ),
+      home: const MyHomePage(title: "Flutter Demo Home Page"),
     );
-    
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key, required this.title});
+
+  // This widget is the home page of your application. It is stateful, meaning
+  // that it has a State object (defined below) that contains fields that affect
+  // how it looks.
+
+  // This class is the configuration for the state. It holds the values (in this
+  // case the title) provided by the parent (in this case the App widget) and
+  // used by the build method of the State. Fields in a Widget subclass are
+  // always marked "final".
+
+  final String title;
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  int _counter = 0;
+
+  void _incrementCounter() {
+    setState(() {
+      // This call to setState tells the Flutter framework that something has
+      // changed in this State, which causes it to rerun the build method below
+      // so that the display can reflect the updated values. If we changed
+      // _counter without calling setState(), then the build method would not be
+      // called again, and so nothing would appear to happen.
+      _counter++;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // This method is rerun every time setState is called, for instance as done
+    // by the _incrementCounter method above.
+    //
+    // The Flutter framework has been optimized to make rerunning build methods
+    // fast, so that you can just rebuild anything that needs updating rather
+    // than having to individually change instances of widgets.
+    return Scaffold(
+      appBar: AppBar(
+        // TRY THIS: Try changing the color here to a specific color (to
+        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
+        // change color while the other colors stay the same.
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        // Here we take the value from the MyHomePage object that was created by
+        // the App.build method, and use it to set our appbar title.
+        title: Text(widget.title),
+      ),
+      body: Center(
+        // Center is a layout widget. It takes a single child and positions it
+        // in the middle of the parent.
+        child: Column(
+          // Column is also a layout widget. It takes a list of children and
+          // arranges them vertically. By default, it sizes itself to fit its
+          // children horizontally, and tries to be as tall as its parent.
+          //
+          // Column has various properties to control how it sizes itself and
+          // how it positions its children. Here we use mainAxisAlignment to
+          // center the children vertically; the main axis here is the vertical
+          // axis because Columns are vertical (the cross axis would be
+          // horizontal).
+          //
+          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
+          // action in the IDE, or press "p" in the console), to see the
+          // wireframe for each widget.
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Text(
+              "You have pushed the button this many times:",
+            ),
+            Text(
+              "$_counter",
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _incrementCounter,
+        tooltip: "Increment",
+        child: const Icon(Icons.add),
+      ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
   }
 }
