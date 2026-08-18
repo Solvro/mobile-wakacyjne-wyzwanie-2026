@@ -282,7 +282,11 @@ class _DreamPlaceScreenState extends State<DreamPlaceScreen> {
                             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.grey[100]),
                           ),
                           const SizedBox(height: 8),
-                          Text(widget.place.description, style: TextStyle(color: Colors.grey[100])),
+                          Text(
+                            widget.place.description,
+                            style: TextStyle(color: Colors.grey[100]),
+                            textAlign: TextAlign.center,
+                          ),
                         ],
                       ),
                     ),
