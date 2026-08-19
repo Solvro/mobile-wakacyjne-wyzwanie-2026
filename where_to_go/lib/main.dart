@@ -1,20 +1,19 @@
 import "package:flutter/material.dart";
 
 void main() {
-runApp(const MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-    const MyApp({super.key});
+  const MyApp({super.key});
 
-    @override
-    Widget build(BuildContext context) {
-        return MaterialApp(
-            home: HomeScreen(),
-        );
-    }
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: HomeScreen(),
+    );
+  }
 }
-
 
 // dane dla jednego miejsca
 class Place {
@@ -43,7 +42,6 @@ class Place {
   });
 }
 
-
 //lista miejsc
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
@@ -62,7 +60,6 @@ class HomeScreen extends StatelessWidget {
       icon_text2: 'Zabytek',
       icon_text3: 'Darmowe',
     ),
-
     Place(
       title: 'Mielno, Polska',
       imagePath: 'assets/images/mielno.jpg',
@@ -75,7 +72,6 @@ class HomeScreen extends StatelessWidget {
       icon_text2: 'Restauracje',
       icon_text3: 'Słonecznie',
     ),
-
     Place(
       title: 'Kłodzko, Polska',
       imagePath: 'assets/images/klodzko.jpg',
@@ -88,20 +84,17 @@ class HomeScreen extends StatelessWidget {
       icon_text2: 'Historia',
       icon_text3: 'Widok',
     ),
-
     Place(
-      title: 'Gąski, Polska',
-      imagePath: 'assets/images/gaski.jpg',
-      locationTitle: 'Latarnia Morska',
-      description: 'Latarnia Morska w Gąskach to zabytkowa latarnia morska położona nad Morzem Bałtyckim.',
-      icon1: Icons.landscape,
-      icon2: Icons.lightbulb,
-      icon3: Icons.photo_camera,
-      icon_text1: 'Widok',
-      icon_text2: 'Latarnia',
-      icon_text3: 'Fotogeniczne'
-    ),
-
+        title: 'Gąski, Polska',
+        imagePath: 'assets/images/gaski.jpg',
+        locationTitle: 'Latarnia Morska',
+        description: 'Latarnia Morska w Gąskach to zabytkowa latarnia morska położona nad Morzem Bałtyckim.',
+        icon1: Icons.landscape,
+        icon2: Icons.lightbulb,
+        icon3: Icons.photo_camera,
+        icon_text1: 'Widok',
+        icon_text2: 'Latarnia',
+        icon_text3: 'Fotogeniczne'),
     Place(
       title: 'Białogard, Polska',
       imagePath: 'assets/images/bialogard.jpg',
@@ -121,13 +114,9 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 145, 197, 248),
       appBar: AppBar(
-        title: const Text('Wymarzone Miejsca', 
-          style: TextStyle(
-            fontFamily: 'Roboto',
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Colors.white
-          ),
+        title: const Text(
+          'Wymarzone Miejsca',
+          style: TextStyle(fontFamily: 'Roboto', fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         backgroundColor: const Color.fromARGB(255, 170, 8, 57),
       ),
@@ -175,9 +164,7 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-
 class DreamPlaceScreen extends StatefulWidget {
-  
   final String title;
   final String imagePath;
   final String locationTitle;
@@ -216,7 +203,6 @@ class _DreamPlaceScreenState extends State<DreamPlaceScreen> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -225,12 +211,7 @@ class _DreamPlaceScreenState extends State<DreamPlaceScreen> {
         centerTitle: false,
         title: Text(
           widget.title,
-          style: TextStyle(
-              fontFamily: 'Roboto',
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.white
-          ),
+          style: TextStyle(fontFamily: 'Roboto', fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         backgroundColor: const Color.fromARGB(255, 170, 8, 57),
         actions: [
@@ -243,8 +224,6 @@ class _DreamPlaceScreenState extends State<DreamPlaceScreen> {
           ),
         ],
       ),
-
-
       body: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -270,65 +249,58 @@ class _DreamPlaceScreenState extends State<DreamPlaceScreen> {
                       ),
                       Padding(
                         padding: EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              widget.locationTitle,
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
+                        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                          Text(
+                            widget.locationTitle,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
                             ),
-                            SizedBox(height: 8),
-                            Text(
-                              widget.description,
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: Colors.white,
-                              ),
+                          ),
+                          SizedBox(height: 8),
+                          Text(
+                            widget.description,
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Colors.white,
                             ),
-                          ]
-                        ),
+                          ),
+                        ]),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-
-                        Column(
-                          children: [
-                            Icon(widget.icon1, color: Colors.white),
-                            SizedBox(height: 4),
-                            Text(
-                              widget.icon_text1,
-                              style: TextStyle(color: Colors.white, fontSize: 10),
-                            ),
-                          ],
-                        ),
-
-                        Column(
-                          children: [
-                            Icon(widget.icon2, color: Colors.white),
-                            SizedBox(height: 4),
-                            Text(
-                              widget.icon_text2,
-                              style: TextStyle(color: Colors.white, fontSize: 10),
-                            ),
-                          ],
-                        ),
-
-                        Column(
-                          children: [
-                            Icon(widget.icon3, color: Colors.white),
-                            SizedBox(height: 4),
-                            Text(
-                              widget.icon_text3,
-                              style: TextStyle(color: Colors.white, fontSize: 10),
-                            ),
-                          ],
-                        ),
-
+                          Column(
+                            children: [
+                              Icon(widget.icon1, color: Colors.white),
+                              SizedBox(height: 4),
+                              Text(
+                                widget.icon_text1,
+                                style: TextStyle(color: Colors.white, fontSize: 10),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Icon(widget.icon2, color: Colors.white),
+                              SizedBox(height: 4),
+                              Text(
+                                widget.icon_text2,
+                                style: TextStyle(color: Colors.white, fontSize: 10),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Icon(widget.icon3, color: Colors.white),
+                              SizedBox(height: 4),
+                              Text(
+                                widget.icon_text3,
+                                style: TextStyle(color: Colors.white, fontSize: 10),
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                       const SizedBox(height: 16),
@@ -340,8 +312,6 @@ class _DreamPlaceScreenState extends State<DreamPlaceScreen> {
           ],
         ),
       ),
-
-
     );
   }
 }
