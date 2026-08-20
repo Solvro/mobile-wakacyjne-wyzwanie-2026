@@ -142,9 +142,9 @@ class HomeScreen extends StatelessWidget {
             title: Text(place.locationTitle),
             subtitle: Text(place.title),
             trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-            onTap: () {
+            onTap: () async {
               // Przejście do ekranu szczegółowego z danymi klikniętego miejsca
-              Navigator.push(
+              await Navigator.push(
                 context,
                 MaterialPageRoute<void>(
                   builder: (context) => DreamPlaceScreen(
