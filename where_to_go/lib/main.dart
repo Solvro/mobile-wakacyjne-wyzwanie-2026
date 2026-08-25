@@ -1,5 +1,7 @@
 import "package:flutter/material.dart";
 
+import "gen/assets.gen.dart";
+
 void main() {
   runApp(const MyApp());
 }
@@ -7,119 +9,307 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "Flutter Demo",
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return MaterialApp(debugShowCheckedModeBanner: false, home: HomeScreen());
+  }
+}
+
+class HomeScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Wymarzone miejsca", style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.pink[600],
       ),
-      home: const MyHomePage(title: "Flutter Demo Home Page"),
+      body: OrientationBuilder(
+        builder: (context, orientation) {
+          return ListView(
+            scrollDirection: orientation == Orientation.portrait ? Axis.vertical : Axis.horizontal,
+            children: [
+              PlaceCard(
+                place: Place(
+                  title: "Lagonisi, Grecja",
+                  homeImagePath: Assets.images.lagonisi.path,
+                  pageImagePath: Assets.images.lagonisi2.path,
+                  pageTitle: "Nadmorskie miasteczko Lagonisi",
+                  description: "Nadmorska dzielnica mieszkaniowa na Riwierze Ateńskiej i południowej części Kalyvia Thorikou we wschodniej Attyce.",
+                  features: [
+                    Feature("Plaża piasczysta", Icons.beach_access),
+                    Feature("Jedzenie", Icons.fastfood),
+                    Feature("Słońce", Icons.sunny),
+                  ],
+                ),
+              ),
+              PlaceCard(
+                place: Place(
+                  title: "Vodice, Chorwacja",
+                  homeImagePath: Assets.images.vodice.path,
+                  pageImagePath: Assets.images.vodice2.path,
+                  pageTitle: "Słoneczny kurort Vodice",
+                  description: "Miasto i port w Chorwacji, w żupanii szybenicko-knińskiej, siedziba miasta Vodice.",
+                  features: [
+                    Feature("Plaża kamienista", Icons.beach_access),
+                    Feature("Życie nocne", Icons.nightlife),
+                    Feature("Słońce", Icons.sunny),
+                  ],
+                ),
+              ),
+              PlaceCard(
+                place: Place(
+                  title: "Rimini, Włochy",
+                  homeImagePath: Assets.images.rimini2.path,
+                  pageImagePath: Assets.images.rimini.path,
+                  pageTitle: "Turystyczne Rimini",
+                  description:
+                      "Jedno z najpopularniejszych miast turystyczno-wypoczynkowych nad północnym Adriatykiem.",
+                  features: [
+                    Feature("Plaża piasczysta", Icons.beach_access),
+                    Feature("Życie nocne", Icons.nightlife),
+                    Feature("Słońce", Icons.sunny),
+                    Feature("Duże miasto", Icons.location_city),
+                  ],
+                ),
+              ),
+              PlaceCard(
+                place: Place(
+                  title: "Madryt, Hiszpania",
+                  homeImagePath: Assets.images.madryt.path,
+                  pageImagePath: Assets.images.madryt2.path,
+                  pageTitle: "Centrum Hiszpanii, Madryt",
+                  description:
+                      "Stolica i największe miasto Hiszpanii, położone w środkowej części kraju, nad rzeką Manzanares.",
+                  features: [
+                    Feature("Stolica", Icons.location_city),
+                    Feature("Życie nocne", Icons.nightlife),
+                    Feature("Nad rzeką", Icons.water),
+                  ],
+                ),
+              ),
+              PlaceCard(
+                place: Place(
+                  title: "Zakopane, Polska",
+                  homeImagePath: Assets.images.zakopane.path,
+                  pageImagePath: Assets.images.zakopane2.path,
+                  pageTitle: "Zimowa stolica, Zakopane",
+                  description: "Miasto w południowej Polsce, największa miejscowość w bezpośrednim otoczeniu Tatr, duży ośrodek sportów zimowych",
+                  features: [
+                    Feature("Góry", Icons.terrain),
+                    Feature("Park Narodowy", Icons.hiking),
+                    Feature("Narty", Icons.downhill_skiing),
+                  ],
+                ),
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class Feature {
+  final String name;
+  final IconData icon;
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  Feature(this.name, this.icon);
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class Place {
+  final String title;
+  final String homeImagePath;
+  final String pageImagePath;
+  final String pageTitle;
+  final String description;
+  final List<Feature> features;
 
-  void _incrementCounter() {
+  Place({
+    required this.title,
+    required this.homeImagePath,
+    required this.pageImagePath,
+    required this.pageTitle,
+    required this.description,
+    required this.features,
+  });
+}
+
+class PlaceCard extends StatelessWidget {
+  final Place place;
+
+  const PlaceCard({super.key, required this.place});
+
+  @override
+  Widget build(BuildContext context) {
+    return OrientationBuilder(
+      builder: (context, orientation) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: orientation == Orientation.portrait ? 0 : 8,
+            left: 8,
+            right: orientation == Orientation.portrait ? 8 : 0,
+            top: 8,
+          ),
+          child: SizedBox(
+            width: 400,
+            height: 229,
+            child: Card(
+              color: Colors.pink[600],
+              clipBehavior: Clip.antiAlias,
+              elevation: 2,
+              shadowColor: Colors.pink[800],
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder<dynamic>(
+                      pageBuilder: (context, animation, secondaryAnimation) => DreamPlaceScreen(place),
+                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                        final tween = Tween(begin: const Offset(1, 0), end: Offset.zero);
+                        final curvedAnimation = CurvedAnimation(parent: animation, curve: Curves.ease);
+                        return SlideTransition(position: tween.animate(curvedAnimation), child: child);
+                      },
+                    ),
+                  );
+                },
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Image.asset(place.homeImagePath, width: double.infinity, fit: BoxFit.cover),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(7),
+                      child: SizedBox(
+                        height: orientation == Orientation.portrait ? 32 : 40,
+                        child: Center(
+                          child: Text(
+                            place.title,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: orientation == Orientation.portrait ? 20 : 25,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class DreamPlaceScreen extends StatefulWidget {
+  final Place place;
+
+  const DreamPlaceScreen(this.place, {super.key});
+
+  @override
+  State<DreamPlaceScreen> createState() => _DreamPlaceScreenState();
+}
+
+class _DreamPlaceScreenState extends State<DreamPlaceScreen> {
+  var _isFavorited = false;
+  void _toggleFavorite() {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      _isFavorited = !_isFavorited;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              "You have pushed the button this many times:",
-            ),
-            Text(
-              "$_counter",
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+        backgroundColor: Colors.pink[600],
+        title: Text(widget.place.title, style: const TextStyle(color: Colors.white)),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          color: Colors.white,
+          onPressed: () => Navigator.pop(context),
         ),
+        actions: [
+          IconButton(
+            onPressed: _toggleFavorite,
+            icon: Icon(_isFavorited ? Icons.favorite : Icons.favorite_border, color: Colors.white),
+          ),
+        ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: "Increment",
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      body: OrientationBuilder(
+        builder: (context, orientation) {
+          if (orientation == Orientation.portrait) {
+            return Column(
+              children: [
+                Image.asset(widget.place.pageImagePath, height: 250, width: double.infinity, fit: BoxFit.cover),
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.place.pageTitle,
+                        style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w500, height: 1.2),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(widget.place.description, style: const TextStyle(fontSize: 15)),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    for (final feature in widget.place.features)
+                      Column(children: [Icon(feature.icon), Text(feature.name)]),
+                  ],
+                ),
+              ],
+            );
+          } else {
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Image.asset(widget.place.pageImagePath, width: 400, height: double.infinity, fit: BoxFit.cover),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                widget.place.pageTitle,
+                                style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w500, height: 1.2),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(widget.place.description, style: const TextStyle(fontSize: 15)),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            for (final feature in widget.place.features)
+                              Column(children: [Icon(feature.icon), Text(feature.name)]),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }
+        },
+      ),
     );
   }
 }
