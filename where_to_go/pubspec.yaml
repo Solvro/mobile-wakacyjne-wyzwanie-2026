@@ -53,6 +53,7 @@ dev_dependencies:
   analyzer:
   analyzer_plugin:
   custom_lint_builder:
+  flutter_hooks: 0.21.3
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

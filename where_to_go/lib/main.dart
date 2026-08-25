@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
 
 import "gen/assets.gen.dart";
 
@@ -62,7 +63,8 @@ class HomeScreen extends StatelessWidget {
                   homeImagePath: Assets.images.rimini2.path,
                   pageImagePath: Assets.images.rimini.path,
                   pageTitle: "Turystyczne Rimini",
-                  description: "Jedno z najpopularniejszych miast turystyczno-wypoczynkowych nad północnym Adriatykiem.",
+                  description:
+                      "Jedno z najpopularniejszych miast turystyczno-wypoczynkowych nad północnym Adriatykiem.",
                   features: [
                     Feature("Plaża piasczysta", Icons.beach_access),
                     Feature("Życie nocne", Icons.nightlife),
@@ -78,7 +80,7 @@ class HomeScreen extends StatelessWidget {
                   pageImagePath: Assets.images.madryt2.path,
                   pageTitle: "Centrum Hiszpanii, Madryt",
                   description:
-                  "Stolica i największe miasto Hiszpanii, położone w środkowej części kraju, nad rzeką Manzanares.",
+                      "Stolica i największe miasto Hiszpanii, położone w środkowej części kraju, nad rzeką Manzanares.",
                   features: [
                     Feature("Stolica", Icons.location_city),
                     Feature("Życie nocne", Icons.nightlife),
@@ -102,7 +104,7 @@ class HomeScreen extends StatelessWidget {
               ),
             ],
           );
-        }
+        },
       ),
     );
   }
@@ -143,7 +145,12 @@ class PlaceCard extends StatelessWidget {
     return OrientationBuilder(
       builder: (context, orientation) {
         return Padding(
-          padding: EdgeInsets.only(bottom: orientation == Orientation.portrait ? 0 : 8, left: 8, right: orientation == Orientation.portrait ? 8 : 0, top: 8),
+          padding: EdgeInsets.only(
+            bottom: orientation == Orientation.portrait ? 0 : 8,
+            left: 8,
+            right: orientation == Orientation.portrait ? 8 : 0,
+            top: 8,
+          ),
           child: SizedBox(
             width: 400,
             height: 229,
@@ -178,7 +185,11 @@ class PlaceCard extends StatelessWidget {
                         child: Center(
                           child: Text(
                             place.title,
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: orientation == Orientation.portrait ? 20 : 25, color: Colors.white),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: orientation == Orientation.portrait ? 20 : 25,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ),
@@ -189,34 +200,23 @@ class PlaceCard extends StatelessWidget {
             ),
           ),
         );
-      }
+      },
     );
   }
 }
 
-class DreamPlaceScreen extends StatefulWidget {
+class DreamPlaceScreen extends HookWidget {
   final Place place;
-
   const DreamPlaceScreen(this.place, {super.key});
 
   @override
-  State<DreamPlaceScreen> createState() => _DreamPlaceScreenState();
-}
-
-class _DreamPlaceScreenState extends State<DreamPlaceScreen> {
-  var _isFavorited = false;
-  void _toggleFavorite() {
-    setState(() {
-      _isFavorited = !_isFavorited;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final isFavorited = useState(false);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.pink[600],
-        title: Text(widget.place.title, style: const TextStyle(color: Colors.white)),
+        title: Text(place.title, style: const TextStyle(color: Colors.white)),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           color: Colors.white,
@@ -224,8 +224,10 @@ class _DreamPlaceScreenState extends State<DreamPlaceScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: _toggleFavorite,
-            icon: Icon(_isFavorited ? Icons.favorite : Icons.favorite_border, color: Colors.white),
+            onPressed: () => isFavorited.value = !isFavorited.value,
+            icon: isFavorited.value
+                ? const Icon(Icons.favorite, color: Colors.red)
+                : const Icon(Icons.favorite_border, color: Colors.white),
           ),
         ],
       ),
@@ -234,18 +236,18 @@ class _DreamPlaceScreenState extends State<DreamPlaceScreen> {
           if (orientation == Orientation.portrait) {
             return Column(
               children: [
-                Image.asset(widget.place.pageImagePath, height: 250, width: double.infinity, fit: BoxFit.cover),
+                Image.asset(place.pageImagePath, height: 250, width: double.infinity, fit: BoxFit.cover),
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        widget.place.pageTitle,
+                        place.pageTitle,
                         style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w500, height: 1.2),
                       ),
                       const SizedBox(height: 8),
-                      Text(widget.place.description, style: const TextStyle(fontSize: 15)),
+                      Text(place.description, style: const TextStyle(fontSize: 15)),
                     ],
                   ),
                 ),
@@ -253,7 +255,7 @@ class _DreamPlaceScreenState extends State<DreamPlaceScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    for (final feature in widget.place.features) Column(children: [Icon(feature.icon), Text(feature.name)]),
+                    for (final feature in place.features) Column(children: [Icon(feature.icon), Text(feature.name)]),
                   ],
                 ),
               ],
@@ -262,7 +264,7 @@ class _DreamPlaceScreenState extends State<DreamPlaceScreen> {
             return Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image.asset(widget.place.pageImagePath, width: 400, height: double.infinity, fit: BoxFit.cover),
+                Image.asset(place.pageImagePath, width: 400, height: double.infinity, fit: BoxFit.cover),
                 Expanded(
                   child: SingleChildScrollView(
                     child: Column(
@@ -273,11 +275,11 @@ class _DreamPlaceScreenState extends State<DreamPlaceScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                widget.place.pageTitle,
+                                place.pageTitle,
                                 style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w500, height: 1.2),
                               ),
                               const SizedBox(height: 8),
-                              Text(widget.place.description, style: const TextStyle(fontSize: 15)),
+                              Text(place.description, style: const TextStyle(fontSize: 15)),
                             ],
                           ),
                         ),
@@ -285,7 +287,8 @@ class _DreamPlaceScreenState extends State<DreamPlaceScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            for (final feature in widget.place.features) Column(children: [Icon(feature.icon), Text(feature.name)]),
+                            for (final feature in place.features)
+                              Column(children: [Icon(feature.icon), Text(feature.name)]),
                           ],
                         ),
                         const SizedBox(height: 16),
