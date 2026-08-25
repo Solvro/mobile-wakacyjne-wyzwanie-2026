@@ -62,7 +62,8 @@ class HomeScreen extends StatelessWidget {
                   homeImagePath: Assets.images.rimini2.path,
                   pageImagePath: Assets.images.rimini.path,
                   pageTitle: "Turystyczne Rimini",
-                  description: "Jedno z najpopularniejszych miast turystyczno-wypoczynkowych nad północnym Adriatykiem.",
+                  description:
+                      "Jedno z najpopularniejszych miast turystyczno-wypoczynkowych nad północnym Adriatykiem.",
                   features: [
                     Feature("Plaża piasczysta", Icons.beach_access),
                     Feature("Życie nocne", Icons.nightlife),
@@ -78,7 +79,7 @@ class HomeScreen extends StatelessWidget {
                   pageImagePath: Assets.images.madryt2.path,
                   pageTitle: "Centrum Hiszpanii, Madryt",
                   description:
-                  "Stolica i największe miasto Hiszpanii, położone w środkowej części kraju, nad rzeką Manzanares.",
+                      "Stolica i największe miasto Hiszpanii, położone w środkowej części kraju, nad rzeką Manzanares.",
                   features: [
                     Feature("Stolica", Icons.location_city),
                     Feature("Życie nocne", Icons.nightlife),
@@ -102,7 +103,7 @@ class HomeScreen extends StatelessWidget {
               ),
             ],
           );
-        }
+        },
       ),
     );
   }
@@ -143,7 +144,12 @@ class PlaceCard extends StatelessWidget {
     return OrientationBuilder(
       builder: (context, orientation) {
         return Padding(
-          padding: EdgeInsets.only(bottom: orientation == Orientation.portrait ? 0 : 8, left: 8, right: orientation == Orientation.portrait ? 8 : 0, top: 8),
+          padding: EdgeInsets.only(
+            bottom: orientation == Orientation.portrait ? 0 : 8,
+            left: 8,
+            right: orientation == Orientation.portrait ? 8 : 0,
+            top: 8,
+          ),
           child: SizedBox(
             width: 400,
             height: 229,
@@ -178,7 +184,11 @@ class PlaceCard extends StatelessWidget {
                         child: Center(
                           child: Text(
                             place.title,
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: orientation == Orientation.portrait ? 20 : 25, color: Colors.white),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: orientation == Orientation.portrait ? 20 : 25,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ),
@@ -189,7 +199,7 @@ class PlaceCard extends StatelessWidget {
             ),
           ),
         );
-      }
+      },
     );
   }
 }
@@ -253,7 +263,8 @@ class _DreamPlaceScreenState extends State<DreamPlaceScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    for (final feature in widget.place.features) Column(children: [Icon(feature.icon), Text(feature.name)]),
+                    for (final feature in widget.place.features)
+                      Column(children: [Icon(feature.icon), Text(feature.name)]),
                   ],
                 ),
               ],
@@ -285,7 +296,8 @@ class _DreamPlaceScreenState extends State<DreamPlaceScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            for (final feature in widget.place.features) Column(children: [Icon(feature.icon), Text(feature.name)]),
+                            for (final feature in widget.place.features)
+                              Column(children: [Icon(feature.icon), Text(feature.name)]),
                           ],
                         ),
                         const SizedBox(height: 16),
