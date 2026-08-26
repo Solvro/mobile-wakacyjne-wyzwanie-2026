@@ -32,21 +32,35 @@ class MyApp extends StatelessWidget {
 class HomeScreen extends ConsumerWidget{
   
   const HomeScreen({super.key});
-  ListTile maker(BuildContext context,Place dps){
-    return ListTile(
+  Card maker(BuildContext context,Place dps){
+    
+    return Card(
+      color: Color.fromRGBO(77, 114, 216, 0.757),
+      shadowColor:  Color.fromRGBO(38, 72, 165, 0.76),
+      elevation: 5,
+      shape:RoundedRectangleBorder(borderRadius: .circular(20)),
+      child:ListTile(
             
             title: Expanded(child:Text(dps.title,style:TextStyle(fontSize: 20))),
-            
             leading: SizedBox(
-              width:MediaQuery.of(context).size.width * 0.4,
-              child:Image.asset(dps.path,fit: BoxFit.cover)
+              width:MediaQuery.of(context).size.width * 0.35,
+              child:ClipRRect(
+                borderRadius: .circular(20),
+                child:Image.asset(dps.path,fit: BoxFit.cover)
+              )
+              
             ),
-            trailing: Icon(dps.isFavorite ? Icons.favorite : Icons.favorite_border),
+            trailing: Row(
+              mainAxisSize: .min,
+              spacing: 20,
+              children:[
+                Icon(dps.isFavorite ? Icons.favorite : Icons.favorite_border),
+                Icon(Icons.arrow_forward_ios),]),
 
             onTap: (){
               GoRouter.of(context).push("${DreamPlaceScreen.route}/${dps.id}");
             },
-    );
+    ));
   }
   @override
   Widget build(BuildContext context,WidgetRef ref){

@@ -10,7 +10,7 @@ class DreamPlaceScreen extends ConsumerWidget {
   final String id; 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isFavorited = ref.watch(favoriteProvider); // obserwujemy stan providera, przy jego zmianie metoda build widgeta uruchomi się jeszcze raz odświerzając nam ui z nowym jej stanem
+    final isFavorited = ref.watch(favoriteProvider); 
     final place = ref.watch(placesProvider).firstWhere((p) => p.id == id);
     return Scaffold(
 
@@ -21,7 +21,7 @@ class DreamPlaceScreen extends ConsumerWidget {
         actions: [
           IconButton(
             onPressed: () {
-              ref.read(placesProvider.notifier).toggleFavorite(place.id); // tutaj odczytujemy jednorazowo stan notifiera ponieważ nie chcemy nasłuchiwać zmian na obiekcie do zarządzania stanem
+              ref.read(placesProvider.notifier).toggleFavorite(place.id); 
             },
             icon: Icon(
               place.isFavorite ? Icons.favorite : Icons.favorite_border,
