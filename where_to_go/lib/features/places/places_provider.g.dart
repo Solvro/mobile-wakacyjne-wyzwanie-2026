@@ -14,9 +14,8 @@ final placesProvider =
     AutoDisposeNotifierProvider<Places, List<Place>>.internal(
       Places.new,
       name: r'placesProvider',
-      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$placesHash,
+      debugGetCreateSourceHash:
+          const bool.fromEnvironment('dart.vm.product') ? null : _$placesHash,
       dependencies: null,
       allTransitiveDependencies: null,
     );
