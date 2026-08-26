@@ -23,7 +23,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: "stable"
-          flutter-version-file: where_to_go/pubspec.yaml
+          flutter-version: '3.29.0'
           
       - run: flutter --version
 
