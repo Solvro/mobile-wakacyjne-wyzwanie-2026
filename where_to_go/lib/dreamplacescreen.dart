@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'features/favorite/favorite_provider.dart';
+//import 'features/favorite/favorite_provider.dart';
 import 'features/places/places_provider.dart';
 
 class DreamPlaceScreen extends ConsumerWidget {
@@ -10,7 +10,7 @@ class DreamPlaceScreen extends ConsumerWidget {
   final String id;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isFavorited = ref.watch(favoriteProvider);
+   // final isFavorited = ref.watch(favoriteProvider);
     final place = ref.watch(placesProvider).firstWhere((p) => p.id == id);
     return Scaffold(
       appBar: AppBar(
