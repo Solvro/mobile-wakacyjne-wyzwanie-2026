@@ -10,7 +10,7 @@ class DreamPlaceScreen extends ConsumerWidget {
   final String id;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-   // final isFavorited = ref.watch(favoriteProvider);
+    // final isFavorited = ref.watch(favoriteProvider);
     final place = ref.watch(placesProvider).firstWhere((p) => p.id == id);
     return Scaffold(
       appBar: AppBar(
