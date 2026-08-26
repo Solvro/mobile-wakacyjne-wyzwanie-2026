@@ -31,8 +31,8 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_hooks: ^0.20.5
-  flutter_riverpod: ^3.0.2
-  riverpod_annotation: ^4.0.3
+  flutter_riverpod: ^2.5.1
+  riverpod_annotation: ^2.3.5
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -43,8 +43,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   build_runner: ^2.4.14
-  riverpod_generator: ^4.0.4
-  riverpod_lint: ^3.0.1
+  riverpod_generator: ^2.4.0
+  riverpod_lint: ^2.3.10
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
