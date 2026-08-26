@@ -38,20 +38,20 @@ class HomeScreen extends ConsumerWidget{
       color: Color.fromRGBO(77, 114, 216, 0.757),
       shadowColor:  Color.fromRGBO(38, 72, 165, 0.76),
       elevation: 5,
-      shape:RoundedRectangleBorder(borderRadius: .circular(20)),
+      shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child:ListTile(
             
             title: Expanded(child:Text(dps.title,style:TextStyle(fontSize: 20))),
             leading: SizedBox(
               width:MediaQuery.of(context).size.width * 0.35,
               child:ClipRRect(
-                borderRadius: .circular(20),
+                borderRadius: BorderRadius.circular(20),
                 child:Image.asset(dps.path,fit: BoxFit.cover)
               )
               
             ),
             trailing: Row(
-              mainAxisSize: .min,
+              mainAxisSize: MainAxisSize.min,
               spacing: 20,
               children:[
                 Icon(dps.isFavorite ? Icons.favorite : Icons.favorite_border),
