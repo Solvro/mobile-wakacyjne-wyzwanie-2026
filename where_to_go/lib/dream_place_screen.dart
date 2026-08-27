@@ -1,8 +1,11 @@
 import "package:flutter/material.dart";
-import "package:flutter_hooks/flutter_hooks.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:flutter_riverpod/legacy.dart";
 import "gen/assets.gen.dart";
 
-class DreamPlaceScreen extends HookWidget {
+final isFavoriteProvider = StateProvider<bool>((_) => false);
+
+class DreamPlaceScreen extends ConsumerWidget {
   const DreamPlaceScreen(
       {super.key, required this.name, required this.country, required this.description, required this.imagePath});
   final String name;
@@ -11,13 +14,13 @@ class DreamPlaceScreen extends HookWidget {
   final AssetGenImage imagePath;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isWideScreen = screenWidth > 600;
-    final isFavorite = useState(false);
+    final isFavorite = ref.watch(isFavoriteProvider);
 
     void toggleFavorite() {
-      isFavorite.value = !isFavorite.value;
+      ref.read(isFavoriteProvider.notifier).state = !isFavorite;
     }
 
     return Scaffold(
@@ -32,8 +35,8 @@ class DreamPlaceScreen extends HookWidget {
         actions: [
           IconButton(
             icon: Icon(
-              isFavorite.value ? Icons.favorite : Icons.favorite_border,
-              color: isFavorite.value ? Colors.red[600] : Colors.black87,
+              isFavorite ? Icons.favorite : Icons.favorite_border,
+              color: isFavorite ? Colors.red[600] : Colors.black87,
             ),
             onPressed: toggleFavorite,
           ),
