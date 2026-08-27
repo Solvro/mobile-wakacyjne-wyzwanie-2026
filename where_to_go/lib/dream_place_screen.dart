@@ -1,33 +1,24 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
-import "package:flutter_riverpod/legacy.dart";
-import "gen/assets.gen.dart";
-
-final isFavoriteProvider = StateProvider<bool>((_) => false);
+import "features/places/places_provider.dart";
 
 class DreamPlaceScreen extends ConsumerWidget {
-  const DreamPlaceScreen(
-      {super.key, required this.name, required this.country, required this.description, required this.imagePath});
-  final String name;
-  final String country;
-  final String description;
-  final AssetGenImage imagePath;
+  const DreamPlaceScreen({super.key, required this.id});
+  final String id;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final places = ref.watch(placesProvider);
+    final place = places.firstWhere((p) => p.id == id);
+
     final screenWidth = MediaQuery.of(context).size.width;
     final isWideScreen = screenWidth > 600;
-    final isFavorite = ref.watch(isFavoriteProvider);
-
-    void toggleFavorite() {
-      ref.read(isFavoriteProvider.notifier).state = !isFavorite;
-    }
 
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
         title: Text(
-          name,
+          place.name,
           style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
         ),
         backgroundColor: Colors.amber[400],
@@ -35,10 +26,10 @@ class DreamPlaceScreen extends ConsumerWidget {
         actions: [
           IconButton(
             icon: Icon(
-              isFavorite ? Icons.favorite : Icons.favorite_border,
-              color: isFavorite ? Colors.red[600] : Colors.black87,
+              place.isFavorite ? Icons.favorite : Icons.favorite_border,
+              color: place.isFavorite ? Colors.red[600] : Colors.black87,
             ),
-            onPressed: toggleFavorite,
+            onPressed: () => ref.read(placesProvider.notifier).toggleFavorite(place.id),
           ),
         ],
       ),
@@ -63,7 +54,7 @@ class DreamPlaceScreen extends ConsumerWidget {
                   bottomLeft: Radius.circular(24),
                   bottomRight: Radius.circular(24),
                 ),
-                child: imagePath.image(fit: BoxFit.cover),
+                child: place.imagePath.image(fit: BoxFit.cover),
               ),
             ),
             Padding(
@@ -72,7 +63,7 @@ class DreamPlaceScreen extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "$name $country",
+                    "${place.name} ${place.country}",
                     style: const TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
@@ -82,7 +73,7 @@ class DreamPlaceScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    description,
+                    place.description,
                     style: TextStyle(
                       fontSize: 15,
                       color: Colors.grey[700],
