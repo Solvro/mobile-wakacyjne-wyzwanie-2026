@@ -45,17 +45,18 @@ const _initialPlaces = [
     iconText3: "Widok",
   ),
   Place(
-      id: "4",
-      title: "Gąski, Polska",
-      imagePath: "assets/images/gaski.jpg",
-      locationTitle: "Latarnia Morska",
-      description: "Latarnia Morska w Gąskach to zabytkowa latarnia morska położona nad Morzem Bałtyckim.",
-      icon1: Icons.landscape,
-      icon2: Icons.lightbulb,
-      icon3: Icons.photo_camera,
-      iconText1: "Widok",
-      iconText2: "Latarnia",
-      iconText3: "Fotogeniczne"),
+    id: "4",
+    title: "Gąski, Polska",
+    imagePath: "assets/images/gaski.jpg",
+    locationTitle: "Latarnia Morska",
+    description: "Latarnia Morska w Gąskach to zabytkowa latarnia morska położona nad Morzem Bałtyckim.",
+    icon1: Icons.landscape,
+    icon2: Icons.lightbulb,
+    icon3: Icons.photo_camera,
+    iconText1: "Widok",
+    iconText2: "Latarnia",
+    iconText3: "Fotogeniczne",
+  ),
   Place(
     id: "5",
     title: "Białogard, Polska",
@@ -79,7 +80,7 @@ class Places extends _$Places {
   void toggle(String id) {
     state = [
       for (final p in state)
-        if (p.id == id) p.copyWith(isFavorite: !p.isFavorite) else p
+        if (p.id == id) p.copyWith(isFavorite: !p.isFavorite) else p,
     ];
   }
 }

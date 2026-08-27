@@ -4,11 +4,7 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 import "app_router.dart";
 
 void main() {
-  runApp(
-    const ProviderScope(
-      child: MyApp(),
-    ),
-  );
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -16,10 +12,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routerConfig: goRouter,
-      title: "Wymarzone Miejsca",
-      debugShowCheckedModeBanner: false,
-    );
+    return MaterialApp.router(routerConfig: goRouter, title: "Wymarzone Miejsca", debugShowCheckedModeBanner: false);
   }
 }

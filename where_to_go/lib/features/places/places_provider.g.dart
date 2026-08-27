@@ -14,15 +14,15 @@ final placesProvider = PlacesProvider._();
 
 final class PlacesProvider extends $NotifierProvider<Places, List<Place>> {
   PlacesProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'placesProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'placesProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$placesHash();
@@ -33,10 +33,7 @@ final class PlacesProvider extends $NotifierProvider<Places, List<Place>> {
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(List<Place> value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<List<Place>>(value),
-    );
+    return $ProviderOverride(origin: this, providerOverride: $SyncValueProvider<List<Place>>(value));
   }
 }
 
@@ -48,8 +45,8 @@ abstract class _$Places extends $Notifier<List<Place>> {
   @override
   WhenComplete runBuild() {
     final ref = this.ref as $Ref<List<Place>, List<Place>>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<List<Place>, List<Place>>, List<Place>, Object?, Object?>;
+    final element =
+        ref.element as $ClassProviderElement<AnyNotifier<List<Place>, List<Place>>, List<Place>, Object?, Object?>;
     return element.handleCreate(ref, build);
   }
 }

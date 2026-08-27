@@ -4,10 +4,7 @@ import "features/places/screens.dart";
 final goRouter = GoRouter(
   initialLocation: "/",
   routes: [
-    GoRoute(
-      path: "/",
-      builder: (context, state) => const HomeScreen(),
-    ),
+    GoRoute(path: "/", builder: (context, state) => const HomeScreen()),
     GoRoute(
       path: "${DreamPlaceScreen.route}/:id",
       builder: (context, state) {
