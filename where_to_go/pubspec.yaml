@@ -1,8 +1,6 @@
 name: where_to_go
 description: "A new Flutter project."
-# The following line prevents the package from being accidentally published to
-# pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: "none" # Remove this line if you wish to publish to pub.dev
+publish_to: "none"
 
 version: 1.0.0+1
 
@@ -18,13 +16,15 @@ dependencies:
   cupertino_icons: ^1.0.8
   riverpod: ^3.3.2
   flutter_riverpod: ^3.3.2
-  riverpod_lint: ^3.1.4
   riverpod_annotation: ^4.0.3
   go_router: ^14.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  # Tymczasowo wyłączone ze względu na konflikt z wersją beta Darta
+  # riverpod_lint: ^3.1.4
 
   solvro_config: ^1.0.1
   build_runner: ^2.6.0
