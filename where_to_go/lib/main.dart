@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-
 import "dream_place_screen.dart";
 import "gen/assets.gen.dart";
 

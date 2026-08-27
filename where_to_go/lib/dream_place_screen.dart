@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
-
+import "package:flutter_hooks/flutter_hooks.dart";
 import "gen/assets.gen.dart";
 
-class DreamPlaceScreen extends StatefulWidget {
+class DreamPlaceScreen extends HookWidget {
   const DreamPlaceScreen(
       {super.key, required this.name, required this.country, required this.description, required this.imagePath});
   final String name;
@@ -11,29 +11,20 @@ class DreamPlaceScreen extends StatefulWidget {
   final AssetGenImage imagePath;
 
   @override
-  State<DreamPlaceScreen> createState() => _DreamPlaceScreenState();
-}
-
-class _DreamPlaceScreenState extends State<DreamPlaceScreen> {
-  var _isFavorite = false;
-
-  void _toggleFavorite() {
-    setState(() {
-      _isFavorite = !_isFavorite;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    // znalazłem fajny sposób na pobranie szerokości ekranu i dostosowanie wysokości obrazka w zależności od tego, czy ekran jest szeroki
     final screenWidth = MediaQuery.of(context).size.width;
     final isWideScreen = screenWidth > 600;
+    final isFavorite = useState(false);
+
+    void toggleFavorite() {
+      isFavorite.value = !isFavorite.value;
+    }
 
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
         title: Text(
-          widget.name,
+          name,
           style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
         ),
         backgroundColor: Colors.amber[400],
@@ -41,14 +32,13 @@ class _DreamPlaceScreenState extends State<DreamPlaceScreen> {
         actions: [
           IconButton(
             icon: Icon(
-              _isFavorite ? Icons.favorite : Icons.favorite_border,
-              color: _isFavorite ? Colors.red[600] : Colors.black87,
+              isFavorite.value ? Icons.favorite : Icons.favorite_border,
+              color: isFavorite.value ? Colors.red[600] : Colors.black87,
             ),
-            onPressed: _toggleFavorite,
+            onPressed: toggleFavorite,
           ),
         ],
       ),
-      // zapobiega błedom na dole ekranu
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,7 +60,7 @@ class _DreamPlaceScreenState extends State<DreamPlaceScreen> {
                   bottomLeft: Radius.circular(24),
                   bottomRight: Radius.circular(24),
                 ),
-                child: widget.imagePath.image(fit: BoxFit.cover),
+                child: imagePath.image(fit: BoxFit.cover),
               ),
             ),
             Padding(
@@ -79,7 +69,7 @@ class _DreamPlaceScreenState extends State<DreamPlaceScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "${widget.name} ${widget.country}",
+                    "$name $country",
                     style: const TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
@@ -89,7 +79,7 @@ class _DreamPlaceScreenState extends State<DreamPlaceScreen> {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    widget.description,
+                    description,
                     style: TextStyle(
                       fontSize: 15,
                       color: Colors.grey[700],
