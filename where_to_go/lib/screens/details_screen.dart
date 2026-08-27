@@ -1,9 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../features/places/places_provider.dart';
+import "package:flutter/material.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "../features/places/places_provider.dart";
 
 class DetailsScreen extends ConsumerWidget {
+  static const route = "/details";
   final String id;
+
   const DetailsScreen({super.key, required this.id});
 
   @override
@@ -38,15 +40,16 @@ class DetailsScreen extends ConsumerWidget {
                 fit: BoxFit.cover,
               ),
             Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     place.title,
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                    style:
+                        Theme.of(context).textTheme.headlineMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
                   ),
                   const SizedBox(height: 12),
                   Text(

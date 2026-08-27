@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import '../features/places/places_provider.dart';
+import "package:flutter/material.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:go_router/go_router.dart";
+import "../features/places/places_provider.dart";
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -13,7 +13,10 @@ class HomeScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFF7F4FA),
       appBar: AppBar(
-        title: const Text('Miejsca marzeń', style: TextStyle(fontWeight: FontWeight.w600)),
+        title: const Text(
+          "Miejsca marzeń",
+          style: TextStyle(fontWeight: FontWeight.w600),
+        ),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -28,16 +31,17 @@ class HomeScreen extends ConsumerWidget {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(16),
-              boxShadow: [
+              boxShadow: const [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.04),
+                  color: Color(0x0A000000),
                   blurRadius: 10,
-                  offset: const Offset(0, 4),
+                  offset: Offset(0, 4),
                 ),
               ],
             ),
             child: ListTile(
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               leading: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: place.imageUrl != null
@@ -47,19 +51,33 @@ class HomeScreen extends ConsumerWidget {
                         height: 56,
                         fit: BoxFit.cover,
                       )
-                    : Container(width: 56, height: 56, color: Colors.grey.shade300),
+                    : Container(
+                        width: 56,
+                        height: 56,
+                        color: Colors.grey.shade300,
+                      ),
               ),
               title: Text(
                 place.title,
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
               ),
               subtitle: Text(
                 place.description,
-                style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
+                style: TextStyle(
+                  color: Colors.grey.shade600,
+                  fontSize: 13,
+                ),
               ),
-              trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Color(0xFF3F51B5)),
+              trailing: const Icon(
+                Icons.arrow_forward_ios,
+                size: 16,
+                color: Color(0xFF3F51B5),
+              ),
               onTap: () {
-                context.push('/details/${place.id}');
+                context.go("/details/${place.id}");
               },
             ),
           );
