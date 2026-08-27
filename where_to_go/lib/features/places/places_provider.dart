@@ -10,7 +10,8 @@ const _initialPlaces = [
     title: "Koszalin, Polska",
     imagePath: "assets/images/koszalin.jpg",
     locationTitle: "Katedra",
-    description: "Katedra Niepokalanego Poczęcia Najświętszej Maryi Panny w Koszalinie.",
+    description:
+        "Katedra Niepokalanego Poczęcia Najświętszej Maryi Panny w Koszalinie.",
     icon1: Icons.location_on,
     icon2: Icons.account_balance,
     icon3: Icons.local_grocery_store,
@@ -23,7 +24,8 @@ const _initialPlaces = [
     title: "Mielno, Polska",
     imagePath: "assets/images/mielno.jpg",
     locationTitle: "Plaża",
-    description: "Mielno słynie z piaszcystych plaż, drogich gofrów i zimnego Bałtyku",
+    description:
+        "Mielno słynie z piaszcystych plaż, drogich gofrów i zimnego Bałtyku",
     icon1: Icons.beach_access,
     icon2: Icons.local_dining,
     icon3: Icons.wb_sunny,
@@ -49,7 +51,8 @@ const _initialPlaces = [
     title: "Gąski, Polska",
     imagePath: "assets/images/gaski.jpg",
     locationTitle: "Latarnia Morska",
-    description: "Latarnia Morska w Gąskach to zabytkowa latarnia morska położona nad Morzem Bałtyckim.",
+    description:
+        "Latarnia Morska w Gąskach to zabytkowa latarnia morska położona nad Morzem Bałtyckim.",
     icon1: Icons.landscape,
     icon2: Icons.lightbulb,
     icon3: Icons.photo_camera,
@@ -62,7 +65,8 @@ const _initialPlaces = [
     title: "Białogard, Polska",
     imagePath: "assets/images/bialogard.jpg",
     locationTitle: "Rynek",
-    description: "Rynek w Białogardzie to centralny plac miasta, otoczony zabytkowymi kamienicami.",
+    description:
+        "Rynek w Białogardzie to centralny plac miasta, otoczony zabytkowymi kamienicami.",
     icon1: Icons.store,
     icon2: Icons.local_cafe,
     icon3: Icons.directions_walk,

@@ -33,7 +33,10 @@ final class PlacesProvider extends $NotifierProvider<Places, List<Place>> {
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(List<Place> value) {
-    return $ProviderOverride(origin: this, providerOverride: $SyncValueProvider<List<Place>>(value));
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<List<Place>>(value),
+    );
   }
 }
 
@@ -46,7 +49,13 @@ abstract class _$Places extends $Notifier<List<Place>> {
   WhenComplete runBuild() {
     final ref = this.ref as $Ref<List<Place>, List<Place>>;
     final element =
-        ref.element as $ClassProviderElement<AnyNotifier<List<Place>, List<Place>>, List<Place>, Object?, Object?>;
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<List<Place>, List<Place>>,
+              List<Place>,
+              Object?,
+              Object?
+            >;
     return element.handleCreate(ref, build);
   }
 }

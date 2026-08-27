@@ -18,7 +18,12 @@ class HomeScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text(
           "Wymarzone Miejsca",
-          style: TextStyle(fontFamily: "Roboto", fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+          style: TextStyle(
+            fontFamily: "Roboto",
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
         ),
         backgroundColor: const Color.fromARGB(255, 170, 8, 57),
       ),
@@ -29,7 +34,12 @@ class HomeScreen extends ConsumerWidget {
           return ListTile(
             leading: ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: Image.asset(place.imagePath, width: 50, height: 50, fit: BoxFit.cover),
+              child: Image.asset(
+                place.imagePath,
+                width: 50,
+                height: 50,
+                fit: BoxFit.cover,
+              ),
             ),
             title: Text(place.locationTitle),
             subtitle: Text(place.title),
@@ -38,7 +48,11 @@ class HomeScreen extends ConsumerWidget {
               color: place.isFavorite ? Colors.red : Colors.grey,
             ),
             onTap: () {
-              unawaited(GoRouter.of(context).push("${DreamPlaceScreen.route}/${place.id}"));
+              unawaited(
+                GoRouter.of(
+                  context,
+                ).push("${DreamPlaceScreen.route}/${place.id}"),
+              );
             },
           );
         },
@@ -64,7 +78,12 @@ class DreamPlaceScreen extends ConsumerWidget {
         centerTitle: false,
         title: Text(
           place.title,
-          style: const TextStyle(fontFamily: "Roboto", fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+          style: const TextStyle(
+            fontFamily: "Roboto",
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
         ),
         backgroundColor: const Color.fromARGB(255, 170, 8, 57),
         actions: [
@@ -97,7 +116,12 @@ class DreamPlaceScreen extends ConsumerWidget {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Image.asset(place.imagePath, width: 300, height: 200, fit: BoxFit.cover),
+                      Image.asset(
+                        place.imagePath,
+                        width: 300,
+                        height: 200,
+                        fit: BoxFit.cover,
+                      ),
                       Padding(
                         padding: const EdgeInsets.all(16),
                         child: Column(
@@ -105,10 +129,20 @@ class DreamPlaceScreen extends ConsumerWidget {
                           children: [
                             Text(
                               place.locationTitle,
-                              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
                             ),
                             const SizedBox(height: 8),
-                            Text(place.description, style: const TextStyle(fontSize: 13, color: Colors.white)),
+                            Text(
+                              place.description,
+                              style: const TextStyle(
+                                fontSize: 13,
+                                color: Colors.white,
+                              ),
+                            ),
                           ],
                         ),
                       ),
