@@ -47,7 +47,6 @@ class _DreamPlaceState extends State<DreamPlace> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Zdjęcie z przyciskiem favorite
           Stack(
             children: [
               Image.asset(
@@ -69,7 +68,6 @@ class _DreamPlaceState extends State<DreamPlace> {
               ),
             ],
           ),
-          // Tytuł i opis
           Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -99,7 +97,7 @@ class _DreamPlaceState extends State<DreamPlace> {
               decoration: BoxDecoration(
                 color: _cardColor,
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: _primaryColor.withOpacity(0.3), width: 1.5),
+                border: Border.all(color: _primaryColor.withValues(alpha: 0.3), width: 1.5),
               ),
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
               child: Row(
