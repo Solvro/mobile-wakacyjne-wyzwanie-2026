@@ -1,10 +1,11 @@
 import "package:flutter/material.dart";
-import "package:flutter_hooks/flutter_hooks.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "features/favorite/favorite_provider.dart";
 
 import "gen/assets.gen.dart";
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -15,6 +16,34 @@ class MyApp extends StatelessWidget {
     return MaterialApp(debugShowCheckedModeBanner: false, home: HomeScreen());
   }
 }
+
+class Feature {
+  final String name;
+  final IconData icon;
+
+  Feature(this.name, this.icon);
+}
+
+class Place {
+  final String title;
+  final String homeImagePath;
+  final String pageImagePath;
+  final String pageTitle;
+  final String description;
+  final List<Feature> features;
+  final bool isFavorite;
+
+  const Place({
+    required this.title,
+    required this.homeImagePath,
+    required this.pageImagePath,
+    required this.pageTitle,
+    required this.description,
+    required this.features,
+    this.isFavorite = false
+  });
+}
+
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -110,30 +139,7 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class Feature {
-  final String name;
-  final IconData icon;
 
-  Feature(this.name, this.icon);
-}
-
-class Place {
-  final String title;
-  final String homeImagePath;
-  final String pageImagePath;
-  final String pageTitle;
-  final String description;
-  final List<Feature> features;
-
-  Place({
-    required this.title,
-    required this.homeImagePath,
-    required this.pageImagePath,
-    required this.pageTitle,
-    required this.description,
-    required this.features,
-  });
-}
 
 class PlaceCard extends StatelessWidget {
   final Place place;
@@ -205,13 +211,13 @@ class PlaceCard extends StatelessWidget {
   }
 }
 
-class DreamPlaceScreen extends HookWidget {
+class DreamPlaceScreen extends ConsumerWidget {
   final Place place;
   const DreamPlaceScreen(this.place, {super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final isFavorited = useState(false);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isFavorited = ref.watch(favoriteProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -224,8 +230,8 @@ class DreamPlaceScreen extends HookWidget {
         ),
         actions: [
           IconButton(
-            onPressed: () => isFavorited.value = !isFavorited.value,
-            icon: isFavorited.value
+            onPressed: () => {ref.read(favoriteProvider.notifier).toggle()},
+            icon: isFavorited
                 ? const Icon(Icons.favorite, color: Colors.red)
                 : const Icon(Icons.favorite_border, color: Colors.white),
           ),
