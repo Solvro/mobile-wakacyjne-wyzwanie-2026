@@ -1,8 +1,9 @@
 import "package:flutter/material.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
+
 import "place.dart";
 
-part 'places_provider.g.dart';
+part "places_provider.g.dart";
 
 const _initialPlaces = [
   Place(
@@ -81,7 +82,7 @@ class Places extends _$Places {
   void toggleFavorite(String id) {
     state = [
       for (final p in state)
-        if (p.id == id) p.copyWith(isFavorite: !p.isFavorite) else p
-    ]
+        if (p.id == id) p.copyWith(isFavorite: !p.isFavorite) else p,
+    ];
   }
 }

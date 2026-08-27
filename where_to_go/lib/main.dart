@@ -1,9 +1,11 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
-import "features/favorite/favorite_provider.dart";
-import "dream_place_screen.dart";
+import "package:go_router/go_router.dart";
 
-import "gen/assets.gen.dart";
+import "app_router.dart";
+import "dream_place_screen.dart";
+import "features/places/place.dart";
+import "features/places/places_provider.dart";
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -14,16 +16,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(debugShowCheckedModeBanner: false, home: HomeScreen());
+    return MaterialApp.router(debugShowCheckedModeBanner: false, routerConfig: goRouter);
   }
 }
 
-
-
-
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
+  const HomeScreen({super.key});
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final places = ref.watch(placesProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Wymarzone miejsca", style: TextStyle(color: Colors.white)),
@@ -33,9 +34,7 @@ class HomeScreen extends StatelessWidget {
         builder: (context, orientation) {
           return ListView(
             scrollDirection: orientation == Orientation.portrait ? Axis.vertical : Axis.horizontal,
-            children: [
-
-            ],
+            children: [for (final place in places) PlaceCard(place)],
           );
         },
       ),
@@ -43,15 +42,13 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-
-
-class PlaceCard extends StatelessWidget {
+class PlaceCard extends ConsumerWidget {
   final Place place;
 
-  const PlaceCard({super.key, required this.place});
+  const PlaceCard(this.place, {super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return OrientationBuilder(
       builder: (context, orientation) {
         return Padding(
@@ -69,43 +66,48 @@ class PlaceCard extends StatelessWidget {
               clipBehavior: Clip.antiAlias,
               elevation: 2,
               shadowColor: Colors.pink[800],
-              child: InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    PageRouteBuilder<dynamic>(
-                      pageBuilder: (context, animation, secondaryAnimation) => DreamPlaceScreen(place),
-                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                        final tween = Tween(begin: const Offset(1, 0), end: Offset.zero);
-                        final curvedAnimation = CurvedAnimation(parent: animation, curve: Curves.ease);
-                        return SlideTransition(position: tween.animate(curvedAnimation), child: child);
-                      },
-                    ),
-                  );
-                },
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: Image.asset(place.homeImagePath, width: double.infinity, fit: BoxFit.cover),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(7),
-                      child: SizedBox(
-                        height: orientation == Orientation.portrait ? 32 : 40,
-                        child: Center(
-                          child: Text(
-                            place.title,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: orientation == Orientation.portrait ? 20 : 25,
-                              color: Colors.white,
+              child: Stack(
+                children: [
+                  InkWell(
+                    onTap: () => GoRouter.of(context).push("${DreamPlaceScreen.route}/${place.id}"),
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: Image.asset(place.homeImagePath, width: double.infinity, fit: BoxFit.cover),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(7),
+                          child: SizedBox(
+                            height: orientation == Orientation.portrait ? 32 : 40,
+                            child: Center(
+                              child: Text(
+                                place.title,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: orientation == Orientation.portrait ? 20 : 25,
+                                  color: Colors.white,
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: IconButton(
+                      icon: Icon(
+                        place.isFavorite ? Icons.favorite : Icons.favorite_border,
+                        color: place.isFavorite ? Colors.red : Colors.white,
+                      ),
+                      onPressed: () {
+                        ref.read(placesProvider.notifier).toggleFavorite(place.id);
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -114,4 +116,3 @@ class PlaceCard extends StatelessWidget {
     );
   }
 }
-

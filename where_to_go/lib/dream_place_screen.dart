@@ -1,16 +1,18 @@
-
 import "package:flutter/material.dart";
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'features/favorite/favorite_provider.dart';
-import "main.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:go_router/go_router.dart";
+
+import "features/places/places_provider.dart";
 
 class DreamPlaceScreen extends ConsumerWidget {
-  final Place place;
-  const DreamPlaceScreen(this.place, {super.key});
+  final String id;
+  const DreamPlaceScreen({super.key, required this.id});
+  static const route = "/details";
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isFavorited = ref.watch(favoriteProvider);
+    final place = ref.watch(placesProvider).firstWhere((p) => p.id == id);
+    final isFavorited = place.isFavorite;
 
     return Scaffold(
       appBar: AppBar(
@@ -19,11 +21,11 @@ class DreamPlaceScreen extends ConsumerWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           color: Colors.white,
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => GoRouter.of(context).pop(),
         ),
         actions: [
           IconButton(
-            onPressed: () => {ref.read(favoriteProvider.notifier).toggle()},
+            onPressed: () => ref.read(placesProvider.notifier).toggleFavorite(place.id),
             icon: isFavorited
                 ? const Icon(Icons.favorite, color: Colors.red)
                 : const Icon(Icons.favorite_border, color: Colors.white),

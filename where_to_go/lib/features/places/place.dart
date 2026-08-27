@@ -25,7 +25,7 @@ class Place {
     required this.pageTitle,
     required this.description,
     required this.features,
-    this.isFavorite = false
+    this.isFavorite = false,
   });
 
   Place copyWith({bool? isFavorite}) {
