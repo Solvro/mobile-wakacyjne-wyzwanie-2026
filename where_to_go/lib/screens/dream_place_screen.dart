@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:go_router/go_router.dart";
 
-import "features/places/places_provider.dart";
+import "../features/places/places_provider.dart";
 
 class DreamPlaceScreen extends ConsumerWidget {
   final String id;
@@ -19,12 +19,13 @@ class DreamPlaceScreen extends ConsumerWidget {
         backgroundColor: Colors.pink[600],
         title: Text(place.title, style: const TextStyle(color: Colors.white)),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back, size: 28),
           color: Colors.white,
           onPressed: () => GoRouter.of(context).pop(),
         ),
         actions: [
           IconButton(
+            iconSize: 28,
             onPressed: () => ref.read(placesProvider.notifier).toggleFavorite(place.id),
             icon: isFavorited
                 ? const Icon(Icons.favorite, color: Colors.red)
