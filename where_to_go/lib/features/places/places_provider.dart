@@ -29,7 +29,7 @@ class Places extends _$Places {
   void toggleFavorite(String id) {
     state = [
       for (final p in state)
-        if (p.id == id) p.copyWith(isFavorite: !p.isFavorite) else p
+        if (p.id == id) p.copyWith(isFavorite: !p.isFavorite) else p,
     ];
   }
 }

@@ -11,10 +11,7 @@ class HomeScreen extends ConsumerWidget {
     final places = ref.watch(placesProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Where to go?"),
-        backgroundColor: Colors.amber[400],
-      ),
+      appBar: AppBar(title: const Text("Where to go?"), backgroundColor: Colors.amber[400]),
       body: ListView.builder(
         itemCount: places.length,
         itemBuilder: (context, index) {

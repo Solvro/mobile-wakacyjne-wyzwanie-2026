@@ -5,8 +5,8 @@ publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  flutter: 3.38.0
-  sdk: ^3.9.0
+  flutter: 3.41.9
+  sdk: ^3.11.0
 
 dependencies:
   flutter:
@@ -14,22 +14,21 @@ dependencies:
 
   flutter_hooks: ^0.21.3+1
   cupertino_icons: ^1.0.8
-  riverpod: ^3.3.2
-  flutter_riverpod: ^3.3.2
-  riverpod_annotation: ^4.0.3
-  go_router: ^14.0.0
+  flutter_riverpod: ^2.6.1
+  riverpod_annotation: ^2.6.1
+  go_router: ^16.2.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  # Tymczasowo wyłączone ze względu na konflikt z wersją beta Darta
-  # riverpod_lint: ^3.1.4
-
+  flutter_lints: ^5.0.0
   solvro_config: ^1.0.1
-  build_runner: ^2.6.0
-  flutter_gen_runner: ^5.11.0
-  riverpod_generator: ^4.0.4
+  build_runner: ^2.5.4
+  flutter_gen_runner: 5.11.0
+  riverpod_generator: ^2.6.5
+  custom_lint: ^0.7.5
+  riverpod_lint: ^2.6.5
 
 flutter:
   uses-material-design: true

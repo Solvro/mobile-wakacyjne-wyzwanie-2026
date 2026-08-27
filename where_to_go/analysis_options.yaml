@@ -1,4 +1,7 @@
+include: package:solvro_config/app.yaml
 analyzer:
+  plugins:
+    - custom_lint
   exclude:
     - build/**
     - android/**
@@ -7,6 +10,3 @@ analyzer:
     - windows/**
     - macos/**
     - linux/**
-include: package:solvro_config/app.yaml
-plugins:
-  riverpod_lint: 3.1.8

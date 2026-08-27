@@ -41,13 +41,7 @@ class DreamPlaceScreen extends ConsumerWidget {
               height: isWideScreen ? 350 : 250,
               width: double.infinity,
               decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withAlpha(25),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
+                boxShadow: [BoxShadow(color: Colors.black.withAlpha(25), blurRadius: 10, offset: const Offset(0, 4))],
               ),
               child: ClipRRect(
                 borderRadius: const BorderRadius.only(
@@ -72,14 +66,7 @@ class DreamPlaceScreen extends ConsumerWidget {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  Text(
-                    place.description,
-                    style: TextStyle(
-                      fontSize: 15,
-                      color: Colors.grey[700],
-                      height: 1.5,
-                    ),
-                  ),
+                  Text(place.description, style: TextStyle(fontSize: 15, color: Colors.grey[700], height: 1.5)),
                   const SizedBox(height: 32),
                   const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
