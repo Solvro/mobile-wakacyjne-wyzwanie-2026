@@ -18,32 +18,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class Feature {
-  final String name;
-  final IconData icon;
 
-  Feature(this.name, this.icon);
-}
-
-class Place {
-  final String title;
-  final String homeImagePath;
-  final String pageImagePath;
-  final String pageTitle;
-  final String description;
-  final List<Feature> features;
-  final bool isFavorite;
-
-  const Place({
-    required this.title,
-    required this.homeImagePath,
-    required this.pageImagePath,
-    required this.pageTitle,
-    required this.description,
-    required this.features,
-    this.isFavorite = false
-  });
-}
 
 
 class HomeScreen extends StatelessWidget {
@@ -59,79 +34,7 @@ class HomeScreen extends StatelessWidget {
           return ListView(
             scrollDirection: orientation == Orientation.portrait ? Axis.vertical : Axis.horizontal,
             children: [
-              PlaceCard(
-                place: Place(
-                  title: "Lagonisi, Grecja",
-                  homeImagePath: Assets.images.lagonisi.path,
-                  pageImagePath: Assets.images.lagonisi2.path,
-                  pageTitle: "Nadmorskie miasteczko Lagonisi",
-                  description: "Nadmorska dzielnica mieszkaniowa na Riwierze Ateńskiej i południowej części Kalyvia Thorikou we wschodniej Attyce.",
-                  features: [
-                    Feature("Plaża piasczysta", Icons.beach_access),
-                    Feature("Jedzenie", Icons.fastfood),
-                    Feature("Słońce", Icons.sunny),
-                  ],
-                ),
-              ),
-              PlaceCard(
-                place: Place(
-                  title: "Vodice, Chorwacja",
-                  homeImagePath: Assets.images.vodice.path,
-                  pageImagePath: Assets.images.vodice2.path,
-                  pageTitle: "Słoneczny kurort Vodice",
-                  description: "Miasto i port w Chorwacji, w żupanii szybenicko-knińskiej, siedziba miasta Vodice.",
-                  features: [
-                    Feature("Plaża kamienista", Icons.beach_access),
-                    Feature("Życie nocne", Icons.nightlife),
-                    Feature("Słońce", Icons.sunny),
-                  ],
-                ),
-              ),
-              PlaceCard(
-                place: Place(
-                  title: "Rimini, Włochy",
-                  homeImagePath: Assets.images.rimini2.path,
-                  pageImagePath: Assets.images.rimini.path,
-                  pageTitle: "Turystyczne Rimini",
-                  description:
-                      "Jedno z najpopularniejszych miast turystyczno-wypoczynkowych nad północnym Adriatykiem.",
-                  features: [
-                    Feature("Plaża piasczysta", Icons.beach_access),
-                    Feature("Życie nocne", Icons.nightlife),
-                    Feature("Słońce", Icons.sunny),
-                    Feature("Duże miasto", Icons.location_city),
-                  ],
-                ),
-              ),
-              PlaceCard(
-                place: Place(
-                  title: "Madryt, Hiszpania",
-                  homeImagePath: Assets.images.madryt.path,
-                  pageImagePath: Assets.images.madryt2.path,
-                  pageTitle: "Centrum Hiszpanii, Madryt",
-                  description:
-                      "Stolica i największe miasto Hiszpanii, położone w środkowej części kraju, nad rzeką Manzanares.",
-                  features: [
-                    Feature("Stolica", Icons.location_city),
-                    Feature("Życie nocne", Icons.nightlife),
-                    Feature("Nad rzeką", Icons.water),
-                  ],
-                ),
-              ),
-              PlaceCard(
-                place: Place(
-                  title: "Zakopane, Polska",
-                  homeImagePath: Assets.images.zakopane.path,
-                  pageImagePath: Assets.images.zakopane2.path,
-                  pageTitle: "Zimowa stolica, Zakopane",
-                  description: "Miasto w południowej Polsce, największa miejscowość w bezpośrednim otoczeniu Tatr, duży ośrodek sportów zimowych",
-                  features: [
-                    Feature("Góry", Icons.terrain),
-                    Feature("Park Narodowy", Icons.hiking),
-                    Feature("Narty", Icons.downhill_skiing),
-                  ],
-                ),
-              ),
+
             ],
           );
         },
