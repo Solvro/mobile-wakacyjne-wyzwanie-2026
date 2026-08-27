@@ -108,7 +108,7 @@ class DreamPlaceScreen extends ConsumerWidget {
             alignment: Alignment.topCenter,
             child: SizedBox(
               width: 300,
-              child: Container(
+              child: DecoratedBox(
                 decoration: BoxDecoration(
                   color: const Color.fromARGB(255, 221, 172, 50),
                   borderRadius: BorderRadius.circular(20),

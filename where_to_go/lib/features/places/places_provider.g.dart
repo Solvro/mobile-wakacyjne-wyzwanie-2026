@@ -40,7 +40,7 @@ final class PlacesProvider extends $NotifierProvider<Places, List<Place>> {
   }
 }
 
-String _$placesHash() => r'6e74309efe6ab96c856ddcdae90b12a1ece45a78';
+String _$placesHash() => r'a694793a441d5b97cb05891aa0d8bd86d7a3a630';
 
 abstract class _$Places extends $Notifier<List<Place>> {
   List<Place> build();
@@ -48,8 +48,8 @@ abstract class _$Places extends $Notifier<List<Place>> {
   @override
   WhenComplete runBuild() {
     final ref = this.ref as $Ref<List<Place>, List<Place>>;
-    final element =
-        ref.element as $ClassProviderElement<AnyNotifier<List<Place>, List<Place>>, List<Place>, Object?, Object?>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<List<Place>, List<Place>>, List<Place>, Object?, Object?>;
     return element.handleCreate(ref, build);
   }
 }
