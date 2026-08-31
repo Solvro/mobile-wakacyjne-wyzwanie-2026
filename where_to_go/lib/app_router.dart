@@ -5,10 +5,7 @@ import 'main.dart';
 final goRouter = GoRouter(
   initialLocation: '/',
   routes: [
-    GoRoute(
-      path: '/',
-      builder: (context, state) => const HomeScreen(),
-    ),
+    GoRoute(path: '/', builder: (context, state) => const HomeScreen()),
     GoRoute(
       path: '${DreamPlaceScreen.route}/:id', // dynamiczny parametr
       builder: (context, state) {

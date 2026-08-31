@@ -1,14 +1,24 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import '../../database/app_database.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../repositories/dreamplacesrepository.dart';
 import 'package:flutter/material.dart';
 import 'place.dart';
 
 part 'places_provider.g.dart';
 
+final appDatabaseProvider = Provider<AppDatabase>((ref) {
+  return AppDatabase();
+});
+
+final dreamPlacesRepositoryProvider = Provider<DreamPlacesRepository>((ref) {
+  return DreamPlacesRepository(ref.watch(appDatabaseProvider));
+});
+
 const _initialPlaces = [
   Place(
     id: '1',
     title: "Kyoto, Japonia",
-    backcolor: Color.fromARGB(255, 110, 110, 233),
     shortdesc: "Kyoto, dawna stolica Japonii",
     description:
         "Serce japońskiej kultury, które mieści tysiące świątyń, pięknych ogrodów i tradycyjnych herbaciarni.",
@@ -18,13 +28,12 @@ const _initialPlaces = [
       Icon(Icons.restaurant),
       Icon(Icons.emoji_food_beverage_outlined),
       Icon(Icons.castle),
-      Icon(Icons.place)
+      Icon(Icons.place),
     ],
   ),
   Place(
     id: '2',
     title: "Zakynthos, Grecja",
-    backcolor: Color.fromARGB(255, 91, 207, 223),
     shortdesc: "Białe klify Zakynthos",
     description: "Jedna z najbardziej malowniczych wysp Grecji.",
     path: 'assets/images/grecja.webp',
@@ -33,13 +42,12 @@ const _initialPlaces = [
       Icon(Icons.restaurant),
       Icon(Icons.scuba_diving),
       Icon(Icons.beach_access),
-      Icon(Icons.place)
+      Icon(Icons.place),
     ],
   ),
   Place(
     id: '3',
     title: "Malaga, Hiszpania",
-    backcolor: Color.fromARGB(255, 238, 223, 90),
     shortdesc: "Malaga, hiszpańskie miasto portowe",
     description: "Słoneczne miasto na wybrzeżu Costa del Sol.",
     path: 'assets/images/hiszpania.webp',
@@ -48,13 +56,12 @@ const _initialPlaces = [
       Icon(Icons.restaurant),
       Icon(Icons.theater_comedy),
       Icon(Icons.surfing),
-      Icon(Icons.art_track)
+      Icon(Icons.art_track),
     ],
   ),
   Place(
     id: '4',
     title: "Chongqing, Chiny",
-    backcolor: Color.fromARGB(255, 238, 80, 80),
     shortdesc: "Chongqing - miasto labirynt",
     description:
         "Megamiasto położone w górach, które posiada wielopoziomową architekturę.",
@@ -64,13 +71,12 @@ const _initialPlaces = [
       Icon(Icons.restaurant),
       Icon(Icons.foggy),
       Icon(Icons.cloud),
-      Icon(Icons.place)
+      Icon(Icons.place),
     ],
   ),
   Place(
     id: '5',
     title: "Bangkok, Tajlandia",
-    backcolor: Color.fromARGB(255, 177, 230, 92),
     shortdesc: "Bangkok, stolica Tajlandii",
     description:
         "Najczęściej odwiedzane miasto przez turystów z całego świata.",
@@ -79,26 +85,41 @@ const _initialPlaces = [
       "Street food",
       "Nurkowanie",
       "Świątynie i zamki",
-      "Dżungla i wyspy"
+      "Dżungla i wyspy",
     ],
     listaicon: [
       Icon(Icons.restaurant),
       Icon(Icons.scuba_diving_outlined),
       Icon(Icons.castle),
-      Icon(Icons.place)
+      Icon(Icons.place),
     ],
-  )
+  ),
 ];
 
 @riverpod
 class Places extends _$Places {
   @override
-  List<Place> build() => _initialPlaces;
-
-  void toggleFavorite(String id) {
-    state = [
-      for (final p in state)
-        if (p.id == id) p.copyWith(isFavorite: !p.isFavorite) else p
+  Future<List<Place>> build() async {
+    final repo = ref.read(dreamPlacesRepositoryProvider);
+    await repo.seedData();
+    final dbPlaces = await repo.getAllPlaces();
+    final favMap = {for (final p in dbPlaces) p.id: p.isFavourite};
+    return [
+      for (final p in _initialPlaces)
+        p.copyWith(isFavorite: favMap[p.id] ?? false),
     ];
+
+    //return _initialPlaces;
+  }
+
+  Future<void> toggleFavorite(String id) async {
+    final aktualny = await future;
+    final place = aktualny.firstWhere((p) => p.id == id);
+    final repo = ref.read(dreamPlacesRepositoryProvider);
+    await repo.toggleFavourite(id, place.isFavorite);
+    state = AsyncData([
+      for (final p in aktualny)
+        if (p.id == id) p.copyWith(isFavorite: !p.isFavorite) else p,
+    ]);
   }
 }

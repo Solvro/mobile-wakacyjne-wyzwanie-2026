@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'places_provider.dart';
+part of 'theme_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -9,42 +9,42 @@ part of 'places_provider.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(Places)
-final placesProvider = PlacesProvider._();
+@ProviderFor(Themem)
+final thememProvider = ThememProvider._();
 
-final class PlacesProvider extends $AsyncNotifierProvider<Places, List<Place>> {
-  PlacesProvider._()
+final class ThememProvider extends $AsyncNotifierProvider<Themem, bool?> {
+  ThememProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'placesProvider',
+        name: r'thememProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$placesHash();
+  String debugGetCreateSourceHash() => _$thememHash();
 
   @$internal
   @override
-  Places create() => Places();
+  Themem create() => Themem();
 }
 
-String _$placesHash() => r'b743d0d20d96c3fd27a64ba302e5e41b26afc845';
+String _$thememHash() => r'943a85ff99330b254d12c8e645a21bc176600432';
 
-abstract class _$Places extends $AsyncNotifier<List<Place>> {
-  FutureOr<List<Place>> build();
+abstract class _$Themem extends $AsyncNotifier<bool?> {
+  FutureOr<bool?> build();
   @$mustCallSuper
   @override
   WhenComplete runBuild() {
-    final ref = this.ref as $Ref<AsyncValue<List<Place>>, List<Place>>;
+    final ref = this.ref as $Ref<AsyncValue<bool?>, bool?>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<AsyncValue<List<Place>>, List<Place>>,
-              AsyncValue<List<Place>>,
+              AnyNotifier<AsyncValue<bool?>, bool?>,
+              AsyncValue<bool?>,
               Object?,
               Object?
             >;

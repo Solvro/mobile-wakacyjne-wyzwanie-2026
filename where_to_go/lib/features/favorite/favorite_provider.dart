@@ -14,3 +14,5 @@ class Favorite extends _$Favorite {
     state = !state;
   }
 }
+
+//flutter pub run build_runner build -d
