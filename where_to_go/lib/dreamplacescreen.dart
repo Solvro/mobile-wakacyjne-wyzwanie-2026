@@ -39,10 +39,9 @@ class DreamPlaceScreen extends ConsumerWidget {
               children: [
                 Container(
                   width: MediaQuery.of(context).size.width * 0.95,
-
                   decoration: BoxDecoration(
-                    border: .all(color: colors.primary, width: 7),
-                    borderRadius: .circular(33),
+                    border: Border.all(color: colors.primary, width: 7),
+                    borderRadius: BorderRadius.circular(33),
                   ),
                   padding: EdgeInsets.all(2),
                   child: ClipRRect(
@@ -50,7 +49,6 @@ class DreamPlaceScreen extends ConsumerWidget {
                     child: Image.asset(place.path, fit: BoxFit.cover),
                   ),
                 ),
-
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
@@ -59,9 +57,8 @@ class DreamPlaceScreen extends ConsumerWidget {
                       Container(
                         decoration: BoxDecoration(
                           color: colors.primary,
-                          borderRadius: .circular(20),
+                          borderRadius: BorderRadius.circular(20),
                         ),
-
                         child: Column(
                           children: [
                             Text(
@@ -69,10 +66,8 @@ class DreamPlaceScreen extends ConsumerWidget {
                               style: TextStyle(fontSize: 20),
                               softWrap: true,
                             ),
-
                             SizedBox(height: 8),
                             Text(place.description, softWrap: true),
-
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [

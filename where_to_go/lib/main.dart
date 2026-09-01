@@ -28,23 +28,19 @@ class MyApp extends ConsumerWidget {
       data: (mode) => MaterialApp.router(
         routerConfig: goRouter,
         title: 'Wybierz miejsce',
-
         theme: ThemeData(
           brightness: Brightness.light,
           scaffoldBackgroundColor: const Color.fromARGB(255, 36, 119, 105),
-
           cardTheme: CardThemeData(
             color: Colors.amber,
             shadowColor: const Color.fromARGB(255, 68, 20, 20),
             elevation: 5,
           ),
-
           colorScheme: ColorScheme.light(
             primary: Colors.amber,
             secondary: Color.fromARGB(255, 25, 100, 96),
             shadow: Color.fromRGBO(38, 72, 165, 0.76),
           ),
-
           appBarTheme: AppBarTheme(
             backgroundColor: const Color.fromARGB(255, 76, 147, 156),
             foregroundColor: const Color.fromARGB(255, 219, 255, 238),
@@ -53,13 +49,11 @@ class MyApp extends ConsumerWidget {
         darkTheme: ThemeData(
           brightness: Brightness.dark,
           scaffoldBackgroundColor: Color.fromARGB(255, 66, 65, 65),
-
           cardTheme: CardThemeData(
             color: const Color.fromARGB(255, 41, 64, 99),
             shadowColor: const Color.fromARGB(255, 68, 20, 20),
             elevation: 5,
           ),
-
           colorScheme: ColorScheme.dark(
             primary: const Color.fromARGB(255, 9, 114, 128),
             secondary: Color.fromARGB(255, 12, 41, 61),
@@ -70,7 +64,6 @@ class MyApp extends ConsumerWidget {
             foregroundColor: const Color.fromARGB(255, 146, 194, 233),
           ),
         ),
-
         themeMode: switch (mode) {
           true => ThemeMode.light,
           false => ThemeMode.dark,
@@ -129,7 +122,6 @@ class HomeScreen extends ConsumerWidget {
     return placesAsync.when(
       data: (places) => Scaffold(
         body: ListView(children: [for (final p in places) maker(context, p)]),
-
         appBar: AppBar(
           title: Text("Wybierz miejsce"),
           actions: [

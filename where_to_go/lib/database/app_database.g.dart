@@ -66,12 +66,12 @@ class $DreamPlacesTable extends DreamPlaces
   );
   @override
   List<GeneratedColumn> get $columns => [
-    id,
-    name,
-    description,
-    imageUrl,
-    isFavourite,
-  ];
+        id,
+        name,
+        description,
+        imageUrl,
+        isFavourite,
+      ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -228,24 +228,23 @@ class DreamPlace extends DataClass implements Insertable<DreamPlace> {
     String? description,
     String? imageUrl,
     bool? isFavourite,
-  }) => DreamPlace(
-    id: id ?? this.id,
-    name: name ?? this.name,
-    description: description ?? this.description,
-    imageUrl: imageUrl ?? this.imageUrl,
-    isFavourite: isFavourite ?? this.isFavourite,
-  );
+  }) =>
+      DreamPlace(
+        id: id ?? this.id,
+        name: name ?? this.name,
+        description: description ?? this.description,
+        imageUrl: imageUrl ?? this.imageUrl,
+        isFavourite: isFavourite ?? this.isFavourite,
+      );
   DreamPlace copyWithCompanion(DreamPlacesCompanion data) {
     return DreamPlace(
       id: data.id.present ? data.id.value : this.id,
       name: data.name.present ? data.name.value : this.name,
-      description: data.description.present
-          ? data.description.value
-          : this.description,
+      description:
+          data.description.present ? data.description.value : this.description,
       imageUrl: data.imageUrl.present ? data.imageUrl.value : this.imageUrl,
-      isFavourite: data.isFavourite.present
-          ? data.isFavourite.value
-          : this.isFavourite,
+      isFavourite:
+          data.isFavourite.present ? data.isFavourite.value : this.isFavourite,
     );
   }
 
@@ -296,10 +295,10 @@ class DreamPlacesCompanion extends UpdateCompanion<DreamPlace> {
     required String imageUrl,
     this.isFavourite = const Value.absent(),
     this.rowid = const Value.absent(),
-  }) : id = Value(id),
-       name = Value(name),
-       description = Value(description),
-       imageUrl = Value(imageUrl);
+  })  : id = Value(id),
+        name = Value(name),
+        description = Value(description),
+        imageUrl = Value(imageUrl);
   static Insertable<DreamPlace> custom({
     Expression<String>? id,
     Expression<String>? name,
@@ -385,24 +384,24 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   List<DatabaseSchemaEntity> get allSchemaEntities => [dreamPlaces];
 }
 
-typedef $$DreamPlacesTableCreateCompanionBuilder =
-    DreamPlacesCompanion Function({
-      required String id,
-      required String name,
-      required String description,
-      required String imageUrl,
-      Value<bool> isFavourite,
-      Value<int> rowid,
-    });
-typedef $$DreamPlacesTableUpdateCompanionBuilder =
-    DreamPlacesCompanion Function({
-      Value<String> id,
-      Value<String> name,
-      Value<String> description,
-      Value<String> imageUrl,
-      Value<bool> isFavourite,
-      Value<int> rowid,
-    });
+typedef $$DreamPlacesTableCreateCompanionBuilder = DreamPlacesCompanion
+    Function({
+  required String id,
+  required String name,
+  required String description,
+  required String imageUrl,
+  Value<bool> isFavourite,
+  Value<int> rowid,
+});
+typedef $$DreamPlacesTableUpdateCompanionBuilder = DreamPlacesCompanion
+    Function({
+  Value<String> id,
+  Value<String> name,
+  Value<String> description,
+  Value<String> imageUrl,
+  Value<bool> isFavourite,
+  Value<int> rowid,
+});
 
 class $$DreamPlacesTableFilterComposer
     extends Composer<_$AppDatabase, $DreamPlacesTable> {
@@ -414,29 +413,29 @@ class $$DreamPlacesTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<String> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.id,
+        builder: (column) => ColumnFilters(column),
+      );
 
   ColumnFilters<String> get name => $composableBuilder(
-    column: $table.name,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.name,
+        builder: (column) => ColumnFilters(column),
+      );
 
   ColumnFilters<String> get description => $composableBuilder(
-    column: $table.description,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.description,
+        builder: (column) => ColumnFilters(column),
+      );
 
   ColumnFilters<String> get imageUrl => $composableBuilder(
-    column: $table.imageUrl,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.imageUrl,
+        builder: (column) => ColumnFilters(column),
+      );
 
   ColumnFilters<bool> get isFavourite => $composableBuilder(
-    column: $table.isFavourite,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.isFavourite,
+        builder: (column) => ColumnFilters(column),
+      );
 }
 
 class $$DreamPlacesTableOrderingComposer
@@ -449,29 +448,29 @@ class $$DreamPlacesTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<String> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.id,
+        builder: (column) => ColumnOrderings(column),
+      );
 
   ColumnOrderings<String> get name => $composableBuilder(
-    column: $table.name,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.name,
+        builder: (column) => ColumnOrderings(column),
+      );
 
   ColumnOrderings<String> get description => $composableBuilder(
-    column: $table.description,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.description,
+        builder: (column) => ColumnOrderings(column),
+      );
 
   ColumnOrderings<String> get imageUrl => $composableBuilder(
-    column: $table.imageUrl,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.imageUrl,
+        builder: (column) => ColumnOrderings(column),
+      );
 
   ColumnOrderings<bool> get isFavourite => $composableBuilder(
-    column: $table.isFavourite,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.isFavourite,
+        builder: (column) => ColumnOrderings(column),
+      );
 }
 
 class $$DreamPlacesTableAnnotationComposer
@@ -490,105 +489,100 @@ class $$DreamPlacesTableAnnotationComposer
       $composableBuilder(column: $table.name, builder: (column) => column);
 
   GeneratedColumn<String> get description => $composableBuilder(
-    column: $table.description,
-    builder: (column) => column,
-  );
+        column: $table.description,
+        builder: (column) => column,
+      );
 
   GeneratedColumn<String> get imageUrl =>
       $composableBuilder(column: $table.imageUrl, builder: (column) => column);
 
   GeneratedColumn<bool> get isFavourite => $composableBuilder(
-    column: $table.isFavourite,
-    builder: (column) => column,
-  );
-}
-
-class $$DreamPlacesTableTableManager
-    extends
-        RootTableManager<
-          _$AppDatabase,
-          $DreamPlacesTable,
-          DreamPlace,
-          $$DreamPlacesTableFilterComposer,
-          $$DreamPlacesTableOrderingComposer,
-          $$DreamPlacesTableAnnotationComposer,
-          $$DreamPlacesTableCreateCompanionBuilder,
-          $$DreamPlacesTableUpdateCompanionBuilder,
-          (
-            DreamPlace,
-            BaseReferences<_$AppDatabase, $DreamPlacesTable, DreamPlace>,
-          ),
-          DreamPlace,
-          PrefetchHooks Function()
-        > {
-  $$DreamPlacesTableTableManager(_$AppDatabase db, $DreamPlacesTable table)
-    : super(
-        TableManagerState(
-          db: db,
-          table: table,
-          createFilteringComposer: () =>
-              $$DreamPlacesTableFilterComposer($db: db, $table: table),
-          createOrderingComposer: () =>
-              $$DreamPlacesTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer: () =>
-              $$DreamPlacesTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback:
-              ({
-                Value<String> id = const Value.absent(),
-                Value<String> name = const Value.absent(),
-                Value<String> description = const Value.absent(),
-                Value<String> imageUrl = const Value.absent(),
-                Value<bool> isFavourite = const Value.absent(),
-                Value<int> rowid = const Value.absent(),
-              }) => DreamPlacesCompanion(
-                id: id,
-                name: name,
-                description: description,
-                imageUrl: imageUrl,
-                isFavourite: isFavourite,
-                rowid: rowid,
-              ),
-          createCompanionCallback:
-              ({
-                required String id,
-                required String name,
-                required String description,
-                required String imageUrl,
-                Value<bool> isFavourite = const Value.absent(),
-                Value<int> rowid = const Value.absent(),
-              }) => DreamPlacesCompanion.insert(
-                id: id,
-                name: name,
-                description: description,
-                imageUrl: imageUrl,
-                isFavourite: isFavourite,
-                rowid: rowid,
-              ),
-          withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
-              .toList(),
-          prefetchHooksCallback: null,
-        ),
+        column: $table.isFavourite,
+        builder: (column) => column,
       );
 }
 
-typedef $$DreamPlacesTableProcessedTableManager =
-    ProcessedTableManager<
-      _$AppDatabase,
-      $DreamPlacesTable,
+class $$DreamPlacesTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $DreamPlacesTable,
+    DreamPlace,
+    $$DreamPlacesTableFilterComposer,
+    $$DreamPlacesTableOrderingComposer,
+    $$DreamPlacesTableAnnotationComposer,
+    $$DreamPlacesTableCreateCompanionBuilder,
+    $$DreamPlacesTableUpdateCompanionBuilder,
+    (
       DreamPlace,
-      $$DreamPlacesTableFilterComposer,
-      $$DreamPlacesTableOrderingComposer,
-      $$DreamPlacesTableAnnotationComposer,
-      $$DreamPlacesTableCreateCompanionBuilder,
-      $$DreamPlacesTableUpdateCompanionBuilder,
-      (
-        DreamPlace,
-        BaseReferences<_$AppDatabase, $DreamPlacesTable, DreamPlace>,
-      ),
+      BaseReferences<_$AppDatabase, $DreamPlacesTable, DreamPlace>,
+    ),
+    DreamPlace,
+    PrefetchHooks Function()> {
+  $$DreamPlacesTableTableManager(_$AppDatabase db, $DreamPlacesTable table)
+      : super(
+          TableManagerState(
+            db: db,
+            table: table,
+            createFilteringComposer: () =>
+                $$DreamPlacesTableFilterComposer($db: db, $table: table),
+            createOrderingComposer: () =>
+                $$DreamPlacesTableOrderingComposer($db: db, $table: table),
+            createComputedFieldComposer: () =>
+                $$DreamPlacesTableAnnotationComposer($db: db, $table: table),
+            updateCompanionCallback: ({
+              Value<String> id = const Value.absent(),
+              Value<String> name = const Value.absent(),
+              Value<String> description = const Value.absent(),
+              Value<String> imageUrl = const Value.absent(),
+              Value<bool> isFavourite = const Value.absent(),
+              Value<int> rowid = const Value.absent(),
+            }) =>
+                DreamPlacesCompanion(
+              id: id,
+              name: name,
+              description: description,
+              imageUrl: imageUrl,
+              isFavourite: isFavourite,
+              rowid: rowid,
+            ),
+            createCompanionCallback: ({
+              required String id,
+              required String name,
+              required String description,
+              required String imageUrl,
+              Value<bool> isFavourite = const Value.absent(),
+              Value<int> rowid = const Value.absent(),
+            }) =>
+                DreamPlacesCompanion.insert(
+              id: id,
+              name: name,
+              description: description,
+              imageUrl: imageUrl,
+              isFavourite: isFavourite,
+              rowid: rowid,
+            ),
+            withReferenceMapper: (p0) => p0
+                .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+                .toList(),
+            prefetchHooksCallback: null,
+          ),
+        );
+}
+
+typedef $$DreamPlacesTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $DreamPlacesTable,
+    DreamPlace,
+    $$DreamPlacesTableFilterComposer,
+    $$DreamPlacesTableOrderingComposer,
+    $$DreamPlacesTableAnnotationComposer,
+    $$DreamPlacesTableCreateCompanionBuilder,
+    $$DreamPlacesTableUpdateCompanionBuilder,
+    (
       DreamPlace,
-      PrefetchHooks Function()
-    >;
+      BaseReferences<_$AppDatabase, $DreamPlacesTable, DreamPlace>,
+    ),
+    DreamPlace,
+    PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
