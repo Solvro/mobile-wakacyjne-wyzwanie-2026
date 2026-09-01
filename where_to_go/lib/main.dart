@@ -23,8 +23,8 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final LocalThemeRepository = ref.watch(thememProvider);
-    return LocalThemeRepository.when(
+    final localThemeRepository = ref.watch(thememProvider);
+    return localThemeRepository.when(
       data: (mode) => MaterialApp.router(
         routerConfig: goRouter,
         title: 'Wybierz miejsce',

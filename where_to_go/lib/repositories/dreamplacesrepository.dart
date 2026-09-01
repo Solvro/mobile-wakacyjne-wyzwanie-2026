@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import '../database/app_database.dart';
+import 'dart:developer';
 
 class DreamPlacesRepository {
   final AppDatabase _db;
@@ -15,11 +16,9 @@ class DreamPlacesRepository {
   }
 
   Future<void> seedData() async {
-    // print("BBBBBBBBBBB");
     final places = await getAllPlaces();
-    // print("BABAB");
     if (places.isEmpty) {
-      print("inicjalizacja bazy");
+      log("inicjalizacja bazy");
       await _db.batch((batch) {
         batch.insertAll(_db.dreamPlaces, [
           DreamPlacesCompanion.insert(
@@ -67,10 +66,10 @@ class DreamPlacesRepository {
   }
 
   Future<void> printAllPlaces() async {
-    print("---------------Baza danych:-----------------");
+    log("---------------Baza danych:-----------------");
     final places = await getAllPlaces();
     for (final place in places) {
-      print(
+      log(
         'ID: ${place.id} | Nazwa: ${place.name} | Ulubione: ${place.isFavourite}',
       );
     }
