@@ -51,6 +51,7 @@ jobs:
       - name: Run custom lints
         run: dart run custom_lint --fatal-infos
 
+
       # - name: Flutter tests
       #   run: flutter test
   
