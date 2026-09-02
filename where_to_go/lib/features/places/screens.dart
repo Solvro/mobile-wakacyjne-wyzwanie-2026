@@ -22,13 +22,15 @@ class HomeScreen extends ConsumerWidget {
     final isSystemDark = systemBrightness == Brightness.dark;
     final isLightMode = themeState.value ?? !isSystemDark;
     final textColor = Theme.of(context).textTheme.bodySmall?.color;
+    final colors = Theme.of(context).colorScheme;
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           "Wymarzone Miejsca",
           style: TextStyle(
+            color: colors.primary,
             fontFamily: "Roboto",
             fontSize: 20,
             fontWeight: FontWeight.bold,
