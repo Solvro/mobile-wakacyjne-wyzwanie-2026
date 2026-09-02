@@ -1,3 +1,22 @@
+<<<<<<< HEAD
+# wakacyjne_wyzwanie_26
+
+A new Flutter project.
+
+## Getting Started
+
+This project is a starting point for a Flutter application.
+
+A few resources to get you started if this is your first Flutter project:
+
+- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
+- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
+- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+
+For help getting started with Flutter development, view the
+[online documentation](https://docs.flutter.dev/), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.
+=======
 # Od zera do flutter developera
 
 ## Struktura i Harmonogram Kursu
@@ -45,3 +64,4 @@ Aby zapewnić sprawną organizację kursu oraz efektywną komunikację, wszyscy 
 * **Chronologia Realizacji Zadań:** Poszczególne listy zadań (moduły) muszą być realizowane w porządku chronologicznym. Ukończenie i zaliczenie danej listy jest warunkiem koniecznym do rozpoczęcia pracy nad kolejną.
 
 * **Terminowość:** Każda lista zadań posiada termin na jej ukończenie, wyznaczony przez prowadzącego kurs. W przypadku przewidywanego opóźnienia, uczestnik jest zobowiązany do wcześniejszego poinformowania o tym fakcie prowadzącego wraz z podaniem przyczyny.
+>>>>>>> origin/main

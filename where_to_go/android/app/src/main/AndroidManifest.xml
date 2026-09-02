@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="where_to_go"
+        android:label="wakacyjne_wyzwanie_26"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

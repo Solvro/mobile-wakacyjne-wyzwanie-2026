@@ -1,125 +1,236 @@
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  runApp(const MyApp());
+import 'app_router.dart';
+import 'features/places/places_provider.dart';
+import 'features/places/dream_place.dart';
+import 'features/places/dream_places_repository.dart';
+import 'features/theme/theme_provider.dart';
+import 'features/theme/local_theme_repository.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Inicjalizacja SharedPreferences dla motywu
+  final prefs = await SharedPreferences.getInstance();
+
+  // Inicjalizacja Hive dla miejsc
+  await Hive.initFlutter();
+  Hive.registerAdapter(DreamPlaceAdapter());
+  final dreamPlacesBox = await Hive.openBox<DreamPlace>('dream_places');
+
+  final repository = DreamPlacesRepository(dreamPlacesBox);
+  await repository.seedDatabase();
+
+  runApp(
+    ProviderScope(
+      overrides: [
+        dreamPlacesBoxProvider.overrideWithValue(dreamPlacesBox),
+        sharedPreferencesProvider.overrideWithValue(prefs),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "Flutter Demo",
+  Widget build(BuildContext context, WidgetRef ref) {
+    final themeOption = ref.watch(themeNotifierProvider);
+
+    return MaterialApp.router(
+      routerConfig: goRouter,
+      // Tryb jasny – jasnozielone tło i akcenty
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
+        brightness: Brightness.light,
+        scaffoldBackgroundColor: const Color(0xFFE8F5E9),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.green,
+          brightness: Brightness.light,
+        ),
+        appBarTheme: const AppBarTheme(backgroundColor: Color(0xFFC8E6C9)),
       ),
-      home: const MyHomePage(title: "Flutter Demo Home Page"),
+      // Tryb ciemny – ciemnozielone tło i akcenty
+      darkTheme: ThemeData(
+        useMaterial3: true,
+        brightness: Brightness.dark,
+        scaffoldBackgroundColor: const Color(0xFF0D2818),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.green,
+          brightness: Brightness.dark,
+        ),
+        appBarTheme: const AppBarTheme(backgroundColor: Color(0xFF05190E)),
+      ),
+      themeMode: _mapAppThemeToThemeMode(themeOption),
+    );
+  }
+
+  ThemeMode _mapAppThemeToThemeMode(AppThemeOption option) {
+    switch (option) {
+      case AppThemeOption.light:
+        return ThemeMode.light;
+      case AppThemeOption.dark:
+        return ThemeMode.dark;
+      case AppThemeOption.system:
+        return ThemeMode.system;
+    }
+  }
+}
+
+// Ekran główny
+class PlacesScreen extends ConsumerWidget {
+  const PlacesScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final places = ref.watch(placesProvider);
+    final currentTheme = ref.watch(themeNotifierProvider);
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Miejsca"),
+        actions: [
+          IconButton(
+            icon: Icon(
+              currentTheme == AppThemeOption.dark
+                  ? Icons.light_mode
+                  : Icons.dark_mode,
+            ),
+            onPressed: () {
+              final nextTheme =
+                  currentTheme == AppThemeOption.dark
+                      ? AppThemeOption.light
+                      : AppThemeOption.dark;
+              ref.read(themeNotifierProvider.notifier).setTheme(nextTheme);
+            },
+          ),
+        ],
+      ),
+      body: ListView.builder(
+        itemCount: places.length,
+        itemBuilder: (context, index) {
+          final place = places[index];
+          return ListTile(
+            leading: Image.asset(place.imagePath),
+            title: Text(place.name),
+            subtitle: Text(place.description),
+            trailing: Icon(
+              place.isFavorite ? Icons.favorite : Icons.favorite_border,
+              color:
+                  place.isFavorite
+                      ? colorScheme.primary
+                      : colorScheme.onSurfaceVariant,
+            ),
+            onTap: () {
+              GoRouter.of(
+                context,
+              ).push("${DreamPlaceScreen.route}/${place.id}");
+            },
+          );
+        },
+      ),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+// Szczegóły miejsc
+class DreamPlaceScreen extends ConsumerWidget {
+  static const route = '/details';
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
+  final String id;
 
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+  const DreamPlaceScreen({super.key, required this.id});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final places = ref.watch(placesProvider);
+    final place = places.firstWhere((p) => p.id == id);
+    final colorScheme = Theme.of(context).colorScheme;
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              "You have pushed the button this many times:",
+        title: Text(place.name),
+        actions: [
+          IconButton(
+            onPressed: () {
+              ref.read(placesProvider.notifier).toggle(place.id);
+            },
+            icon: Icon(
+              place.isFavorite ? Icons.favorite : Icons.favorite_border,
+              color:
+                  place.isFavorite
+                      ? colorScheme.primary
+                      : colorScheme.onSurfaceVariant,
             ),
-            Text(
-              "$_counter",
-              style: Theme.of(context).textTheme.headlineMedium,
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Image.asset(
+              place.imagePath,
+              width: double.infinity,
+              height: 250,
+              fit: BoxFit.cover,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  Text(
+                    place.name,
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    place.description,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Column(
+                  children: [
+                    Icon(Icons.star, color: colorScheme.primary),
+                    const SizedBox(height: 4),
+                    const Text("Gwiazdy"),
+                  ],
+                ),
+                Column(
+                  children: [
+                    Icon(Icons.location_on, color: colorScheme.primary),
+                    const SizedBox(height: 4),
+                    const Text("Lokacja"),
+                  ],
+                ),
+                Column(
+                  children: [
+                    Icon(Icons.access_time, color: colorScheme.primary),
+                    const SizedBox(height: 4),
+                    const Text("Czas"),
+                  ],
+                ),
+              ],
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: "Increment",
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
