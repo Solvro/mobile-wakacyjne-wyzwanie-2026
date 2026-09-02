@@ -10,19 +10,19 @@ part of 'places_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(Places)
-final placesProvider = PlacesProvider._();
+const placesProvider = PlacesProvider._();
 
 final class PlacesProvider extends $NotifierProvider<Places, List<Place>> {
-  PlacesProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'placesProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
+  const PlacesProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'placesProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
 
   @override
   String debugGetCreateSourceHash() => _$placesHash();
@@ -46,16 +46,11 @@ abstract class _$Places extends $Notifier<List<Place>> {
   List<Place> build();
   @$mustCallSuper
   @override
-  WhenComplete runBuild() {
+  void runBuild() {
+    final created = build();
     final ref = this.ref as $Ref<List<Place>, List<Place>>;
-    final element =
-        ref.element
-            as $ClassProviderElement<
-              AnyNotifier<List<Place>, List<Place>>,
-              List<Place>,
-              Object?,
-              Object?
-            >;
-    return element.handleCreate(ref, build);
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<List<Place>, List<Place>>, List<Place>, Object?, Object?>;
+    element.handleValue(ref, created);
   }
 }

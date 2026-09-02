@@ -1,3 +1,4 @@
+// @dart=3.0
 import "package:go_router/go_router.dart";
 import "features/places/screens.dart";
 

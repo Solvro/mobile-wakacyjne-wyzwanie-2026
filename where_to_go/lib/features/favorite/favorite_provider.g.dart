@@ -1,4 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// @dart=3.0
 
 part of 'favorite_provider.dart';
 
@@ -10,19 +11,19 @@ part of 'favorite_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(Favorite)
-final favoriteProvider = FavoriteProvider._();
+const favoriteProvider = FavoriteProvider._();
 
 final class FavoriteProvider extends $NotifierProvider<Favorite, bool> {
-  FavoriteProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'favoriteProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
+  const FavoriteProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'favoriteProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
 
   @override
   String debugGetCreateSourceHash() => _$favoriteHash();
@@ -46,16 +47,11 @@ abstract class _$Favorite extends $Notifier<bool> {
   bool build();
   @$mustCallSuper
   @override
-  WhenComplete runBuild() {
+  void runBuild() {
+    final created = build();
     final ref = this.ref as $Ref<bool, bool>;
-    final element =
-        ref.element
-            as $ClassProviderElement<
-              AnyNotifier<bool, bool>,
-              bool,
-              Object?,
-              Object?
-            >;
-    return element.handleCreate(ref, build);
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<bool, bool>, bool, Object?, Object?>;
+    element.handleValue(ref, created);
   }
 }
