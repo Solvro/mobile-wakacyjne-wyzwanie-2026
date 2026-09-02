@@ -1,0 +1,23 @@
+# Flutter & Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+devtools_options.yaml
+
+# C/C++ build outputs
+**/android/app/.cxx/
+
+# Android
+**/android/local.properties
+**/android/app/debug/
+**/android/app/profile/
+**/android/app/release/
+
+# VS Code & IDEs
+.vscode/
+.idea/
+*.iml

@@ -1,58 +1,31 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive/hive.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'place.dart';
+
+import 'dream_place.dart';
+import 'dream_places_repository.dart';
 
 part 'places_provider.g.dart';
 
-const _initialPlaces = [
-  Place(
-    id: '1',
-    name: 'Białe miasteczko Oia',
-    imagePath: 'assets/images/Wymarzone_miej.jpg',
-    description:
-        'Miejsce, w którym czas zwalnia, a każdy zachód słońca wygląda jak wycięty z pocztówki.',
-  ),
-  Place(
-    id: '2',
-    name: 'Czarne miasteczko Oia',
-    imagePath: 'assets/images/Wymarzone_miej.jpg',
-    description:
-        'Miejsce, w którym czas zwalnia, a każdy zachód słońca wygląda jak wycięty z pocztówki.',
-  ),
-  Place(
-    id: '3',
-    name: 'Zielone miasteczko Oia',
-    imagePath: 'assets/images/Wymarzone_miej.jpg',
-    description:
-        'Miejsce, w którym czas zwalnia, a każdy zachód słońca wygląda jak wycięty z pocztówki.',
-  ),
-  Place(
-    id: '4',
-    name: 'Czerwone miasteczko Oia',
-    imagePath: 'assets/images/Wymarzone_miej.jpg',
-    description:
-        'Miejsce, w którym czas zwalnia, a każdy zachód słońca wygląda jak wycięty z pocztówki.',
-  ),
-  Place(
-    id: '5',
-    name: 'Żółte miasteczko Oia',
-    imagePath: 'assets/images/Wymarzone_miej.jpg',
-    description:
-        'Miejsce, w którym czas zwalnia, a każdy zachód słońca wygląda jak wycięty z pocztówki.',
-  ),
-];
+final dreamPlacesBoxProvider = Provider<Box<DreamPlace>>((ref) {
+  throw UnimplementedError('Box<DreamPlace> wymaga nadpisania w main.dart');
+});
+
+final dreamPlacesRepositoryProvider = Provider<DreamPlacesRepository>((ref) {
+  return DreamPlacesRepository(ref.watch(dreamPlacesBoxProvider));
+});
 
 @riverpod
 class Places extends _$Places {
   @override
-  List<Place> build() => _initialPlaces;
+  List<DreamPlace> build() {
+    final repository = ref.watch(dreamPlacesRepositoryProvider);
+    return repository.getAllPlaces();
+  }
 
-  void toggle(String id) {
-    state = [
-      for (final place in state)
-        if (place.id == id)
-          place.copyWith(isFavorite: !place.isFavorite)
-        else
-          place,
-    ];
+  Future<void> toggle(String id) async {
+    final repository = ref.read(dreamPlacesRepositoryProvider);
+    await repository.toggleFavorite(id);
+    state = repository.getAllPlaces();
   }
 }
