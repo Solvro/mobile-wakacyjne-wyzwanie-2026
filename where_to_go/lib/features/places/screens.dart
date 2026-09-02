@@ -1,10 +1,13 @@
-// ignore_for_file: type=lint
+
+// ignore_for_file: non_const_argument_for_const_parameter, type=lint
 import "dart:async";
 
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:go_router/go_router.dart";
 
+import "../../database/database.dart";
+import "../../theme_provider.dart";
 import "places_provider.dart";
 
 class HomeScreen extends ConsumerWidget {
@@ -12,10 +15,17 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final places = ref.watch(placesProvider);
+    final placesAsync = ref.watch(placesProvider);
+
+    // Bezpieczny odczyt wartości z AsyncValue (domyślnie true dla jasnego)
+    final themeState = ref.watch(themeNotifierProvider);
+    final systemBrightness = MediaQuery.of(context).platformBrightness;
+    final isSystemDark = systemBrightness == Brightness.dark;
+    final isLightMode = themeState.value ?? !isSystemDark;
+    final textColor = Theme.of(context).textTheme.bodySmall?.color;
 
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 145, 197, 248),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text(
           "Wymarzone Miejsca",
@@ -23,40 +33,66 @@ class HomeScreen extends ConsumerWidget {
             fontFamily: "Roboto",
             fontSize: 20,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
           ),
         ),
-        backgroundColor: const Color.fromARGB(255, 170, 8, 57),
-      ),
-      body: ListView.builder(
-        itemCount: places.length,
-        itemBuilder: (context, index) {
-          final place = places[index];
-          return ListTile(
-            leading: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.asset(
-                place.imagePath,
-                width: 50,
-                height: 50,
-                fit: BoxFit.cover,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 12.0),
+            child: IconButton(
+              icon: Icon(
+                isLightMode ? Icons.light_mode : Icons.dark_mode,
               ),
+              onPressed: () {
+                // Wywołanie metody AsyncNotifier z przełączeniem wartości
+                ref
+                    .read(themeNotifierProvider.notifier)
+                    .setTheme(!isLightMode);
+              },
             ),
-            title: Text(place.locationTitle),
-            subtitle: Text(place.title),
-            trailing: Icon(
-              place.isFavorite ? Icons.favorite : Icons.favorite_border,
-              color: place.isFavorite ? Colors.red : Colors.grey,
-            ),
-            onTap: () {
-              unawaited(
-                GoRouter.of(
-                  context,
-                ).push("${DreamPlaceScreen.route}/${place.id}"),
-              );
-            },
-          );
-        },
+          ),
+        ],
+      ),
+      body: placesAsync.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (err, stack) => Center(child: Text("Błąd: $err")),
+        data: (places) => ListView.builder(
+          itemCount: places.length,
+          itemBuilder: (context, index) {
+            final place = places[index];
+            return ListTile(
+              leading: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.asset(
+                  place.imagePath,
+                  width: 50,
+                  height: 50,
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, __, ___) => const Icon(Icons.broken_image),
+                ),
+              ),
+              title: Text(place.locationTitle),
+              subtitle: Text(place.title),
+              trailing: IconButton(
+                icon: Icon(
+                  place.isFavorite ? Icons.favorite : Icons.favorite_border,
+                  color: place.isFavorite ? Colors.red : textColor,
+                ),
+                onPressed: () {
+                  ref
+                      .read(placesNotifierProvider)
+                      .toggleFavorite(place.id, place.isFavorite);
+                },
+              ),
+              onTap: () {
+                unawaited(
+                  GoRouter.of(
+                    context,
+                  ).push("${DreamPlaceScreen.route}/${place.id}"),
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }
@@ -64,123 +100,166 @@ class HomeScreen extends ConsumerWidget {
 
 class DreamPlaceScreen extends ConsumerWidget {
   static const route = "/details";
-  final String id;
+  final int id; // Typ zmieniony ze String na int
 
   const DreamPlaceScreen({super.key, required this.id});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final places = ref.watch(placesProvider);
-    final place = places.firstWhere((place) => place.id == id);
+    final placesAsync = ref.watch(placesProvider);
+    final ThemeData theme = Theme.of(context);
+    final textColor = Theme.of(context).textTheme.bodyMedium?.color;
 
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 49, 140, 231),
-      appBar: AppBar(
-        centerTitle: false,
-        title: Text(
-          place.title,
-          style: const TextStyle(
-            fontFamily: "Roboto",
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-        backgroundColor: const Color.fromARGB(255, 170, 8, 57),
-        actions: [
-          IconButton(
-            icon: Icon(
-              place.isFavorite ? Icons.favorite : Icons.favorite_border,
-              color: place.isFavorite ? Colors.red : Colors.white,
-            ),
-            onPressed: () {
-              ref.read(placesProvider.notifier).toggle(id);
-            },
-          ),
-        ],
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Align(
-            alignment: Alignment.topCenter,
-            child: SizedBox(
-              width: 300,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 221, 172, 50),
-                  borderRadius: BorderRadius.circular(20),
+      backgroundColor: theme.scaffoldBackgroundColor,
+      body: placesAsync.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (err, stack) => Center(child: Text("Błąd: $err")),
+        data: (places) {
+          final place = places.cast<DreamPlace?>().firstWhere(
+                (element) => element?.id == id,
+                orElse: () => null,
+              );
+
+          if (place == null) {
+            return Scaffold(
+              appBar: AppBar(),
+              body: const Center(child: Text("Nie znaleziono miejsca")),
+            );
+          }
+
+          return Scaffold(
+            appBar: AppBar(
+              centerTitle: false,
+              title: Text(
+                place.title,
+                style: const TextStyle(
+                  fontFamily: "Roboto",
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
                 ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Image.asset(
-                        place.imagePath,
-                        width: 300,
-                        height: 200,
-                        fit: BoxFit.cover,
+              ),
+              backgroundColor: theme.appBarTheme.backgroundColor,
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 20.0),
+                  child: IconButton(
+                    icon: Icon(
+                      place.isFavorite
+                          ? Icons.favorite
+                          : Icons.favorite_border,
+                      color: place.isFavorite ? Colors.red : textColor,
+                    ),
+                    onPressed: () {
+                      ref
+                          .read(placesNotifierProvider)
+                          .toggleFavorite(place.id, place.isFavorite);
+                    },
+                  ),
+                ),
+              ],
+            ),
+            body: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: SizedBox(
+                    width: 300,
+                    child: Card(
+                      color: Theme.of(context).colorScheme.secondary,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(16),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
                         child: Column(
+                          mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              place.locationTitle,
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                            Image.asset(
+                              place.imagePath,
+                              width: 300,
+                              height: 200,
+                              fit: BoxFit.cover,
+                              errorBuilder: (_, __, ___) =>
+                                  const Icon(Icons.broken_image, size: 100),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    place.locationTitle,
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    place.description,
+                                    style: const TextStyle(
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            const SizedBox(height: 8),
-                            Text(
-                              place.description,
-                              style: const TextStyle(
-                                fontSize: 13,
-                                color: Colors.white,
-                              ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                _PlaceInfo(
+                                  iconCode: place.icon1,
+                                  text: place.iconText1,
+                                ),
+                                _PlaceInfo(
+                                  iconCode: place.icon2,
+                                  text: place.iconText2,
+                                ),
+                                _PlaceInfo(
+                                  iconCode: place.icon3,
+                                  text: place.iconText3,
+                                ),
+                              ],
                             ),
+                            const SizedBox(height: 16),
                           ],
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          _PlaceInfo(icon: place.icon1, text: place.iconText1),
-                          _PlaceInfo(icon: place.icon2, text: place.iconText2),
-                          _PlaceInfo(icon: place.icon3, text: place.iconText3),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                    ],
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
 }
 
 class _PlaceInfo extends StatelessWidget {
-  final IconData icon;
+  final int iconCode;
   final String text;
 
-  const _PlaceInfo({required this.icon, required this.text});
+  const _PlaceInfo({required this.iconCode, required this.text});
 
   @override
   Widget build(BuildContext context) {
+    final textColor = Theme.of(context).textTheme.bodyMedium?.color;
     return Column(
       children: [
-        Icon(icon, color: Colors.white),
+        Icon(
+          IconData(
+            iconCode,
+            fontFamily: "MaterialIcons",
+          ),
+          color: textColor,
+        ),
         const SizedBox(height: 4),
-        Text(text, style: const TextStyle(color: Colors.white, fontSize: 10)),
+        Text(text, style: TextStyle(color: textColor, fontSize: 10)),
       ],
     );
   }

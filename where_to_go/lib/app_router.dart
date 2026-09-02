@@ -9,7 +9,8 @@ final goRouter = GoRouter(
     GoRoute(
       path: "${DreamPlaceScreen.route}/:id",
       builder: (context, state) {
-        final id = state.pathParameters["id"]!;
+        // Konwersja String z URL na int dla widoku ekranu
+        final id = int.parse(state.pathParameters["id"]!);
         return DreamPlaceScreen(id: id);
       },
     ),
