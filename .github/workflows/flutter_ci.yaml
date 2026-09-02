@@ -19,20 +19,22 @@ jobs:
         working-directory: where_to_go
 
     steps:
-      - uses: actions/checkout@v5
-      
+      - uses: actions/checkout@v4
+
       - uses: subosito/flutter-action@v2
         with:
           channel: "stable"
           flutter-version: '3.29.0'
-          
+
       - run: flutter --version
 
       - name: Install dependencies
         run: flutter pub get
 
       - name: Generate files
-        run: dart run build_runner build --delete-conflicting-outputs
+        run: |
+          dart run build_runner build --delete-conflicting-outputs
+          dart format .
 
       - name: Verify formatting
         run: dart format --output=none --set-exit-if-changed .
