@@ -78,7 +78,6 @@ class MyApp extends ConsumerWidget {
       case AppThemeOption.dark:
         return ThemeMode.dark;
       case AppThemeOption.system:
-      default:
         return ThemeMode.system;
     }
   }
