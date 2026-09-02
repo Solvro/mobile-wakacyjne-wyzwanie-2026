@@ -1,4 +1,3 @@
-
 // ignore_for_file: non_const_argument_for_const_parameter, type=lint
 import "dart:async";
 
@@ -44,9 +43,7 @@ class HomeScreen extends ConsumerWidget {
               ),
               onPressed: () {
                 // Wywołanie metody AsyncNotifier z przełączeniem wartości
-                ref
-                    .read(themeNotifierProvider.notifier)
-                    .setTheme(!isLightMode);
+                ref.read(themeNotifierProvider.notifier).setTheme(!isLightMode);
               },
             ),
           ),
@@ -145,9 +142,7 @@ class DreamPlaceScreen extends ConsumerWidget {
                   padding: const EdgeInsets.only(right: 20.0),
                   child: IconButton(
                     icon: Icon(
-                      place.isFavorite
-                          ? Icons.favorite
-                          : Icons.favorite_border,
+                      place.isFavorite ? Icons.favorite : Icons.favorite_border,
                       color: place.isFavorite ? Colors.red : textColor,
                     ),
                     onPressed: () {

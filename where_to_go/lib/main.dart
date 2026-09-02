@@ -13,7 +13,7 @@ Future<void> main() async {
   // Pobieramy instancję bazy danych i dokonujemy sprawdzenia / seedowania
   final db = container.read(databaseProvider);
   await db.seedDatabase();
-  
+
   runApp(const ProviderScope(child: MyApp()));
 }
 

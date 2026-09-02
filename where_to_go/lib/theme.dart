@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 final ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
   useMaterial3: true,
-  scaffoldBackgroundColor: const Color.fromARGB(255, 49, 140, 231), // Tło ekranu
+  scaffoldBackgroundColor:
+      const Color.fromARGB(255, 49, 140, 231), // Tło ekranu
 
   appBarTheme: const AppBarTheme(
     backgroundColor: Color.fromARGB(255, 170, 8, 57), // Pasek górny

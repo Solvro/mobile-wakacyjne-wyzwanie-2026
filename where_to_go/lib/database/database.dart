@@ -86,8 +86,7 @@ class AppDatabase extends _$AppDatabase {
       DreamPlacesCompanion.insert(
         title: 'Kłodzko, Polska',
         locationTitle: 'Most w Kłodzku',
-        description:
-            'Most w Kłodzku to zabytkowy most przekraczający rzekę.',
+        description: 'Most w Kłodzku to zabytkowy most przekraczający rzekę.',
         imagePath: 'assets/images/klodzko.jpg',
         icon1: Icons.location_city.codePoint,
         icon2: Icons.history.codePoint,

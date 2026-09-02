@@ -13,9 +13,12 @@ class DreamPlacesRepository {
 
   // UPDATE: zmiana stanu ulubionego
   Future<void> toggleFavourite(int id) async {
-    final place = await (db.select(db.dreamPlaces)..where((tbl) => tbl.id.equals(id))).getSingleOrNull();
+    final place = await (db.select(db.dreamPlaces)
+          ..where((tbl) => tbl.id.equals(id)))
+        .getSingleOrNull();
     if (place != null) {
-      await (db.update(db.dreamPlaces)..where((tbl) => tbl.id.equals(id))).write(
+      await (db.update(db.dreamPlaces)..where((tbl) => tbl.id.equals(id)))
+          .write(
         DreamPlacesCompanion(
           isFavorite: Value(!place.isFavorite),
         ),
