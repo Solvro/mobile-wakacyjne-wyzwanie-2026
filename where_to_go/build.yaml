@@ -1,0 +1,8 @@
+targets:
+  $default:
+    builders:
+      riverpod_generator:
+        generate_for:
+          - lib/features/favorite/favorite_provider.dart
+          - lib/features/places/places_provider.dart
+          - lib/database/database.dart
