@@ -1,4 +1,4 @@
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 
 class DreamPlace extends StatefulWidget {
   const DreamPlace({
@@ -47,7 +47,6 @@ class _DreamPlaceState extends State<DreamPlace> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Zdjęcie z przyciskiem favorite
           Stack(
             children: [
               Image.asset(
@@ -69,7 +68,6 @@ class _DreamPlaceState extends State<DreamPlace> {
               ),
             ],
           ),
-          // Tytuł i opis
           Padding(
             padding: const EdgeInsets.all(16),
             child: Column(

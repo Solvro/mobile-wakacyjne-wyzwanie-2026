@@ -1,8 +1,9 @@
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
-import "../widgets/dream_place.dart";
+import '../widgets/dream_place.dart';
 
-class DreamPlaceScreen extends StatelessWidget {
+class DreamPlaceScreen extends HookWidget {
   const DreamPlaceScreen({super.key});
 
   static final List<Map<String, dynamic>> _places = [
@@ -50,8 +51,24 @@ class DreamPlaceScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Stan zarządzany przez HookWidget (useState)
+    final isFavorited = useState(false);
+
     return Scaffold(
-      appBar: AppBar(title: const Text("Wymarzone miejsca")),
+      appBar: AppBar(
+        title: const Text("Wymarzone miejsca"),
+        actions: [
+          IconButton(
+            onPressed: () {
+              isFavorited.value = !isFavorited.value;
+            },
+            icon: Icon(
+              isFavorited.value ? Icons.favorite : Icons.favorite_border,
+              color: isFavorited.value ? Colors.red : null,
+            ),
+          ),
+        ],
+      ),
       body: ListView.builder(
         itemCount: _places.length,
         itemBuilder: (context, index) {
