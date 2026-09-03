@@ -3,6 +3,7 @@ import "package:go_router/go_router.dart";
 
 import "screens/dream_place_screen.dart";
 import "screens/home_screen.dart";
+import "screens/settings_screen.dart";
 
 final goRouter = GoRouter(
   initialLocation: "/",
@@ -26,5 +27,6 @@ final goRouter = GoRouter(
         );
       },
     ),
+    GoRoute(path: SettingsScreen.route, builder: (context, state) => const SettingsScreen())
   ],
 );

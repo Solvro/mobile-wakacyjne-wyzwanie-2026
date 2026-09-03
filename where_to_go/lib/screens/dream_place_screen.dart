@@ -16,8 +16,7 @@ class DreamPlaceScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.pink[600],
-        title: Text(place.title, style: const TextStyle(color: Colors.white)),
+        title: Text(place.title),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, size: 28),
           color: Colors.white,
@@ -46,19 +45,25 @@ class DreamPlaceScreen extends ConsumerWidget {
                     children: [
                       Text(
                         place.pageTitle,
-                        style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w500, height: 1.2),
+                        style: Theme.of(context).textTheme.titleMedium
                       ),
                       const SizedBox(height: 8),
-                      Text(place.description, style: const TextStyle(fontSize: 15)),
+                      Text(place.description, style: Theme.of(context).textTheme.bodySmall)
                     ],
                   ),
                 ),
                 const SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    for (final feature in place.features) Column(children: [Icon(feature.icon), Text(feature.name)]),
-                  ],
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      for (final feature in place.features) Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Column(children: [Icon(feature.icon), Text(feature.name)]),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             );
@@ -81,17 +86,23 @@ class DreamPlaceScreen extends ConsumerWidget {
                                 style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w500, height: 1.2),
                               ),
                               const SizedBox(height: 8),
-                              Text(place.description, style: const TextStyle(fontSize: 15)),
+                              Text(place.description, style: Theme.of(context).textTheme.bodySmall),
                             ],
                           ),
                         ),
                         const SizedBox(height: 8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            for (final feature in place.features)
-                              Column(children: [Icon(feature.icon), Text(feature.name)]),
-                          ],
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                for (final feature in place.features)
+                                  Column(children: [Icon(feature.icon), Padding(
+                                    padding: const EdgeInsets.all(8),
+                                    child: Text(feature.name),
+                                  )]),
+                              ],
+                            ),
                         ),
                         const SizedBox(height: 16),
                       ],

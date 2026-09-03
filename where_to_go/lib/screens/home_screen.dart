@@ -5,6 +5,7 @@ import "package:go_router/go_router.dart";
 import "../features/places/place.dart";
 import "../features/places/places_provider.dart";
 import "dream_place_screen.dart";
+import "settings_screen.dart";
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -13,8 +14,13 @@ class HomeScreen extends ConsumerWidget {
     final places = ref.watch(placesProvider);
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Wymarzone miejsca", style: TextStyle(color: Colors.white)),
-        backgroundColor: Colors.pink[600],
+        title: const Text("Wymarzone miejsca"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings, size: 28),
+            onPressed: () => GoRouter.of(context).push(SettingsScreen.route),
+          )
+        ]
       ),
       body: OrientationBuilder(
         builder: (context, orientation) {
@@ -48,10 +54,8 @@ class PlaceCard extends ConsumerWidget {
             width: 400,
             height: 229,
             child: Card(
-              color: Colors.pink[600],
               clipBehavior: Clip.antiAlias,
               elevation: 2,
-              shadowColor: Colors.pink[800],
               child: Stack(
                 children: [
                   InkWell(
@@ -68,11 +72,7 @@ class PlaceCard extends ConsumerWidget {
                             child: Center(
                               child: Text(
                                 place.title,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: orientation == Orientation.portrait ? 20 : 25,
-                                  color: Colors.white,
-                                ),
+                                style: Theme.of(context).textTheme.labelMedium
                               ),
                             ),
                           ),

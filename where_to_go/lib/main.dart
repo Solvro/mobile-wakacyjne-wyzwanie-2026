@@ -1,9 +1,11 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:google_fonts/google_fonts.dart";
 import "package:shared_preferences/shared_preferences.dart";
 
 import "app_router.dart";
 import "features/themes/theme_provider.dart";
+import "features/themes/app_themes.dart";
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,13 +27,16 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeControllerProvider);
-
-    return MaterialApp.router(
-      themeMode: themeMode,
-        theme: ThemeData.light(),
-        darkTheme: ThemeData.dark(),
-        debugShowCheckedModeBanner: false,
-        routerConfig: goRouter
+    return OrientationBuilder(
+      builder: (context, orientation) {
+        return MaterialApp.router(
+          themeMode: themeMode,
+            theme: AppThemes.lightTheme(orientation),
+            darkTheme: AppThemes.darkTheme(orientation),
+            debugShowCheckedModeBanner: false,
+            routerConfig: goRouter
+        );
+      }
     );
   }
 }
