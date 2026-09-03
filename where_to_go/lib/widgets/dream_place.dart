@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
 class DreamPlace extends StatefulWidget {
   const DreamPlace({
@@ -97,7 +97,10 @@ class _DreamPlaceState extends State<DreamPlace> {
               decoration: BoxDecoration(
                 color: _cardColor,
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: _primaryColor.withValues(alpha: 0.3), width: 1.5),
+                border: Border.all(
+                  color: _primaryColor.withValues(alpha: 0.3),
+                  width: 1.5,
+                ),
               ),
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
               child: Row(
