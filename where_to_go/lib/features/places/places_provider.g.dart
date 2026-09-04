@@ -48,7 +48,7 @@ final class AppDatabaseProvider
   }
 }
 
-String _$appDatabaseHash() => r'4c20f914a3c547001c20f44f1138a1d70037da2d';
+String _$appDatabaseHash() => r'4db1c5efe1a73afafa926c6e91d12e49a68b1abc';
 
 @ProviderFor(Places)
 final placesProvider = PlacesProvider._();
