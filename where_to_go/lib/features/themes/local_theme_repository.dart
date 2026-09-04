@@ -10,8 +10,8 @@ class LocalThemeRepository {
   ThemeMode getThemeMode() {
     final name = _prefs.getString(_key);
     return ThemeMode.values.firstWhere(
-        (e) => e.name == name,
-      orElse: () => ThemeMode.system
+      (e) => e.name == name,
+      orElse: () => ThemeMode.system,
     );
   }
 

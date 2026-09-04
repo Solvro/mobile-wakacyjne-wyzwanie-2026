@@ -11,24 +11,33 @@ class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final places = ref.watch(placesProvider);
+    final placesAsync = ref.watch(placesProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Wymarzone miejsca"),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.settings, size: 28),
-            onPressed: () => GoRouter.of(context).push(SettingsScreen.route),
-          )
-        ]
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: IconButton(
+              icon: const Icon(Icons.settings, size: 28),
+              onPressed: () => GoRouter.of(context).push(SettingsScreen.route),
+            ),
+          ),
+        ],
       ),
-      body: OrientationBuilder(
-        builder: (context, orientation) {
-          return ListView(
-            scrollDirection: orientation == Orientation.portrait ? Axis.vertical : Axis.horizontal,
-            children: [for (final place in places) PlaceCard(place)],
-          );
-        },
+      body: placesAsync.when(
+        data: (places) => OrientationBuilder(
+          builder: (context, orientation) {
+            return ListView(
+              scrollDirection: orientation == Orientation.portrait
+                  ? Axis.vertical
+                  : Axis.horizontal,
+              children: [for (final place in places) PlaceCard(place)],
+            );
+          },
+        ),
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (err, stack) => Center(child: Text("Błąd bazy: $err")),
       ),
     );
   }
@@ -59,20 +68,28 @@ class PlaceCard extends ConsumerWidget {
               child: Stack(
                 children: [
                   InkWell(
-                    onTap: () => GoRouter.of(context).push("${DreamPlaceScreen.route}/${place.id}"),
+                    onTap: () =>
+                        GoRouter.of(context)
+                            .push("${DreamPlaceScreen.route}/${place.id}"),
                     child: Column(
                       children: [
                         Expanded(
-                          child: Image.asset(place.homeImagePath, width: double.infinity, fit: BoxFit.cover),
+                          child: Image.asset(
+                            place.homeImagePath,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(7),
                           child: SizedBox(
-                            height: orientation == Orientation.portrait ? 32 : 40,
+                            height: orientation == Orientation.portrait
+                                ? 32
+                                : 40,
                             child: Center(
                               child: Text(
                                 place.title,
-                                style: Theme.of(context).textTheme.labelMedium
+                                style: Theme.of(context).textTheme.labelMedium,
                               ),
                             ),
                           ),
@@ -84,14 +101,20 @@ class PlaceCard extends ConsumerWidget {
                     bottom: 0,
                     right: 0,
                     child: IconButton(
-                      padding: EdgeInsets.all(orientation == Orientation.portrait ? 8 : 9),
+                      padding: EdgeInsets.all(
+                        orientation == Orientation.portrait ? 8 : 9,
+                      ),
                       icon: Icon(
-                        place.isFavorite ? Icons.favorite : Icons.favorite_border,
+                        place.isFavorite
+                            ? Icons.favorite
+                            : Icons.favorite_border,
                         color: place.isFavorite ? Colors.red : Colors.white,
                         size: orientation == Orientation.portrait ? 28 : 35,
                       ),
                       onPressed: () {
-                        ref.read(placesProvider.notifier).toggleFavorite(place.id);
+                        ref
+                            .read(placesProvider.notifier)
+                            .toggleFavorite(place.id);
                       },
                     ),
                   ),

@@ -29,28 +29,39 @@ class SettingsScreen extends ConsumerWidget {
             trailing: DropdownButton<ThemeMode>(
               value: themeMode,
               onChanged: (ThemeMode? newMode) {
-                if(newMode != null) {
-                  ref.watch(themeControllerProvider.notifier).setThemeMode(newMode);
+                if (newMode != null) {
+                  ref
+                      .watch(themeControllerProvider.notifier)
+                      .setThemeMode(newMode);
                 }
               },
               items: [
                 DropdownMenuItem(
                   value: ThemeMode.system,
-                  child: Text("Systemowy", style: Theme.of(context).textTheme.bodyMedium)
+                  child: Text(
+                    "Systemowy",
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
                 ),
                 DropdownMenuItem(
                   value: ThemeMode.light,
-                  child: Text("Jasny", style: Theme.of(context).textTheme.bodyMedium)
+                  child: Text(
+                    "Jasny",
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
                 ),
                 DropdownMenuItem(
                   value: ThemeMode.dark,
-                  child: Text("Ciemny", style: Theme.of(context).textTheme.bodyMedium)
-                )
-              ]
-            )
-          )
+                  child: Text(
+                    "Ciemny",
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
-      )
+      ),
     );
   }
 }

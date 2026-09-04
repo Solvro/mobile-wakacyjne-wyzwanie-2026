@@ -19,7 +19,10 @@ final goRouter = GoRouter(
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return SlideTransition(
               position: animation.drive(
-                Tween(begin: const Offset(1, 0), end: Offset.zero).chain(CurveTween(curve: Curves.easeOut)),
+                Tween(
+                  begin: const Offset(1, 0),
+                  end: Offset.zero,
+                ).chain(CurveTween(curve: Curves.easeOut)),
               ),
               child: child,
             );
@@ -27,6 +30,9 @@ final goRouter = GoRouter(
         );
       },
     ),
-    GoRoute(path: SettingsScreen.route, builder: (context, state) => const SettingsScreen())
+    GoRoute(
+      path: SettingsScreen.route,
+      builder: (context, state) => const SettingsScreen(),
+    ),
   ],
 );

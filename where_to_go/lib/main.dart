@@ -13,17 +13,14 @@ void main() async {
   final prefs = await SharedPreferences.getInstance();
 
   runApp(
-      ProviderScope(
-        overrides: [
-          sharedPreferencesProvider.overrideWithValue(prefs)
-        ],
-          child: MyApp()
-      )
+    ProviderScope(
+      overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+      child: MyApp(),
+    ),
   );
 }
 
 class MyApp extends ConsumerWidget {
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeControllerProvider);
@@ -31,12 +28,12 @@ class MyApp extends ConsumerWidget {
       builder: (context, orientation) {
         return MaterialApp.router(
           themeMode: themeMode,
-            theme: AppThemes.lightTheme(orientation),
-            darkTheme: AppThemes.darkTheme(orientation),
-            debugShowCheckedModeBanner: false,
-            routerConfig: goRouter
+          theme: AppThemes.lightTheme(orientation),
+          darkTheme: AppThemes.darkTheme(orientation),
+          debugShowCheckedModeBanner: false,
+          routerConfig: goRouter,
         );
-      }
+      },
     );
   }
 }
