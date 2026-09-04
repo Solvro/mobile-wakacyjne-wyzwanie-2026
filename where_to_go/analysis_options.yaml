@@ -7,4 +7,3 @@ analyzer:
     - windows/**
     - macos/**
     - linux/**
-include: package:solvro_config/app.yaml

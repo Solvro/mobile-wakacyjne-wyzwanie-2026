@@ -3,7 +3,6 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:go_router/go_router.dart";
 
 import "../features/themes/theme_provider.dart";
-import "../features/themes/app_themes.dart";
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});

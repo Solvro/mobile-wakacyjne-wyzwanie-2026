@@ -13,22 +13,18 @@ class FeaturesConverter extends TypeConverter<List<Feature>, String> {
 
   @override
   List<Feature> fromSql(String fromDb) {
-    final List<dynamic> decoded = json.decode(fromDb);
-    return decoded
-        .map(
-          (item) => Feature(
-            item["name"] as String,
-            IconData(item["iconCode"] as int, fontFamily: "MaterialIcons"),
-          ),
-        )
-        .toList();
+    final List<dynamic> names = json.decode(fromDb);
+    return names.map((name) {
+      return Feature.all.firstWhere(
+        (f) => f.name == name,
+        orElse: () => Feature(name as String, Icons.help),
+      );
+    }).toList();
   }
 
   @override
   String toSql(List<Feature> value) {
-    return json.encode(
-      value.map((f) => {"name": f.name, "iconCode": f.icon.codePoint}).toList(),
-    );
+    return json.encode(value.map((f) => f.name).toList());
   }
 }
 

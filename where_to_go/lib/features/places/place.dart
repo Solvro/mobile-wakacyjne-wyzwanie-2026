@@ -5,6 +5,20 @@ class Feature {
   final IconData icon;
 
   const Feature(this.name, this.icon);
+
+  static const all = [
+    Feature("Plaża piasczysta", Icons.beach_access),
+    Feature("Plaża kamienista", Icons.beach_access),
+    Feature("Jedzenie", Icons.fastfood),
+    Feature("Słońce", Icons.sunny),
+    Feature("Życie nocne", Icons.nightlife),
+    Feature("Duże miasto", Icons.location_city),
+    Feature("Stolica", Icons.location_city),
+    Feature("Nad rzeką", Icons.water),
+    Feature("Góry", Icons.terrain),
+    Feature("Park Narodowy", Icons.hiking),
+    Feature("Narty", Icons.downhill_skiing),
+  ];
 }
 
 class Place {
