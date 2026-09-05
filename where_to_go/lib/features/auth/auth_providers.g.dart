@@ -9,28 +9,28 @@ part of 'auth_providers.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(AuthStatus)
-final authStatusProvider = AuthStatusProvider._();
+@ProviderFor(AuthStatusController)
+final authStatusControllerProvider = AuthStatusControllerProvider._();
 
-final class AuthStatusProvider
-    extends $NotifierProvider<AuthStatus, AuthenticationStatus> {
-  AuthStatusProvider._()
+final class AuthStatusControllerProvider
+    extends $NotifierProvider<AuthStatusController, AuthenticationStatus> {
+  AuthStatusControllerProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'authStatusProvider',
+        name: r'authStatusControllerProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$authStatusHash();
+  String debugGetCreateSourceHash() => _$authStatusControllerHash();
 
   @$internal
   @override
-  AuthStatus create() => AuthStatus();
+  AuthStatusController create() => AuthStatusController();
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(AuthenticationStatus value) {
@@ -41,9 +41,10 @@ final class AuthStatusProvider
   }
 }
 
-String _$authStatusHash() => r'2aeba955caf6342248c959e2b94d0018419d3e84';
+String _$authStatusControllerHash() =>
+    r'aa2ca95e97be2e50d42f1898d215a5900bc3ffd3';
 
-abstract class _$AuthStatus extends $Notifier<AuthenticationStatus> {
+abstract class _$AuthStatusController extends $Notifier<AuthenticationStatus> {
   AuthenticationStatus build();
   @$mustCallSuper
   @override

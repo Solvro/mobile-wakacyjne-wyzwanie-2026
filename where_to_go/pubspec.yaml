@@ -44,6 +44,7 @@ dependencies:
   drift_flutter: ^0.2.8
   path_provider: ^2.1.6
   flutter_secure_storage: ^11.0.0
+  dio: ^5.11.1
 
 
 dev_dependencies:

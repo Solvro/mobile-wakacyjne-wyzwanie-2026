@@ -7,10 +7,11 @@ import "package:where_to_go/screens/login_screen.dart";
 
 import "../screens/dream_place_screen.dart";
 import "../screens/home_screen.dart";
+import "../screens/register_screen.dart";
 import "../screens/settings_screen.dart";
 
 final appRouterProvider = Provider<GoRouter>((ref) {
-  final authStatus = ref.watch(authStatusProvider);
+  final authStatus = ref.watch(authStatusControllerProvider);
 
   return GoRouter(
     initialLocation: "/",
@@ -30,7 +31,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     routes: [
       GoRoute(path: "/", builder: (context, state) => const HomeScreen()),
       GoRoute(
-        path: "${DreamPlaceScreen.route}/:id", // dynamiczny parametr
+        path: "${DreamPlaceScreen.route}/:id",
         pageBuilder: (context, state) {
           final id = state.pathParameters["id"]!;
           return CustomTransitionPage(
@@ -57,8 +58,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: LoginScreen.route,
-        builder: (context, state) => const LoginScreen(),
+        builder: (context, state) => LoginScreen(),
       ),
+      GoRoute(
+        path: RegisterScreen.route,
+        builder: (context, state) => RegisterScreen(),
+      )
     ],
   );
 });

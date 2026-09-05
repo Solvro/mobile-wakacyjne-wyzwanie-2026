@@ -14,6 +14,7 @@ TextTheme globalTextTheme(bool isPortrait) {
       height: 1.2,
     ),
     bodyMedium: const TextStyle(fontSize: 20),
+    displaySmall: const TextStyle (fontSize: 15, color: Colors.grey),
   );
 }
 
