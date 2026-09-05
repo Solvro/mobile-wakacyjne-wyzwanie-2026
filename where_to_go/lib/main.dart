@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:shared_preferences/shared_preferences.dart";
 
-import "app_router.dart";
+import "routing/app_router.dart";
 import "features/themes/theme_provider.dart";
 import "features/themes/app_themes.dart";
 
@@ -20,9 +20,12 @@ void main() async {
 }
 
 class MyApp extends ConsumerWidget {
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeControllerProvider);
+    final router = ref.watch(appRouterProvider);
+
     return OrientationBuilder(
       builder: (context, orientation) {
         return MaterialApp.router(
@@ -30,7 +33,7 @@ class MyApp extends ConsumerWidget {
           theme: AppThemes.lightTheme(orientation),
           darkTheme: AppThemes.darkTheme(orientation),
           debugShowCheckedModeBanner: false,
-          routerConfig: goRouter,
+          routerConfig: router,
         );
       },
     );
