@@ -20,7 +20,6 @@ void main() async {
 }
 
 class MyApp extends ConsumerWidget {
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeControllerProvider);

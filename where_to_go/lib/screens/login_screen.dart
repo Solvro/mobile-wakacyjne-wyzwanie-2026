@@ -16,16 +16,16 @@ class LoginScreen extends ConsumerWidget {
             decoration: InputDecoration(
               border: OutlineInputBorder(),
               hintText: "e-mail",
-            )
+            ),
           ),
           TextField(
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: "hasło",
-              )
-          )
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              hintText: "hasło",
+            ),
+          ),
         ],
-      )
+      ),
     );
   }
 }
