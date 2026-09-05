@@ -18,8 +18,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     redirect: (context, state) {
       final isLoggingIn = state.matchedLocation.startsWith("/login");
 
-      if (authStatus == AuthenticationStatus.unauthenticated) {
-        return isLoggingIn ? null : '/login';
+      if (authStatus == AuthenticationStatus.unauthenticated && !isLoggingIn) {
+        return '/login';
       }
 
       if (authStatus == AuthenticationStatus.authenticated && isLoggingIn) {

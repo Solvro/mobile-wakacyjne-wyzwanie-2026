@@ -30,7 +30,7 @@ class AuthenticationRepository {
       } else if (e.type == DioExceptionType.connectionTimeout) {
         throw Exception("Brak połączenia z internetem");
       } else {
-        throw Exception("Wystąpił nieoczekiwany błąd");
+        throw Exception("Wystąpił nieoczekiwany błąd ${e.response?.statusCode}");
       }
     }
   }
@@ -49,7 +49,11 @@ class AuthenticationRepository {
     }
   }
 
-  Future<void> logoutUser() {
-    return _secureStorage.deleteAccessKey();
+  Future<void> logoutUser() async {
+    try {
+      await _secureStorage.deleteAccessKey();
+    } on DioException catch (e) {
+      throw Exception(e.response);
+    }
   }
 }

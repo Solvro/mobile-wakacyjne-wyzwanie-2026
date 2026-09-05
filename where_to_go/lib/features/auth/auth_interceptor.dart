@@ -9,7 +9,7 @@ class AuthInterceptor extends Interceptor {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
-    final key = await ref.read(authRepositoryProvider).getKey();
+    final key = await ref.read(secureStorageProvider).getAccessKey();
 
     if (key != null) {
       options.headers["Authorization"] = "Bearer $key";

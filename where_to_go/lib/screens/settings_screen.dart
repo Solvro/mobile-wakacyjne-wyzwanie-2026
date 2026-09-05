@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:go_router/go_router.dart";
 
+import "../features/auth/auth_providers.dart";
 import "../features/themes/theme_provider.dart";
 
 class SettingsScreen extends ConsumerWidget {
@@ -11,6 +12,19 @@ class SettingsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeControllerProvider);
+
+    Future<void> tryLoggingOut() async {
+      try {
+        await ref.read(authStatusControllerProvider.notifier).logout();
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Wylogowano"))
+        );
+      } catch(e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(e.toString()))
+        );
+      }
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -59,6 +73,10 @@ class SettingsScreen extends ConsumerWidget {
               ],
             ),
           ),
+          FilledButton(
+            child: Text("Wyloguj się", style: Theme.of(context).textTheme.bodyMedium),
+            onPressed: () => tryLoggingOut(),
+          )
         ],
       ),
     );

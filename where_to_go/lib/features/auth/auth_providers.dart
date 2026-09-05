@@ -15,6 +15,8 @@ final dioProvider = Provider((ref) {
   final dio = Dio(BaseOptions(baseUrl: ApiPaths.baseUrl));
 
   dio.interceptors.add(AuthInterceptor(ref));
+
+  return dio;
 });
 
 final authRepositoryProvider = Provider((ref) {
@@ -50,6 +52,15 @@ class AuthStatusController extends _$AuthStatusController {
   Future<void> register(String email, String password) async {
     try {
       await ref.read(authRepositoryProvider).registerUser(email, password);
+    } catch(e) {
+      rethrow;
+    }
+  }
+
+  Future<void> logout() async {
+    try {
+      await ref.read(authRepositoryProvider).logoutUser();
+      state = AuthenticationStatus.unauthenticated;
     } catch(e) {
       rethrow;
     }
