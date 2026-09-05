@@ -14,17 +14,17 @@ class DreamPlaceScreen extends ConsumerWidget {
     final place = ref.watch(placesProvider).firstWhere((p) => p.id == id);
     final isFavorited = place.isFavorite;
     return Scaffold(
-      //backgroundColor: Theme.of(context).colorScheme.onPrimary,
+      backgroundColor: Colors.grey[100],
       appBar: AppBar(
-        //backgroundColor: Theme.of(context).colorScheme.primary,
+        backgroundColor: Colors.deepPurple[300],
         title: Text(
           place.title,
-          style: TextStyle(color: Theme.of(context).colorScheme.onPrimary, fontWeight: FontWeight.bold),
+          style: TextStyle(color: Colors.grey[100], fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          color: Theme.of(context).colorScheme.onPrimary,
+          color: Colors.grey[100],
           onPressed: () => context.pop(),
         ),
         actions: [
@@ -32,7 +32,7 @@ class DreamPlaceScreen extends ConsumerWidget {
             onPressed: () => ref.read(placesProvider.notifier).toggleFavorite(id),
             icon: isFavorited
                 ? Icon(Icons.star_rounded, color: Colors.amber[600])
-                : Icon(Icons.star_border_rounded, color: Theme.of(context).colorScheme.onPrimary),
+                : Icon(Icons.star_border_rounded, color: Colors.grey[100]),
           ),
         ],
       ),
@@ -59,7 +59,7 @@ class DreamPlaceScreen extends ConsumerWidget {
               padding: const EdgeInsets.all(16),
               child: Card(
                 elevation: 4,
-                //color: Theme.of(context).colorScheme.primary,
+                color: Colors.deepPurple[300],
                 child: Column(
                   children: [
                     Padding(
@@ -68,12 +68,12 @@ class DreamPlaceScreen extends ConsumerWidget {
                         children: [
                           Text(
                             place.descriptionTitle,
-                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onPrimary),
+                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.grey[100]),
                           ),
                           const SizedBox(height: 8),
                           Text(
                             place.description,
-                            style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+                            style: TextStyle(color: Colors.grey[100]),
                             textAlign: TextAlign.center,
                           ),
                         ],
@@ -97,12 +97,12 @@ class DreamPlaceScreen extends ConsumerWidget {
                             Expanded(
                               child: Column(
                                 children: [
-                                  Icon(feature.icon, color: Theme.of(context).colorScheme.onPrimary),
+                                  Icon(feature.icon, color: Colors.grey[100]),
                                   const SizedBox(height: 4),
                                   Text(
                                     feature.label,
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+                                    style: TextStyle(color: Colors.grey[100]),
                                   ),
                                 ],
                               ),

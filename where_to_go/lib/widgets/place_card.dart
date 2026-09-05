@@ -16,7 +16,7 @@ class PlaceCard extends StatelessWidget {
       child: Card(
         elevation: 4,
         clipBehavior: Clip.antiAlias,
-        //color: Theme.of(context).colorScheme.primary,
+        color: Colors.deepPurple[300],
         child: InkWell(
           onTap: () async {
             await context.push("${DreamPlaceScreen.route}/${place.id}");
@@ -41,7 +41,7 @@ class PlaceCard extends StatelessWidget {
                       right: 8,
                       child: Container(
                         padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface, shape: BoxShape.circle),
+                        decoration: BoxDecoration(color: Colors.grey[100], shape: BoxShape.circle),
                         child: Icon(Icons.star_rounded, color: Colors.amber[600], size: 28),
                       ),
                     ),
@@ -51,7 +51,7 @@ class PlaceCard extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: Text(
                   place.title,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Theme.of(context).colorScheme.onPrimary),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.grey[100]),
                 ),
               ),
             ],
