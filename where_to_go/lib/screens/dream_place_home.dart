@@ -3,6 +3,7 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 
 import "../features/places/places_provider.dart";
 import "../widgets/place_card.dart";
+import "../widgets/settings_dialog.dart";
 
 class DreamPlaceHome extends ConsumerWidget {
   const DreamPlaceHome({super.key});
@@ -11,14 +12,25 @@ class DreamPlaceHome extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final places = ref.watch(placesProvider);
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      //backgroundColor: Theme.of(context).colorScheme.onPrimary,
       appBar: AppBar(
-        backgroundColor: Colors.deepPurple[300],
+        //backgroundColor: Theme.of(context).colorScheme.primary,
         title: Text(
           "Wymarzone destynacje",
-          style: TextStyle(color: Colors.grey[100], fontWeight: FontWeight.bold),
+          style: TextStyle(color: Theme.of(context).colorScheme.onPrimary, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () async {
+              await showDialog<void>(
+                context: context,
+                builder: (context) =>  const SettingsDialog(),
+              );
+            },
+          ),
+        ],
       ),
       body: ListView(children: [for (final place in places) PlaceCard(place: place)]),
     );
