@@ -5,12 +5,12 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'dio_provider.g.dart';
 
 @riverpod
-FlutterSecureStorage secureStorage(Ref ref) {
+FlutterSecureStorage secureStorage(ref) {
   return const FlutterSecureStorage();
 }
 
 @riverpod
-Dio dio(Ref ref) {
+Dio dio(ref) {
   final storage = ref.watch(secureStorageProvider);
   final options = BaseOptions(
     baseUrl: 'http://10.0.2.2:3000',

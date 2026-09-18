@@ -5,7 +5,7 @@ import '../../repositories/authrepo.dart';
 part 'auth_provider.g.dart';
 
 @riverpod
-AuthenticationRepository authRepository(Ref ref) {
+AuthenticationRepository authRepository(ref) {
   final db = ref.watch(appDatabaseProvider);
   return AuthenticationRepository(db: db);
 }
