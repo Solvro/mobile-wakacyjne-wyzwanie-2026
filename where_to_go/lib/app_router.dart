@@ -3,8 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'dreamplacescreen.dart';
 import 'main.dart';
 import 'auth/auth_provider.dart';
-import 'Loginscreen.dart';
-import 'Registerscreen.dart';
+import 'loginscreen.dart';
+import 'registerscreen.dart';
 import 'package:flutter/foundation.dart';
 
 class GoRouterRefreshNotifier extends ChangeNotifier {
