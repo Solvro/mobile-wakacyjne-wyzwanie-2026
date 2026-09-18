@@ -14,12 +14,35 @@ class DreamPlaces extends Table {
   Set<Column> get primaryKey => {id};
 }
 
-@DriftDatabase(tables: [DreamPlaces])
+class Users extends Table {
+  TextColumn get id => text()();
+  TextColumn get username => text().unique()();
+  TextColumn get email => text().unique()();
+  TextColumn get password => text()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+@DriftDatabase(tables: [DreamPlaces, Users])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+    onCreate: (m) => m.createAll(),
+    onUpgrade: (m, from, to) async {
+      if (from < 2) {
+        await m.createTable(users);
+      }
+      if (from < 3) {
+        await m.createTable(users);
+      }
+    },
+  );
 
   static QueryExecutor _openConnection() {
     return driftDatabase(name: 'Baza danych');

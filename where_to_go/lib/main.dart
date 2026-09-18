@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/dreamplacescreen.dart';
 import 'package:flutter_application_1/features/theme_provider.dart';
-//import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-//import 'features/favorite/favorite_provider.dart';
 import 'app_router.dart';
 import 'package:go_router/go_router.dart';
 import 'features/places/places_provider.dart';
 import 'features/places/place.dart';
-//import 'package:shared_preferences/shared_preferences.dart';
-//import 'package:drift/drift.dart';
-//import 'database/app_database.dart';
-//import 'repositories/dreamplacesrepository.dart';
+import 'theme.dart';
+import 'auth/auth_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,44 +22,10 @@ class MyApp extends ConsumerWidget {
     final localThemeRepository = ref.watch(thememProvider);
     return localThemeRepository.when(
       data: (mode) => MaterialApp.router(
-        routerConfig: goRouter,
+        routerConfig: ref.watch(goRouterProvider),
         title: 'Wybierz miejsce',
-        theme: ThemeData(
-          brightness: Brightness.light,
-          scaffoldBackgroundColor: const Color.fromARGB(255, 36, 119, 105),
-          cardTheme: CardThemeData(
-            color: Colors.amber,
-            shadowColor: const Color.fromARGB(255, 68, 20, 20),
-            elevation: 5,
-          ),
-          colorScheme: ColorScheme.light(
-            primary: Colors.amber,
-            secondary: Color.fromARGB(255, 25, 100, 96),
-            shadow: Color.fromRGBO(38, 72, 165, 0.76),
-          ),
-          appBarTheme: AppBarTheme(
-            backgroundColor: const Color.fromARGB(255, 76, 147, 156),
-            foregroundColor: const Color.fromARGB(255, 219, 255, 238),
-          ),
-        ),
-        darkTheme: ThemeData(
-          brightness: Brightness.dark,
-          scaffoldBackgroundColor: Color.fromARGB(255, 66, 65, 65),
-          cardTheme: CardThemeData(
-            color: const Color.fromARGB(255, 41, 64, 99),
-            shadowColor: const Color.fromARGB(255, 68, 20, 20),
-            elevation: 5,
-          ),
-          colorScheme: ColorScheme.dark(
-            primary: const Color.fromARGB(255, 9, 114, 128),
-            secondary: Color.fromARGB(255, 12, 41, 61),
-            shadow: Color.fromRGBO(38, 72, 165, 0.76),
-          ),
-          appBarTheme: AppBarTheme(
-            backgroundColor: const Color.fromARGB(255, 20, 37, 83),
-            foregroundColor: const Color.fromARGB(255, 146, 194, 233),
-          ),
-        ),
+        theme: lighttheme,
+        darkTheme: darktheme,
         themeMode: switch (mode) {
           true => ThemeMode.light,
           false => ThemeMode.dark,
@@ -109,15 +71,6 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final LocalThemeRepository=ref.watch(thememProvider);
-    /* return Scaffold(
-      body: ListView(children: [
-        maker(context, ref.watch(placesProvider)[0]),
-        maker(context, ref.watch(placesProvider)[1]),
-        maker(context, ref.watch(placesProvider)[2]),
-        maker(context, ref.watch(placesProvider)[3]),
-        maker(context, ref.watch(placesProvider)[4])
-      ]),*/
     final placesAsync = ref.watch(placesProvider);
     return placesAsync.when(
       data: (places) => Scaffold(
@@ -133,6 +86,13 @@ class HomeScreen extends ConsumerWidget {
                   onChanged: ((value) {
                     ref.read(thememProvider.notifier).toggle(value);
                   }),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.logout),
+                  tooltip: 'Wyloguj',
+                  onPressed: () async {
+                    await ref.read(authProvider.notifier).logout();
+                  },
                 ),
               ],
             ),
