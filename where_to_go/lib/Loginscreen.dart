@@ -24,9 +24,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       errorMessage = false;
     });
     try {
-      await ref
-          .read(authProvider.notifier)
-          .login(
+      await ref.read(authProvider.notifier).login(
             email: _emailController.text.trim(),
             password: _passwordController.text,
           );
@@ -44,7 +42,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       appBar: AppBar(title: Text("Logowanie")),
       body: SingleChildScrollView(
         child: Padding(
-          padding: .all(20),
+          padding: EdgeInsets.all(20),
           child: Form(
             key: formKey,
             child: Column(
@@ -52,7 +50,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 TextFormField(
                   controller: _emailController,
                   decoration: InputDecoration(label: Text("Username/email:")),
-                  keyboardType: .emailAddress,
                   validator: _required,
                 ),
                 SizedBox(height: 20),

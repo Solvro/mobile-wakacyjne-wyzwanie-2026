@@ -12,24 +12,20 @@ part of 'auth_provider.dart';
 @ProviderFor(authRepository)
 final authRepositoryProvider = AuthRepositoryProvider._();
 
-final class AuthRepositoryProvider
-    extends
-        $FunctionalProvider<
-          AuthenticationRepository,
-          AuthenticationRepository,
-          AuthenticationRepository
-        >
-    with $Provider<AuthenticationRepository> {
+final class AuthRepositoryProvider extends $FunctionalProvider<
+    AuthenticationRepository,
+    AuthenticationRepository,
+    AuthenticationRepository> with $Provider<AuthenticationRepository> {
   AuthRepositoryProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'authRepositoryProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'authRepositoryProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
 
   @override
   String debugGetCreateSourceHash() => _$authRepositoryHash();
@@ -38,7 +34,8 @@ final class AuthRepositoryProvider
   @override
   $ProviderElement<AuthenticationRepository> $createElement(
     $ProviderPointer pointer,
-  ) => $ProviderElement(pointer);
+  ) =>
+      $ProviderElement(pointer);
 
   @override
   AuthenticationRepository create(Ref ref) {
@@ -61,15 +58,15 @@ final authProvider = AuthProvider._();
 
 final class AuthProvider extends $AsyncNotifierProvider<Auth, bool> {
   AuthProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'authProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'authProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
 
   @override
   String debugGetCreateSourceHash() => _$authHash();
@@ -87,14 +84,11 @@ abstract class _$Auth extends $AsyncNotifier<bool> {
   @override
   WhenComplete runBuild() {
     final ref = this.ref as $Ref<AsyncValue<bool>, bool>;
-    final element =
-        ref.element
-            as $ClassProviderElement<
-              AnyNotifier<AsyncValue<bool>, bool>,
-              AsyncValue<bool>,
-              Object?,
-              Object?
-            >;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<AsyncValue<bool>, bool>,
+        AsyncValue<bool>,
+        Object?,
+        Object?>;
     return element.handleCreate(ref, build);
   }
 }

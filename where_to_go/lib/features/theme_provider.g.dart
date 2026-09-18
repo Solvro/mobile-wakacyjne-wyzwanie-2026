@@ -14,15 +14,15 @@ final thememProvider = ThememProvider._();
 
 final class ThememProvider extends $AsyncNotifierProvider<Themem, bool?> {
   ThememProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'thememProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'thememProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
 
   @override
   String debugGetCreateSourceHash() => _$thememHash();
@@ -40,14 +40,11 @@ abstract class _$Themem extends $AsyncNotifier<bool?> {
   @override
   WhenComplete runBuild() {
     final ref = this.ref as $Ref<AsyncValue<bool?>, bool?>;
-    final element =
-        ref.element
-            as $ClassProviderElement<
-              AnyNotifier<AsyncValue<bool?>, bool?>,
-              AsyncValue<bool?>,
-              Object?,
-              Object?
-            >;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<AsyncValue<bool?>, bool?>,
+        AsyncValue<bool?>,
+        Object?,
+        Object?>;
     return element.handleCreate(ref, build);
   }
 }

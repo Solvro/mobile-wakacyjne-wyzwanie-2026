@@ -12,24 +12,20 @@ part of 'dio_provider.dart';
 @ProviderFor(secureStorage)
 final secureStorageProvider = SecureStorageProvider._();
 
-final class SecureStorageProvider
-    extends
-        $FunctionalProvider<
-          FlutterSecureStorage,
-          FlutterSecureStorage,
-          FlutterSecureStorage
-        >
-    with $Provider<FlutterSecureStorage> {
+final class SecureStorageProvider extends $FunctionalProvider<
+    FlutterSecureStorage,
+    FlutterSecureStorage,
+    FlutterSecureStorage> with $Provider<FlutterSecureStorage> {
   SecureStorageProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'secureStorageProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'secureStorageProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
 
   @override
   String debugGetCreateSourceHash() => _$secureStorageHash();
@@ -38,7 +34,8 @@ final class SecureStorageProvider
   @override
   $ProviderElement<FlutterSecureStorage> $createElement(
     $ProviderPointer pointer,
-  ) => $ProviderElement(pointer);
+  ) =>
+      $ProviderElement(pointer);
 
   @override
   FlutterSecureStorage create(Ref ref) {
@@ -62,15 +59,15 @@ final dioProvider = DioProvider._();
 final class DioProvider extends $FunctionalProvider<Dio, Dio, Dio>
     with $Provider<Dio> {
   DioProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'dioProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'dioProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
 
   @override
   String debugGetCreateSourceHash() => _$dioHash();

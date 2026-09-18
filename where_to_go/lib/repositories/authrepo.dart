@@ -13,9 +13,9 @@ class AuthenticationRepository {
   AuthenticationRepository({
     FlutterSecureStorage? storage,
     required AppDatabase db,
-  }) : //_dio = dio,
-       _db = db,
-       _storage = storage ?? const FlutterSecureStorage();
+  })  : //_dio = dio,
+        _db = db,
+        _storage = storage ?? const FlutterSecureStorage();
 
   // final Dio _dio;
   final AppDatabase _db;
@@ -44,12 +44,14 @@ class AuthenticationRepository {
   Future<User?> _findByEmailOrUsername(String value) async {
     final byEmail = await (_db.select(
       _db.users,
-    )..where((u) => u.email.equals(value))).getSingleOrNull();
+    )..where((u) => u.email.equals(value)))
+        .getSingleOrNull();
     if (byEmail != null) return byEmail;
 
     return (_db.select(
       _db.users,
-    )..where((u) => u.username.equals(value))).getSingleOrNull();
+    )..where((u) => u.username.equals(value)))
+        .getSingleOrNull();
   }
 
   Future<void> login({required String email, required String password}) async {
@@ -68,19 +70,19 @@ class AuthenticationRepository {
   }) async {
     final existingByEmail = await (_db.select(
       _db.users,
-    )..where((u) => u.email.equals(email))).getSingleOrNull();
+    )..where((u) => u.email.equals(email)))
+        .getSingleOrNull();
     final existingByUsername = await (_db.select(
       _db.users,
-    )..where((u) => u.username.equals(username))).getSingleOrNull();
+    )..where((u) => u.username.equals(username)))
+        .getSingleOrNull();
 
     if (existingByEmail != null || existingByUsername != null) {
       throw AuthenticationException('Username lub email już istnieje');
     }
 
     final id = DateTime.now().microsecondsSinceEpoch.toString();
-    await _db
-        .into(_db.users)
-        .insert(
+    await _db.into(_db.users).insert(
           UsersCompanion.insert(
             id: id,
             username: username,

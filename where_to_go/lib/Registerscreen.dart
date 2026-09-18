@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_application_1/auth/auth_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -26,9 +27,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       errorMessage = "";
     });
     try {
-      await ref
-          .read(authProvider.notifier)
-          .register(
+      await ref.read(authProvider.notifier).register(
             email: _emailController.text.trim(),
             password: _passwordController.text,
             username: _usernameController.text.trim(),
@@ -47,7 +46,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       appBar: AppBar(title: Text("Rejestracja")),
       body: SingleChildScrollView(
         child: Padding(
-          padding: .all(20),
+          padding: EdgeInsets.all(20),
           child: Form(
             key: formKey,
             child: Column(
@@ -61,7 +60,6 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 TextFormField(
                   controller: _emailController,
                   decoration: InputDecoration(label: Text("Email:")),
-                  keyboardType: .emailAddress,
                   validator: _required,
                 ),
                 SizedBox(height: 20),
@@ -91,7 +89,6 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   onPressed: submit,
                   child: const Text('Zarejestruj się'),
                 ),
-
                 TextButton(
                   onPressed: () => context.go('/login'),
                   child: Text("Logowanie"),
