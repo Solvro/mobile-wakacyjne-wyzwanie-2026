@@ -7,4 +7,7 @@ analyzer:
     - windows/**
     - macos/**
     - linux/**
+  errors:
+    migrate_design_widgets: ignore
+    unnecessary_type_name_in_constructor: ignore
 include: package:solvro_config/app.yaml
