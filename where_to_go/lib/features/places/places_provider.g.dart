@@ -9,52 +9,10 @@ part of 'places_provider.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(appDatabase)
-final appDatabaseProvider = AppDatabaseProvider._();
-
-final class AppDatabaseProvider
-    extends $FunctionalProvider<AppDatabase, AppDatabase, AppDatabase>
-    with $Provider<AppDatabase> {
-  AppDatabaseProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'appDatabaseProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
-
-  @override
-  String debugGetCreateSourceHash() => _$appDatabaseHash();
-
-  @$internal
-  @override
-  $ProviderElement<AppDatabase> $createElement($ProviderPointer pointer) =>
-      $ProviderElement(pointer);
-
-  @override
-  AppDatabase create(Ref ref) {
-    return appDatabase(ref);
-  }
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(AppDatabase value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<AppDatabase>(value),
-    );
-  }
-}
-
-String _$appDatabaseHash() => r'4db1c5efe1a73afafa926c6e91d12e49a68b1abc';
-
 @ProviderFor(Places)
 final placesProvider = PlacesProvider._();
 
-final class PlacesProvider
-    extends $StreamNotifierProvider<Places, List<Place>> {
+final class PlacesProvider extends $AsyncNotifierProvider<Places, List<Place>> {
   PlacesProvider._()
     : super(
         from: null,
@@ -74,10 +32,10 @@ final class PlacesProvider
   Places create() => Places();
 }
 
-String _$placesHash() => r'421d01a2e77b6d75fd302250e265d0681547acc3';
+String _$placesHash() => r'4b0111c668610159cbbf4b24e8d33b9775ec54d1';
 
-abstract class _$Places extends $StreamNotifier<List<Place>> {
-  Stream<List<Place>> build();
+abstract class _$Places extends $AsyncNotifier<List<Place>> {
+  FutureOr<List<Place>> build();
   @$mustCallSuper
   @override
   void runBuild() {

@@ -1,35 +1,46 @@
-import "package:riverpod_annotation/riverpod_annotation.dart";
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:where_to_go/features/places/place.dart';
+import 'package:where_to_go/features/places/places_repository.dart';
 
-import "place.dart";
-import "places_database.dart";
+import '../auth/auth_providers.dart';
 
 part "places_provider.g.dart";
 
-@riverpod
-AppDatabase appDatabase(Ref ref) {
-  final db = AppDatabase();
-
-  ref.onDispose(db.close);
-  return db;
-}
+final placesRepositoryProvider = Provider((ref) => PlacesRepository(ref.read(dioProvider)));
 
 @riverpod
 class Places extends _$Places {
   @override
-  Stream<List<Place>> build() {
-    final db = ref.watch(appDatabaseProvider);
-
-    return db.watchAllPlaces();
+  Future<List<Place>> build() async {
+    final places = initPlaces();
+    return places;
   }
 
-  void toggleFavorite(String id) async {
-    final db = ref.read(appDatabaseProvider);
+  Future<List<Place>> initPlaces() async {
+    try {
+      final initialPlaces = await ref
+          .read(placesRepositoryProvider)
+          .initializePlaces();
+      return initialPlaces;
+    } catch(e) {
+      rethrow;
+    }
+  }
 
-    final places = state.value;
-    if (places != null) {
-      final place = places.firstWhere((p) => p.id == id);
+  Future<void> toggleFavourite(Place place) async {
+    final currentPlaces = state.value;
+    if(currentPlaces == null) return;
+    try{
+      await ref.read(placesRepositoryProvider).updateFavourite(place);
+      state = AsyncData([
+        for(final statePlace in currentPlaces)
+          if(statePlace.id == place.id) statePlace.copyWith(isFavourite: !statePlace.isFavourite)
+          else statePlace
+      ]);
 
-      await db.updateFavorite(id, !place.isFavorite);
+    } catch(e) {
+      rethrow;
     }
   }
 }

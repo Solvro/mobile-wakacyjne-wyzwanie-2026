@@ -1,3 +1,4 @@
+import "package:cached_network_image/cached_network_image.dart";
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:go_router/go_router.dart";
@@ -74,8 +75,9 @@ class PlaceCard extends ConsumerWidget {
                     child: Column(
                       children: [
                         Expanded(
-                          child: Image.asset(
-                            place.homeImagePath,
+                          child: CachedNetworkImage(
+                            imageUrl: place.fullImageUrl,
+                            placeholder: (context, url) => CircularProgressIndicator(),
                             width: double.infinity,
                             fit: BoxFit.cover,
                           ),
@@ -88,7 +90,7 @@ class PlaceCard extends ConsumerWidget {
                                 : 40,
                             child: Center(
                               child: Text(
-                                place.title,
+                                place.name,
                                 style: Theme.of(context).textTheme.labelMedium,
                               ),
                             ),
@@ -105,16 +107,16 @@ class PlaceCard extends ConsumerWidget {
                         orientation == Orientation.portrait ? 8 : 9,
                       ),
                       icon: Icon(
-                        place.isFavorite
+                        place.isFavourite
                             ? Icons.favorite
                             : Icons.favorite_border,
-                        color: place.isFavorite ? Colors.red : Colors.white,
+                        color: place.isFavourite ? Colors.red : Colors.white,
                         size: orientation == Orientation.portrait ? 28 : 35,
                       ),
                       onPressed: () {
                         ref
                             .read(placesProvider.notifier)
-                            .toggleFavorite(place.id);
+                            .toggleFavourite(place);
                       },
                     ),
                   ),

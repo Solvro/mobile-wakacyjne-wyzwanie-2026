@@ -1,7 +1,9 @@
+import "package:cached_network_image/cached_network_image.dart";
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:go_router/go_router.dart";
 
+import "../features/places/place.dart";
 import "../features/places/places_provider.dart";
 
 class DreamPlaceScreen extends ConsumerWidget {
@@ -15,12 +17,12 @@ class DreamPlaceScreen extends ConsumerWidget {
 
     return placesAsync.when(
       data: (places) {
-        final place = places.firstWhere((p) => p.id == id);
-        final isFavorited = place.isFavorite;
+        final place = places.firstWhere((p) => p.id == int.tryParse(id));
+        final isFavourited = place.isFavourite;
 
         return Scaffold(
           appBar: AppBar(
-            title: Text(place.title),
+            title: Text(place.name),
             leading: IconButton(
               icon: const Icon(Icons.arrow_back, size: 28),
               color: Colors.white,
@@ -30,8 +32,8 @@ class DreamPlaceScreen extends ConsumerWidget {
               IconButton(
                 iconSize: 28,
                 onPressed: () =>
-                    ref.read(placesProvider.notifier).toggleFavorite(place.id),
-                icon: isFavorited
+                    ref.read(placesProvider.notifier).toggleFavourite(place),
+                icon: isFavourited
                     ? const Icon(Icons.favorite, color: Colors.red)
                     : const Icon(Icons.favorite_border, color: Colors.white),
               ),
@@ -42,8 +44,9 @@ class DreamPlaceScreen extends ConsumerWidget {
               if (orientation == Orientation.portrait) {
                 return Column(
                   children: [
-                    Image.asset(
-                      place.pageImagePath,
+                    CachedNetworkImage(
+                      imageUrl: place.fullImageUrl,
+                      placeholder: (context, url) => CircularProgressIndicator(),
                       height: 250,
                       width: double.infinity,
                       fit: BoxFit.cover,
@@ -54,7 +57,7 @@ class DreamPlaceScreen extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            place.pageTitle,
+                            place.name,
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                           const SizedBox(height: 8),
@@ -65,33 +68,15 @@ class DreamPlaceScreen extends ConsumerWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          for (final feature in place.features)
-                            Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: Column(
-                                children: [
-                                  Icon(feature.icon),
-                                  Text(feature.name),
-                                ],
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
                   ],
                 );
               } else {
                 return Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Image.asset(
-                      place.pageImagePath,
+                    CachedNetworkImage(
+                      imageUrl: place.fullImageUrl,
+                      placeholder: (context, url) => CircularProgressIndicator(),
                       width: 400,
                       height: double.infinity,
                       fit: BoxFit.cover,
@@ -106,7 +91,7 @@ class DreamPlaceScreen extends ConsumerWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    place.pageTitle,
+                                    place.name,
                                     style: const TextStyle(
                                       fontSize: 25,
                                       fontWeight: FontWeight.w500,
@@ -123,27 +108,6 @@ class DreamPlaceScreen extends ConsumerWidget {
                                 ],
                               ),
                             ),
-                            const SizedBox(height: 8),
-                            SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  for (final feature in place.features)
-                                    Column(
-                                      children: [
-                                        Icon(feature.icon),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8),
-                                          child: Text(feature.name),
-                                        ),
-                                      ],
-                                    ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 16),
                           ],
                         ),
                       ),

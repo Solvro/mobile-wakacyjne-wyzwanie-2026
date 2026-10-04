@@ -1,57 +1,18 @@
-import "package:flutter/material.dart";
+import "package:freezed_annotation/freezed_annotation.dart";
+import "package:where_to_go/core/api_paths.dart";
 
-class Feature {
-  final String name;
-  final IconData icon;
+part "place.freezed.dart";
+part "place.g.dart";
 
-  const Feature(this.name, this.icon);
+@freezed
+abstract class Place with _$Place {
+  const factory Place({int? id, required String name, required String description, required String imageUrl, @Default(false) bool isFavourite, String? ownerEmail}) = _Place;
 
-  static const all = [
-    Feature("Plaża piasczysta", Icons.beach_access),
-    Feature("Plaża kamienista", Icons.beach_access),
-    Feature("Jedzenie", Icons.fastfood),
-    Feature("Słońce", Icons.sunny),
-    Feature("Życie nocne", Icons.nightlife),
-    Feature("Duże miasto", Icons.location_city),
-    Feature("Stolica", Icons.location_city),
-    Feature("Nad rzeką", Icons.water),
-    Feature("Góry", Icons.terrain),
-    Feature("Park Narodowy", Icons.hiking),
-    Feature("Narty", Icons.downhill_skiing),
-  ];
+  factory Place.fromJson(Map<String, dynamic> json) => _$PlaceFromJson(json);
 }
 
-class Place {
-  final String id;
-  final String title;
-  final String homeImagePath;
-  final String pageImagePath;
-  final String pageTitle;
-  final String description;
-  final List<Feature> features;
-  final bool isFavorite;
-
-  const Place({
-    required this.id,
-    required this.title,
-    required this.homeImagePath,
-    required this.pageImagePath,
-    required this.pageTitle,
-    required this.description,
-    required this.features,
-    this.isFavorite = false,
-  });
-
-  Place copyWith({bool? isFavorite}) {
-    return Place(
-      id: id,
-      title: title,
-      homeImagePath: homeImagePath,
-      pageImagePath: pageImagePath,
-      pageTitle: pageTitle,
-      description: description,
-      features: features,
-      isFavorite: isFavorite ?? this.isFavorite,
-    );
+extension PlaceX on Place {
+  String get fullImageUrl {
+    return "${ApiPaths.baseUrl}/photos/$imageUrl";
   }
 }

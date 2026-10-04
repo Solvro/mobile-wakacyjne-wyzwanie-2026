@@ -24,6 +24,7 @@ class AuthenticationRepository {
       } else {
         throw Exception("Serwer nie zwrócił klucza dostępu");
       }
+
     } on DioException catch (e) {
       if (e.response?.statusCode == 401) {
         throw Exception("Niepoprawny e-mail lub hasło");

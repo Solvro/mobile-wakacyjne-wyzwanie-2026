@@ -5,5 +5,6 @@ class ApiPaths {
   static const refresh = "/auth/refresh";
   static const me = "/auth/me";
   static const places = "/places";
-  static String placeById(String id) => "/places/$id";
+  static String placeById(int? id) => "/places/$id";
+  static String photoByFileName(String? fileName) => "photos/$fileName";
 }
