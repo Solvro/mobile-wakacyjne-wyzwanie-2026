@@ -31,4 +31,20 @@ class Place {
       isFavorite: isFavorite ?? this.isFavorite,
     );
   }
+
+  factory Place.fromJson(Map<String, dynamic> json) {
+    return Place(
+      id: json["id"] as int,
+      title: json["name"] as String,
+      descriptionTitle: json["name"] as String,
+      description: (json["description"] as String?) ?? "",
+      features: const [], // Features usually don't come from this simple API, filled locally in PlacesProvider
+      image: AssetGenImage((json["imageUrl"] as String?) ?? ""),
+      isFavorite: (json["isFavourite"] as bool?) ?? false,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {"id": id, "name": title, "description": description, "imageUrl": image.path, "isFavourite": isFavorite};
+  }
 }

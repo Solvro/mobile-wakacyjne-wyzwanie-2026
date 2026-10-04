@@ -1,45 +1,61 @@
-import "package:drift/drift.dart";
+import "package:dio/dio.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 
-import "../database/app_database.dart";
-import "../features/places/places_provider.dart";
+import "../models/place.dart";
+import "../network/dio_provider.dart";
+
+part "dream_places_repository.g.dart";
+
+@riverpod
+DreamPlacesRepository dreamPlacesRepository(Ref ref) {
+  return DreamPlacesRepository(ref.watch(dioProvider));
+}
 
 class DreamPlacesRepository {
-  final AppDatabase _db;
+  final Dio _dio;
 
-  DreamPlacesRepository(this._db);
+  DreamPlacesRepository(this._dio);
 
-  // READ - pobieranie wszystkich miejsc z bazy danych
-  Future<List<DreamPlace>> getAllPlaces() {
-    return _db.select(_db.dreamPlaces).get();
+  Future<List<Place>> getAllPlaces() async {
+    final response = await _dio.get<Map<String, dynamic>>(
+      "/places",
+      queryParameters: {
+        "sort": "ASC",
+        "sortBy": ["id"],
+      },
+    );
+
+    final data = response.data?["results"] ?? response.data?["items"] ?? response.data?["data"] ?? response.data;
+    if (data is List) {
+      return data.map((dynamic json) => Place.fromJson(json as Map<String, dynamic>)).toList();
+    }
+    return [];
   }
 
-  // UPDATE - zmiana isFavorite
-  Future<void> toggleFavorite(int id, {required bool currentStatus}) async {
-    await (_db.update(
-      _db.dreamPlaces,
-    )..where((tbl) => tbl.id.equals(id))).write(DreamPlacesCompanion(isFavorite: Value(!currentStatus)));
+  Future<Place> createPlace({
+    required String name,
+    required String description,
+    required String imageUrl,
+    bool isFavourite = false,
+  }) async {
+    final response = await _dio.post<Map<String, dynamic>>(
+      "/places",
+      data: {"name": name, "description": description, "imageUrl": imageUrl, "isFavourite": isFavourite},
+    );
+    return Place.fromJson(response.data!);
   }
 
-  // SEED - zapelnianie bazy danych poczatkowymi danymi
-
-  Future<void> seedDatabase() async {
-    final existingPlaces = await _db.select(_db.dreamPlaces).get();
-    if (existingPlaces.isNotEmpty) return; // jak baza nie jest pusta to nie seeduj jej
-
-    final samplePlaces = initalPlaces
-        .map(
-          (p) => DreamPlacesCompanion.insert(
-            title: p.title,
-            descriptionTitle: p.descriptionTitle,
-            description: p.description,
-            imageUrl: p.image.path,
-            isFavorite: Value(p.isFavorite),
-          ),
-        )
-        .toList();
-
-    await _db.batch((batch) {
-      batch.insertAll(_db.dreamPlaces, samplePlaces);
-    });
+  Future<void> toggleFavorite(
+    int id, {
+    required bool currentStatus,
+    String? name,
+    String? description,
+    String? imageUrl,
+  }) async {
+    final data = <String, dynamic>{"isFavourite": !currentStatus};
+    if (name != null) data["name"] = name;
+    if (description != null) data["description"] = description;
+    if (imageUrl != null) data["imageUrl"] = imageUrl;
+    await _dio.put<Map<String, dynamic>>("/places/$id", data: data);
   }
 }

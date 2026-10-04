@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 
+import "../features/auth/auth_provider.dart";
 import "../features/places/places_provider.dart";
 import "../widgets/place_card.dart";
 import "../widgets/settings_dialog.dart";
@@ -12,15 +13,19 @@ class DreamPlaceHome extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final placesAsync = ref.watch(placesProvider);
     return Scaffold(
-      //backgroundColor: Theme.of(context).colorScheme.onPrimary,
       appBar: AppBar(
-        //backgroundColor: Theme.of(context).colorScheme.primary,
         title: Text(
           "Wymarzone destynacje",
           style: TextStyle(color: Theme.of(context).colorScheme.onPrimary, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () async {
+              await ref.read(authProvider.notifier).logout();
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () async {

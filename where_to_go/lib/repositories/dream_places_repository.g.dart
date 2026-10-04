@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'database_provider.dart';
+part of 'dream_places_repository.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -8,42 +8,6 @@ part of 'database_provider.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-
-@ProviderFor(appDatabase)
-final appDatabaseProvider = AppDatabaseProvider._();
-
-final class AppDatabaseProvider extends $FunctionalProvider<AppDatabase, AppDatabase, AppDatabase>
-    with $Provider<AppDatabase> {
-  AppDatabaseProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'appDatabaseProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
-
-  @override
-  String debugGetCreateSourceHash() => _$appDatabaseHash();
-
-  @$internal
-  @override
-  $ProviderElement<AppDatabase> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
-
-  @override
-  AppDatabase create(Ref ref) {
-    return appDatabase(ref);
-  }
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(AppDatabase value) {
-    return $ProviderOverride(origin: this, providerOverride: $SyncValueProvider<AppDatabase>(value));
-  }
-}
-
-String _$appDatabaseHash() => r'18ce5c8c4d8ddbfe5a7d819d8fb7d5aca76bf416';
 
 @ProviderFor(dreamPlacesRepository)
 final dreamPlacesRepositoryProvider = DreamPlacesRepositoryProvider._();
@@ -80,4 +44,4 @@ final class DreamPlacesRepositoryProvider
   }
 }
 
-String _$dreamPlacesRepositoryHash() => r'c587df30188e66519cac7f07b329835d72bd67ff';
+String _$dreamPlacesRepositoryHash() => r'385e2e242c0fb37a30c75dd12e847ba128fc1d60';
